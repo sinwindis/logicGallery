@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <item >
 
         <shape android:shape="rectangle">
-
-            <solid android:color="#aaeeff" />
             <stroke
-                android:width="0.5dp"
+                android:width="1px"
                 android:color="#3a94e8" />
-
         </shape>
 
     </item>
+
     <item>
         <rotate
             android:fromDegrees="135"
@@ -21,7 +18,7 @@
             android:pivotY="50%"
             android:toDegrees="135">
             <shape android:shape="line">
-                <stroke android:width="2dp" android:color="#000000" />
+                <stroke android:width="2px" android:color="#000000" />
             </shape>
         </rotate>
     </item>
@@ -32,7 +29,7 @@
             android:pivotY="50%"
             android:toDegrees="45">
             <shape android:shape="line">
-                <stroke android:width="2dp" android:color="#000000" />
+                <stroke android:width="2px" android:color="#000000" />
             </shape>
         </rotate>
     </item>

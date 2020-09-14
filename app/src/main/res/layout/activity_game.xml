@@ -95,6 +95,8 @@
 
             </androidx.recyclerview.widget.RecyclerView>
 
+
+
             <LinearLayout
                 android:id="@+id/ll_count"
                 android:layout_width="0dp"
@@ -116,9 +118,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

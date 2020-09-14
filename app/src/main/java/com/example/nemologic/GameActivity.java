@@ -1,8 +1,8 @@
 package com.example.nemologic;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +19,7 @@ public class GameActivity extends AppCompatActivity {
 
 
     private RecyclerView rv_board;
+    private RecyclerView rv_board_border;
     private RecyclerView rv_row;
     private RecyclerView rv_column;
     private TextView tv_stack;
@@ -28,8 +29,8 @@ public class GameActivity extends AppCompatActivity {
 
     private Button btn_toggle;
 
-    RvRowAdapter rvRowAdapter;
-    RvColumnAdapter rvColumnAdapter;
+    private RvRowAdapter rvRowAdapter;
+    private RvColumnAdapter rvColumnAdapter;
 
     private GridLayoutManager glm;
     private GameLevelData gld;
@@ -86,13 +87,16 @@ public class GameActivity extends AppCompatActivity {
                     switch(gld.checkedSet[y][x])
                     {
                         case 0:
-                            view.setImageResource(R.drawable.border_05dp_white);
+                            view.setImageResource(R.drawable.border_1px_transparent);
+                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                             break;
                         case 1:
-                            view.setImageResource(R.drawable.border_05dp_black);
+                            view.setImageResource(R.drawable.border_1px_transparent);
+                            view.setBackgroundColor(Color.parseColor("#000000"));
                             break;
                         case 2:
-                            view.setImageResource(R.drawable.border_05dp_x);
+                            view.setImageResource(R.drawable.border_1px_x);
+                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                             break;
                     }
                 }
@@ -104,17 +108,20 @@ public class GameActivity extends AppCompatActivity {
                         case 0:
                         case 5:
                             //체크
-                            view.setImageResource(R.drawable.border_4dp_black);
+                            view.setImageResource(R.drawable.border_2dp_transparent);
+                            view.setBackgroundColor(Color.parseColor("#000000"));
                             break;
                         case 1:
                         case 3:
                             //X
-                            view.setImageResource(R.drawable.border_4dp_x);
+                            view.setImageResource(R.drawable.border_2dp_x);
+                            view.setBackgroundColor(Color.parseColor("#ffffff"));
                             break;
                         case 2:
                         case 4:
                             //공백
-                            view.setImageResource(R.drawable.border_4dp_white);
+                            view.setImageResource(R.drawable.border_2dp_transparent);
+                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                             break;
                     }
                 }
@@ -123,17 +130,19 @@ public class GameActivity extends AppCompatActivity {
                     switch(gld.checkedSet[y][x])
                     {
                         case 0:
-                            view.setImageResource(R.drawable.border_05dp_white_sky);
+                            view.setImageResource(R.drawable.border_1px_transparent);
+                            view.setBackgroundColor(Color.parseColor("#aaeeff"));
                         break;
                         case 1:
-                            view.setImageResource(R.drawable.border_05dp_black_sky);
+                            view.setImageResource(R.drawable.border_1px_transparent);
+                            view.setBackgroundColor(Color.parseColor("#113355"));
                             break;
                         case 2:
-                            view.setImageResource(R.drawable.border_05dp_x_sky);
+                            view.setImageResource(R.drawable.border_1px_x);
+                            view.setBackgroundColor(Color.parseColor("#aaeeff"));
                             break;
                     }
                 }
-
 
             }
         }
@@ -527,10 +536,12 @@ public class GameActivity extends AppCompatActivity {
         //로직 게임판을 만듭니다.
 
         glm = new GridLayoutManager(this, gld.width);
-        GameScreenAdapter gsa = new GameScreenAdapter(gld.height, gld.width);
+
+        RvBoardAdapter rba = new RvBoardAdapter(gld.height, gld.width);
+
 
         rv_board.setLayoutManager(glm);
-        rv_board.setAdapter(gsa);
+        rv_board.setAdapter(rba);
 
         rv_board.addOnItemTouchListener(boardTouchListener);
         makeIdxView();
@@ -594,6 +605,7 @@ public class GameActivity extends AppCompatActivity {
 
 
         rv_board = findViewById(R.id.rv_board);
+        //rv_board_border = findViewById(R.id.rv_board_border);
         rv_row = findViewById(R.id.rv_row);
         rv_column = findViewById(R.id.rv_column);
 
