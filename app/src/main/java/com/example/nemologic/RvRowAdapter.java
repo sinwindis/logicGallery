@@ -244,6 +244,15 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
             if(checkIdx == idxNumSet[rowNum])
             {
                 //모든 idx가 맞춰졌을 때
+                //혹시 과잉 체크된 칸이 없는지 확인
+                for(int j = i+1; j < checkedSet[0].length; j++)
+                {
+                    if(checkedSet[rowNum][j] == 1)
+                    {
+                        Arrays.fill(checkTemp, false);
+                        return checkTemp;
+                    }
+                }
                 Arrays.fill(checkTemp, true);
                 return checkTemp;
             }

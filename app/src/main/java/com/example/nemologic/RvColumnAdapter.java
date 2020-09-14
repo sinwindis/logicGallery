@@ -243,6 +243,16 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
             if(checkIdx == idxNumSet[columnNum])
             {
                 //모든 idx가 맞춰졌을 때
+                //혹시 과잉 체크된 칸이 없는지 확인
+                for(int j = i+1; j < checkedSet.length; j++)
+                {
+                    if(checkedSet[j][columnNum] == 1)
+                    {
+                        Arrays.fill(checkTemp, false);
+                        return checkTemp;
+                    }
+                }
+
                 Arrays.fill(checkTemp, true);
                 return checkTemp;
             }

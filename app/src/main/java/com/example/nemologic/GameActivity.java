@@ -75,20 +75,62 @@ public class GameActivity extends AppCompatActivity {
                 ImageView view =  (ImageView) glm.findViewByPosition(x + y * gld.width);
                 if(view == null)
                     return;
-                if(dragTemp[y][x] == 1)
-                    continue;
-                switch(gld.checkedSet[y][x])
+
+                if(dragTemp[y][x] == 0)
                 {
-                    case 0:
-                        view.setImageResource(R.drawable.border_05dp_white);
-                        break;
-                    case 1:
-                        view.setImageResource(R.drawable.border_05dp_black);
-                        break;
-                    case 2:
-                        view.setImageResource(R.drawable.border_05dp_x);
-                        break;
+                    //dragTemp가 0인 경우 checkedSet에 있는 값대로 화면에 표현해 준다.
+                    switch(gld.checkedSet[y][x])
+                    {
+                        case 0:
+                            view.setImageResource(R.drawable.border_05dp_white);
+                            break;
+                        case 1:
+                            view.setImageResource(R.drawable.border_05dp_black);
+                            break;
+                        case 2:
+                            view.setImageResource(R.drawable.border_05dp_x);
+                            break;
+                    }
                 }
+                else if(dragTemp[y][x] == 1)
+                {
+                    //dragTemp가 1인 경우 드래그된 칸은 macroMode에 맞게 그래픽을 갱신해 준다.
+                    switch(macroMode)
+                    {
+                        case 0:
+                        case 5:
+                            //체크
+                            view.setImageResource(R.drawable.border_4dp_black);
+                            break;
+                        case 1:
+                        case 3:
+                            //X
+                            view.setImageResource(R.drawable.border_4dp_x);
+                            break;
+                        case 2:
+                        case 4:
+                            //공백
+                            view.setImageResource(R.drawable.border_4dp_white);
+                            break;
+                    }
+                }
+                else if(dragTemp[y][x] == 2)
+                {
+                    switch(gld.checkedSet[y][x])
+                    {
+                        case 0:
+                            view.setImageResource(R.drawable.border_05dp_white_sky);
+                        break;
+                        case 1:
+                            view.setImageResource(R.drawable.border_05dp_black_sky);
+                            break;
+                        case 2:
+                            view.setImageResource(R.drawable.border_05dp_x_sky);
+                            break;
+                    }
+                }
+
+
             }
         }
     }
@@ -115,7 +157,10 @@ public class GameActivity extends AppCompatActivity {
         int dragEndX;
         int dragEndY;
 
-        int dragCount = 0;
+        int lastX;
+        int lastY;
+
+        int dragCount;
 
         if(touchStartX > touchEndX)
         {
@@ -141,64 +186,46 @@ public class GameActivity extends AppCompatActivity {
 
         removeDragTemp();
 
+        if(dragEndX - dragStartX > dragEndY - dragStartY)
+        {
+            //가로 방향 드래그가 더 길 경우
+            //가로 방향 한 줄만 드래그시킨다.
+            dragCount = dragEndX - dragStartX + 1;
+            dragEndY = touchStartY;
+            dragStartY = touchStartY;
+
+            //마지막으로 선택된 칸의 위치를 lastX와 lastY에 저장해 둔다.
+            lastX = touchEndX;
+            lastY = touchStartY;
+        }
+        else
+        {
+            dragCount = dragEndY - dragStartY + 1;
+            dragEndX = touchStartX;
+            dragStartX = touchStartX;
+
+            lastX = touchStartX;
+            lastY = touchEndY;
+        }
+
+        for(int y = 0; y < gld.height; y++)
+        {
+            dragTemp[y][lastX] = 2;
+        }
+        for(int x = 0; x < gld.width; x++)
+        {
+            dragTemp[lastY][x] = 2;
+        }
 
         for(int y = dragStartY; y <= dragEndY; y++)
         {
             for(int x = dragStartX; x <= dragEndX; x++)
             {
-                view = (ImageView) glm.findViewByPosition(y * gld.width + x);
-                assert view != null;
-                dragTemp[y][x] = 1;
-                switch (macroMode)
+                if(gld.checkedSet[y][x] == gld.checkedSet[touchStartY][touchStartX])
                 {
-                    case 0:
-                        //공백 -> 체크
-                        if(gld.checkedSet[y][x] == 0)
-                        {
-                            view.setImageResource(R.drawable.border_4dp_black);
-                            dragCount++;
-                        }
-                        break;
-                    case 1:
-                        //공백 -> X
-                        if(gld.checkedSet[y][x] == 0)
-                        {
-                            view.setImageResource(R.drawable.border_4dp_x);
-                            dragCount++;
-                        }
-                        break;
-                    case 2:
-                        //체크 -> 공백
-                        if(gld.checkedSet[y][x] == 1)
-                        {
-                            view.setImageResource(R.drawable.border_4dp_white);
-                            dragCount++;
-                        }
-                        break;
-                    case 3:
-                        //체크 -> X
-                        if(gld.checkedSet[y][x] == 1)
-                        {
-                            view.setImageResource(R.drawable.border_4dp_x);
-                            dragCount++;
-                        }
-                        break;
-                    case 4:
-                        //X -> 공백
-                        if(gld.checkedSet[y][x] == 2)
-                        {
-                            view.setImageResource(R.drawable.border_4dp_white);
-                            dragCount++;
-                        }
-                        break;
-                    case 5:
-                        //X -> 체크
-                        if(gld.checkedSet[y][x] == 2)
-                        {
-                            view.setImageResource(R.drawable.border_4dp_black);
-                            dragCount++;
-                        }
-
+                    //본인이 처음 선택한 것이랑 현재 드래그된 칸이 똑같은 유형이라면
+                    //dragTemp에 해당 칸을 저장해 둔다.
+                    dragTemp[y][x] = 1;
                 }
             }
         }
@@ -233,7 +260,7 @@ public class GameActivity extends AppCompatActivity {
         {
             for(int x = 0; x < gld.width; x++)
             {
-                if(dragTemp[y][x] == 0)
+                if(dragTemp[y][x] != 1)
                     continue;
                 switch(macroMode)
                 {
@@ -348,9 +375,9 @@ public class GameActivity extends AppCompatActivity {
             // Write log here.
             // This is an abstract method, you must implement.
 
-            setMacroMode(pos);
             dragManage();
             refreshBoard();
+            setMacroMode(pos);
             updateNumColor();
         }
 

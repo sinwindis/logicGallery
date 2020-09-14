@@ -1,7 +1,5 @@
 package com.example.nemologic;
 
-import java.util.Arrays;
-
 public class GameLevelData {
 
     public String name;
@@ -21,7 +19,7 @@ public class GameLevelData {
         this.height = dataSet.length;
         this.width = dataSet[0].length;
         this.checkedSet = new int[this.height][this.width];
-        this.checkStack = new int[200][this.height][this.width];
+        this.checkStack = new int[10][this.height][this.width];
         for(int y = 0; y < height; y++)
         {
             for(int x = 0; x < width; x++)
@@ -34,17 +32,42 @@ public class GameLevelData {
 
     }
 
+    private void expandStackSize()
+    {
+        int[][][] stackTemp = new int[checkStack.length][this.height][this.width];
+
+        for(int i = 0; i < checkStack.length; i++)
+        {
+            for(int y = 0; y < this.height; y++)
+            {
+                if (this.width >= 0)
+                    System.arraycopy(checkStack[i][y], 0, stackTemp[i][y], 0, this.width);
+            }
+        }
+
+        checkStack = new int[stackTemp.length*2][this.height][this.width];
+
+        for(int i = 0; i < stackTemp.length; i++)
+        {
+            for(int y = 0; y < this.height; y++)
+            {
+                if (this.width >= 0)
+                    System.arraycopy(stackTemp[i][y], 0, checkStack[i][y], 0, this.width);
+            }
+        }
+    }
+
     public void pushCheckStack()
     {
         stackNum++;
         stackMaxNum = stackNum;
 
+        if(stackNum == checkStack.length - 1)
+            expandStackSize();
+
         for(int y = 0; y < height; y++)
         {
-            for(int x = 0; x < width; x++)
-            {
-                checkStack[stackNum][y][x] = checkedSet[y][x];
-            }
+            if (width >= 0) System.arraycopy(checkedSet[y], 0, checkStack[stackNum][y], 0, width);
         }
     }
 
@@ -55,10 +78,7 @@ public class GameLevelData {
         stackNum--;
         for(int y = 0; y < height; y++)
         {
-            for(int x = 0; x < width; x++)
-            {
-                checkedSet[y][x] = checkStack[stackNum][y][x];
-            }
+            if (width >= 0) System.arraycopy(checkStack[stackNum][y], 0, checkedSet[y], 0, width);
         }
     }
 
@@ -70,10 +90,7 @@ public class GameLevelData {
         stackNum++;
         for(int y = 0; y < height; y++)
         {
-            for(int x = 0; x < width; x++)
-            {
-                checkedSet[y][x] = checkStack[stackNum][y][x];
-            }
+            if (width >= 0) System.arraycopy(checkStack[stackNum][y], 0, checkedSet[y], 0, width);
         }
 
     }
