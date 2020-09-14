@@ -149,10 +149,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
                         {
                             //체크된 칸이 있는 경우 뭔가 문제가 있다고 판단한다.
                             //모든 숫자의 완성 여부를 false로 만든 후 반환한다.
-                            for(int k = 0; k < checkedSet[rowNum].length; k++)
-                            {
-                                checkTemp[k] = false;
-                            }
+                            Arrays.fill(checkTemp, false);
 
                             return checkTemp;
                         }
@@ -206,10 +203,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
                         {
                             //체크된 칸이 있는 경우 뭔가 문제가 있다고 판단한다.
                             //모든 숫자의 완성 여부를 false로 만든 후 반환한다.
-                            for(int k = 0; k < checkedSet[rowNum].length; k++)
-                            {
-                                checkTemp[k] = false;
-                            }
+                            Arrays.fill(checkTemp, false);
 
                             return checkTemp;
                         }

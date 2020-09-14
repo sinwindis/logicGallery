@@ -60,6 +60,10 @@ public class GameActivity extends AppCompatActivity {
                 {
                     return;
                 }
+                else if(gld.dataSet[y][x] != 1 && gld.checkedSet[y][x] == 1)
+                {
+                    return;
+                }
             }
         }
 
@@ -375,9 +379,9 @@ public class GameActivity extends AppCompatActivity {
             // Write log here.
             // This is an abstract method, you must implement.
 
+            setMacroMode(pos);
             dragManage();
             refreshBoard();
-            setMacroMode(pos);
             updateNumColor();
         }
 
