@@ -1,4 +1,4 @@
-package com.example.nemologic;
+package com.example.nemologic.gameactivity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -14,6 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.nemologic.utils.BoardItemTouchListener;
+import com.example.nemologic.data.GameLevelData;
+import com.example.nemologic.R;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -244,6 +248,7 @@ public class GameActivity extends AppCompatActivity {
         }
         tv_count.setText(String.valueOf(dragCount));
         view = (ImageView) glm.findViewByPosition(touchStartY * gld.width + touchStartX);
+        assert view != null;
         ll_count.setX(view.getX() + view.getWidth());
         ll_count.setY(view.getY());
 

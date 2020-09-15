@@ -1,6 +1,7 @@
-package com.example.nemologic;
+package com.example.nemologic.utils;
 
 
+import com.example.nemologic.data.GameLevelData;
 
 public class CampaignLevelLoader {
 

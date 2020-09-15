@@ -1,4 +1,4 @@
-package com.example.nemologic;
+package com.example.nemologic.mainactivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,8 +6,9 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.nemologic.categoryactivity.CategoryActivity;
+import com.example.nemologic.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn_category = (Button) findViewById(R.id.btn_category);
+        Button btn_category = findViewById(R.id.btn_category);
 
         final Intent intent = new Intent(this, CategoryActivity.class);
 

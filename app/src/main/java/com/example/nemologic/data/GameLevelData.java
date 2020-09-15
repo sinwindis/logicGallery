@@ -1,4 +1,4 @@
-package com.example.nemologic;
+package com.example.nemologic.data;
 
 public class GameLevelData {
 

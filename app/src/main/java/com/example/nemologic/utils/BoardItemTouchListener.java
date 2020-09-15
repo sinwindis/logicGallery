@@ -1,4 +1,4 @@
-package com.example.nemologic;
+package com.example.nemologic.utils;
 
 import android.graphics.Rect;
 import android.media.Image;

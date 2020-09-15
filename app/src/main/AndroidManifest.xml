@@ -11,21 +11,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".GameActivity">
+        <activity android:name=".gameactivity.GameActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".mainactivity.MainActivity">
 
         </activity>
 
-        <activity android:name=".CategoryActivity">
+        <activity android:name=".categoryactivity.CategoryActivity">
 
         </activity>
-        <activity android:name=".LevelActivity">
+        <activity android:name=".levelactivity.LevelActivity">
 
         </activity>
 

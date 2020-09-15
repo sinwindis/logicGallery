@@ -1,4 +1,4 @@
-package com.example.nemologic;
+package com.example.nemologic.levelactivity;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -6,6 +6,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.nemologic.R;
 
 import java.util.Objects;
 

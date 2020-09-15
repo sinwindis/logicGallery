@@ -1,10 +1,12 @@
-package com.example.nemologic;
+package com.example.nemologic.categoryactivity;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.nemologic.R;
 
 public class CategoryActivity extends AppCompatActivity {
 
