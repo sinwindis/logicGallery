@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nemologic.categoryactivity.CategoryActivity;
 import com.example.nemologic.R;
+import com.example.nemologic.data.DataManager;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelDB;
 
@@ -27,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
         final Intent intent = new Intent(this, CategoryActivity.class);
 
+        DataManager.loadLevel(this);
+        DataManager.loadCategory(this);
+
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(this);
         try {
             mDbOpenHelper.open();
@@ -34,9 +38,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         mDbOpenHelper.create();
-
-        //mDbOpenHelper.insertLevel("dummy", "dummyC", 10, 10, new String("1, 1, 1"));
-        //mDbOpenHelper.insertLevel("dummy2", "dummy2C", 10, 10, new String("1, 1, 1"));
 
         Cursor cursor =  mDbOpenHelper.getLevelCursor();
 
@@ -47,13 +48,13 @@ public class MainActivity extends AppCompatActivity {
             Log.d("getLevelCursor test", name + " " + category);
         }
 
-        cursor =  mDbOpenHelper.getLevelCursorByCategory("dummyC");
+        cursor =  mDbOpenHelper.getLevelCursorByCategory("dummy1");
 
         while(cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex(LevelDB.CreateDB.NAME));
             String category = cursor.getString(cursor.getColumnIndex(LevelDB.CreateDB.CATEGORY));
 
-            Log.d("getLevelCursor test", name + " " + category);
+            Log.d("getLevelCursorBC test", name + " " + category);
         }
 
         mDbOpenHelper.close();

@@ -29,23 +29,23 @@ public class LevelActivity extends AppCompatActivity {
 
         int categoryPos = Objects.requireNonNull(getIntent().getExtras()).getInt("pos");
 
-        CategoryData categoryData = DataManager.loadCategory(this).get(categoryPos);
-        ArrayList<LevelData> levels = DataManager.loadLevel(this, categoryPos);
-
-        String categoryName = categoryData.getName();
-        tv_category.setText(categoryName);
-
-
-
-        levelPlayManager[] lpms = new levelPlayManager[categoryData.getLevelNum()];
-
-        for(int i = 0; i < lpms.length; i++)
-        {
-            LevelData levelTemp = levels.get(i);
-            lpms[i] = new levelPlayManager(levelTemp.getName(), levelTemp.getDataSet());
-        }
-
-        rv_level.setLayoutManager(new LinearLayoutManager(this));
-        rv_level.setAdapter(new RvLevelAdapter(this, lpms));
+//        CategoryData categoryData = DataManager.loadCategory(this).get(categoryPos);
+//        ArrayList<LevelData> levels = DataManager.loadLevel(this, categoryPos);
+//
+//        String categoryName = categoryData.getName();
+//        tv_category.setText(categoryName);
+//
+//
+//
+//        levelPlayManager[] lpms = new levelPlayManager[categoryData.getLevelNum()];
+//
+//        for(int i = 0; i < lpms.length; i++)
+//        {
+//            LevelData levelTemp = levels.get(i);
+//            lpms[i] = new levelPlayManager(levelTemp.getName(), levelTemp.getDataSet());
+//        }
+//
+//        rv_level.setLayoutManager(new LinearLayoutManager(this));
+//        rv_level.setAdapter(new RvLevelAdapter(this, lpms));
     }
 }
