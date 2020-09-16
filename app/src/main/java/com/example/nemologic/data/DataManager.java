@@ -1,23 +1,14 @@
 package com.example.nemologic.data;
 
 import android.content.Context;
-import android.util.Log;
-import android.util.Xml;
-
 import com.example.nemologic.R;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-import org.xmlpull.v1.XmlSerializer;
-
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
+import java.sql.SQLException;
 
 //대집도..
 //raw xml 파일에서 읽은 level의 데이터를 db에 차곡차곡 쌓는 역할로 바뀔 것
@@ -25,54 +16,62 @@ import java.util.ArrayList;
 
 public class DataManager {
 
+
     public DataManager()
     {
     }
 
-    public static ArrayList<CategoryData> loadCategory(Context ctx)
+    public static void loadCategory(Context ctx)
     {
+        //xml파일에 저장된 데이터를 category db에 저장합니다.
+        //게임의 버전을 인식하여 추가해야 할 카테고리만 자동으로 추가합니다.
+
+        DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
+        try {
+            mDbOpenHelper.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         InputStream categoryInputStream;
 
-        ArrayList<CategoryData> categories = new ArrayList<>();
+        //get version
+        String currentVersion = "0.1";
+        //get version
 
         try {
-            categoryInputStream = ctx.getResources().openRawResource(R.raw.levels);
+            categoryInputStream = ctx.getResources().openRawResource(R.raw.categories);
 
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser parser = factory.newPullParser();
             parser.setInput(new InputStreamReader(categoryInputStream, "UTF-8"));
             int eventType = parser.getEventType();
             String nameOfCategory = "";
-            int numOfLevels = 0;
-            int numOfClears = 0;
+            String version;
 
             while(eventType != XmlPullParser.END_DOCUMENT) {
-                switch (eventType) {
-                    case XmlPullParser.START_TAG:
-                        String startTag = parser.getName();
-                        if(startTag.equals("cname")) {
-                            nameOfCategory = parser.nextText();
-                        }
-                        else if(startTag.equals("level"))
+                if (eventType == XmlPullParser.START_TAG) {
+                    String startTag = parser.getName();
+                    if (startTag.equals("version")) {
+                        version = parser.nextText();
+                        if(version.equals(currentVersion))
                         {
-                            numOfLevels++;
+                            //해당 태그 아래부터 카테고리 명을 insert하기 시작한다.
+                            eventType = parser.next();
+                            break;
                         }
-                        else if(startTag.equals("progress"))
-                        {
-                            if(parser.nextText().equals("2"))
-                            {
-                                numOfClears++;
-                            }
-                        }
-                        break;
-                    case XmlPullParser.END_TAG:
-                        String endTag = parser.getName();
-                        if(endTag.equals("category")) {
-                            categories.add(new CategoryData(nameOfCategory, numOfLevels, numOfClears));
-                            numOfLevels = 0;
-                            numOfClears = 0;
-                        }
-                        break;
+                    }
+                }
+                eventType = parser.next();
+            }
+
+            while(eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    String startTag = parser.getName();
+                    if (startTag.equals("name")) {
+                        nameOfCategory = parser.nextText();
+                        mDbOpenHelper.insertCategory(nameOfCategory);
+                    }
                 }
                 eventType = parser.next();
             }
@@ -82,24 +81,34 @@ public class DataManager {
             e.printStackTrace();
         }
 
-        return categories;
+        mDbOpenHelper.close();
+
+        //카테고리 버전을 업데이트 해준다.
+        //~~
     }
 
-    public static ArrayList<LevelData> loadLevel(Context ctx, int categoryIdx)
+    public static void loadLevel(Context ctx)
     {
+        DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
+        try {
+            mDbOpenHelper.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         InputStream levelInputStream;
 
-        ArrayList<LevelData> levels = new ArrayList<>();
-
-        int categoryNum = 0;
-        boolean foundCategory = false;
+        //get version
+        String currentVersion = "0.1";
+        //get version
 
         String levelName = "";
+        String categoryName = "";
         int levelWidth = 0;
         int levelHeight = 0;
         String levelData = "";
-        int levelProgress = 0;
-        String levelSave = "";
+
+        String version;
 
         try {
             levelInputStream = ctx.getResources().openRawResource(R.raw.levels);
@@ -110,48 +119,51 @@ public class DataManager {
             int eventType = parser.getEventType();
 
             while(eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    String startTag = parser.getName();
+                    if (startTag.equals("version")) {
+                        version = parser.nextText();
+                        if(version.equals(currentVersion))
+                        {
+                            //해당 태그 아래부터 카테고리 명을 insert하기 시작한다.
+                            eventType = parser.next();
+                            break;
+                        }
+                    }
+                }
+                eventType = parser.next();
+            }
+
+            while(eventType != XmlPullParser.END_DOCUMENT) {
                 switch (eventType) {
                     case XmlPullParser.START_TAG:
                         String startTag = parser.getName();
 
                         switch (startTag) {
-                            case "category":
-                                if (categoryNum == categoryIdx) {
-                                    //찾으려는 카테고리에 도착했을 때
-                                    foundCategory = true;
-                                }
-                                break;
+
                             case "lname":
-                                if (foundCategory) {
-                                    levelName = parser.nextText();
-                                }
+                                levelName = parser.nextText();
+                                break;
+                            case "cname":
+                                categoryName = parser.nextText();
                                 break;
                             case "width":
-                                if (foundCategory) {
-                                    levelWidth = Integer.parseInt(parser.nextText());
-                                }
+                                levelWidth = Integer.parseInt(parser.nextText());
                                 break;
                             case "height":
-                                if (foundCategory) {
-                                    levelHeight = Integer.parseInt(parser.nextText());
-                                }
+                                levelHeight = Integer.parseInt(parser.nextText());
                                 break;
                             case "data":
-                                if (foundCategory) {
-                                    levelData = parser.nextText();
-                                }
+                                levelData = parser.nextText();
                                 break;
                         }
                         break;
                     case XmlPullParser.END_TAG:
                         String endTag = parser.getName();
-                        if(endTag.equals("category") && categoryNum == categoryIdx) {
-                            //찾으려는 카테고리를 모두 탐색하면 함수를 종료한다.
-                            return levels;
-                        }
-                        else if(endTag.equals("level") && foundCategory)
+                        if(endTag.equals("level"))
                         {
                             //해당 레벨의 데이터를 db에 추가한다.
+                            mDbOpenHelper.insertLevel(levelName, categoryName, levelWidth, levelHeight, levelData);
                         }
                         break;
                 }
@@ -163,6 +175,8 @@ public class DataManager {
             e.printStackTrace();
         }
 
-        return levels;
+        mDbOpenHelper.close();
+
+        //버전을 갱신해 준다.
     }
 }
