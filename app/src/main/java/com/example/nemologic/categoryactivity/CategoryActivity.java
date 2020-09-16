@@ -7,6 +7,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
+import com.example.nemologic.data.CategoryData;
+import com.example.nemologic.data.DataLoader;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class CategoryActivity extends AppCompatActivity {
 
@@ -16,22 +21,18 @@ public class CategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
-        RecyclerView rv_level = findViewById(R.id.rv_category);
+        RecyclerView rv_category = findViewById(R.id.rv_category);
 
-        String[] dummy_data = new String[10];
+        ArrayList<CategoryData> categories = DataLoader.loadCategory(this);
 
-        dummy_data[0] = "animal";
-        dummy_data[1] = "car";
-        dummy_data[2] = "food";
-        dummy_data[3] = "country";
-        dummy_data[4] = "game";
-        dummy_data[5] = "school";
-        dummy_data[6] = "insect";
-        dummy_data[7] = "instrument";
-        dummy_data[8] = "dummy";
-        dummy_data[9] = "horror";
+        String[] dummy_data = new String[categories.size()];
 
-        rv_level.setLayoutManager(new LinearLayoutManager(this));
-        rv_level.setAdapter(new RvCategoryAdapter(this, dummy_data));
+        for(int i = 0; i < categories.size(); i++)
+        {
+            dummy_data[i] = categories.get(i).getName();
+        }
+
+        rv_category.setLayoutManager(new LinearLayoutManager(this));
+        rv_category.setAdapter(new RvCategoryAdapter(this, dummy_data));
     }
 }

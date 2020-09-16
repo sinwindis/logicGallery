@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.utils.BoardItemTouchListener;
-import com.example.nemologic.data.GameLevelData;
+import com.example.nemologic.data.levelPlayManager;
 import com.example.nemologic.R;
 
 public class GameActivity extends AppCompatActivity {
@@ -37,7 +37,7 @@ public class GameActivity extends AppCompatActivity {
     private RvColumnAdapter rvColumnAdapter;
 
     private GridLayoutManager glm;
-    private GameLevelData gld;
+    private levelPlayManager gld;
 
     int[][] rowDataSet;
     int[][] columnDataSet;
@@ -610,7 +610,6 @@ public class GameActivity extends AppCompatActivity {
 
 
         rv_board = findViewById(R.id.rv_board);
-        //rv_board_border = findViewById(R.id.rv_board_border);
         rv_row = findViewById(R.id.rv_row);
         rv_column = findViewById(R.id.rv_column);
 
@@ -621,7 +620,7 @@ public class GameActivity extends AppCompatActivity {
                              {1, 1, 0, 1, 0, 1, 1, 1, 1, 1},
                              {1, 1, 0, 1, 0, 1, 1, 1, 1, 1},
                              {1, 1, 0, 1, 0, 1, 1, 1, 1, 1}};
-        gld = new GameLevelData("dummy", dummyData);
+        gld = new levelPlayManager("dummy", dummyData);
 
         dragTemp = new int[gld.height][gld.width];
         makeGameBoard();

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".levelactivity.LevelActivity"
+    tools:context=".optionactivity.OptionActivity"
     android:background="#e0e0e0">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,28 +20,20 @@
         >
 
         <TextView
-            android:id="@+id/tv_item_level_category"
+            android:id="@+id/tv_option_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="옵션"
+            android:textSize="30sp"
+            android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_level"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topbar">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

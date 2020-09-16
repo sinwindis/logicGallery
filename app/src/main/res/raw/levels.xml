@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <category>
+        <cname>animal</cname>
+        <level>
+            <lname>dummy</lname>
+            <width>10</width>
+            <height>10</height>
+            <data>0 1 0 1 1 0 1 0 1 1 0 1 0 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 0 1 1 0 0 0 0 1 0 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1 1 0 1 1 1 1 0 0 1 1 0 0 1 1 0 1</data>
+        </level>
+    </category>
+    <category>
+        <cname>dummy1</cname>
+    </category>
+
+    <category>
+        <cname>dummy2</cname>
+    </category>
+
+</resources>

@@ -1,6 +1,6 @@
 package com.example.nemologic.data;
 
-public class GameLevelData {
+public class levelPlayManager {
 
     public String name;
     public int[][] dataSet;
@@ -12,7 +12,7 @@ public class GameLevelData {
     public int stackNum = 0;
     public int stackMaxNum = 0;
 
-    public GameLevelData(String name, int[][] dataSet)
+    public levelPlayManager(String name, int[][] dataSet)
     {
         this.name = name;
         this.dataSet = dataSet.clone();

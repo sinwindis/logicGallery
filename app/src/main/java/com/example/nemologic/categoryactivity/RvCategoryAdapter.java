@@ -17,7 +17,7 @@ public class RvCategoryAdapter extends RecyclerView.Adapter<RvCategoryAdapter.Vi
 
     String[] names;
     Context ctx;
-    final Intent intent;
+    Intent intent;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -54,8 +54,7 @@ public class RvCategoryAdapter extends RecyclerView.Adapter<RvCategoryAdapter.Vi
         TextView tv = holder.itemView.findViewById(R.id.tv_item_category_name);
         tv.setText(this.names[position]);
         final int categoryPos = position;
-
-        holder.itemView.findViewById(R.id.cl_item_category).setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //클릭 시 해당 카테고리에 해당하는 게임 레벨들을 나열하는 LevelActivity로 이동
@@ -63,6 +62,7 @@ public class RvCategoryAdapter extends RecyclerView.Adapter<RvCategoryAdapter.Vi
                 ctx.startActivity(intent);
             }
         });
+
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
