@@ -8,8 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
+import com.example.nemologic.data.CategoryData;
+import com.example.nemologic.data.DataManager;
+import com.example.nemologic.data.LevelData;
 import com.example.nemologic.data.levelPlayManager;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class LevelActivity extends AppCompatActivity {
@@ -20,25 +24,28 @@ public class LevelActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level);
 
-        String categoryName = Objects.requireNonNull(getIntent().getExtras()).getString("category");
         TextView tv_category = findViewById(R.id.tv_item_level_category);
-        tv_category.setText(categoryName);
-
         RecyclerView rv_level = findViewById(R.id.rv_level);
 
-        levelPlayManager[] dummyGld = new levelPlayManager[1];
+        int categoryPos = Objects.requireNonNull(getIntent().getExtras()).getInt("pos");
 
-        int[][] dummyData = {{0, 1, 0, 1, 1, 0, 1, 0, 1, 1},
-                            {0, 1, 0, 1, 1, 1, 1, 1, 0, 0},
-                            {1, 1, 0, 1, 0, 1, 1, 1, 1, 1},
-                            {0, 1, 1, 0, 0, 0, 0, 1, 0, 1},
-                            {1, 1, 0, 1, 0, 1, 1, 1, 1, 1},
-                            {1, 1, 0, 1, 0, 1, 1, 1, 1, 1},
-                            {1, 1, 0, 1, 0, 1, 1, 1, 1, 1}};
+        CategoryData categoryData = DataManager.loadCategory(this).get(categoryPos);
+        ArrayList<LevelData> levels = DataManager.loadLevel(this, categoryPos);
 
-        dummyGld[0] = new levelPlayManager("dummy", dummyData);
+        String categoryName = categoryData.getName();
+        tv_category.setText(categoryName);
+
+
+
+        levelPlayManager[] lpms = new levelPlayManager[categoryData.getLevelNum()];
+
+        for(int i = 0; i < lpms.length; i++)
+        {
+            LevelData levelTemp = levels.get(i);
+            lpms[i] = new levelPlayManager(levelTemp.getName(), levelTemp.getDataSet());
+        }
 
         rv_level.setLayoutManager(new LinearLayoutManager(this));
-        rv_level.setAdapter(new RvLevelAdapter(this, dummyGld));
+        rv_level.setAdapter(new RvLevelAdapter(this, lpms));
     }
 }

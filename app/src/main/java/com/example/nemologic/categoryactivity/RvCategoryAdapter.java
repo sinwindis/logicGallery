@@ -59,6 +59,7 @@ public class RvCategoryAdapter extends RecyclerView.Adapter<RvCategoryAdapter.Vi
             public void onClick(View view) {
                 //클릭 시 해당 카테고리에 해당하는 게임 레벨들을 나열하는 LevelActivity로 이동
                 intent.putExtra("category", names[categoryPos]);
+                intent.putExtra("pos", categoryPos);
                 ctx.startActivity(intent);
             }
         });

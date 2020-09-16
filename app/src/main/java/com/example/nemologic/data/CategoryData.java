@@ -6,11 +6,13 @@ public class CategoryData {
 
     private String name;
     private int levelNum;
+    private int clearNum;
 
-    public CategoryData(String name, int numOfLevels)
+    public CategoryData(String name, int numOfLevels, int numOfClears)
     {
         this.name = name;
         this.levelNum = numOfLevels;
+        this.clearNum = numOfClears;
     }
 
     public String getName()

@@ -61,8 +61,9 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //클릭 시 해당 카테고리에 해당하는 게임 레벨들을 나열하는 LevelActivity로 이동
-                intent.putExtra("gldpos", position);
+                //클릭 시 해당 게임을 플레이하는 GameActivity로 이동
+                intent.putExtra("name", levels[position].name);
+                intent.putExtra("dataset", levels[position].dataSet);
                 ctx.startActivity(intent);
             }
         });

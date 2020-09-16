@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.CategoryData;
-import com.example.nemologic.data.DataLoader;
+import com.example.nemologic.data.DataManager;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class CategoryActivity extends AppCompatActivity {
@@ -23,7 +22,7 @@ public class CategoryActivity extends AppCompatActivity {
 
         RecyclerView rv_category = findViewById(R.id.rv_category);
 
-        ArrayList<CategoryData> categories = DataLoader.loadCategory(this);
+        ArrayList<CategoryData> categories = DataManager.loadCategory(this);
 
         String[] dummy_data = new String[categories.size()];
 
