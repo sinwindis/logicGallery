@@ -1,6 +1,8 @@
 package com.example.nemologic.data;
 
-public class levelPlayManager {
+import android.util.Log;
+
+public class LevelPlayManager {
 
     public String name;
     public int[][] dataSet;
@@ -12,13 +14,39 @@ public class levelPlayManager {
     public int stackNum = 0;
     public int stackMaxNum = 0;
 
-    public levelPlayManager(String name, int[][] dataSet)
+    private int[][] parseDataSet(String dataSet, int width, int height)
+    {
+        String[] rawTemp = dataSet.split(" ");
+        int[][] dataTemp = new int[height][width];
+
+        for(int y = 0; y < height; y++)
+        {
+            for(int x = 0; x < width; x++)
+            {
+                dataTemp[y][x] = Integer.parseInt(rawTemp[x + y*width]);
+            }
+        }
+
+        return dataTemp;
+    }
+
+    public LevelPlayManager(String name, int width, int height, String dataSet, String saveData)
     {
         this.name = name;
-        this.dataSet = dataSet.clone();
-        this.height = dataSet.length;
-        this.width = dataSet[0].length;
-        this.checkedSet = new int[this.height][this.width];
+        this.dataSet = parseDataSet(dataSet, width, height);
+        this.height = height;
+        this.width = width;
+        if(saveData.isEmpty())
+        {
+            //저장 데이터가 없으면 새로 빈 array 할당
+            this.checkedSet = new int[height][width];
+        }
+        else
+        {
+            //저장 데이터가 있으면 해당 데이터를 파싱해서 저장
+            this.checkedSet = parseDataSet(saveData, width, height);
+        }
+
         this.checkStack = new int[10][this.height][this.width];
         for(int y = 0; y < height; y++)
         {

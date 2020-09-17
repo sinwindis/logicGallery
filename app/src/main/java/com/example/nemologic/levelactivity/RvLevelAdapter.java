@@ -11,12 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-import com.example.nemologic.data.levelPlayManager;
+import com.example.nemologic.data.LevelData;
+import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.gameactivity.GameActivity;
 
 public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHolder> {
 
-    levelPlayManager[] levels;
+    LevelData[] levels;
     Intent intent;
     Context ctx;
 
@@ -29,7 +30,7 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         }
     }
 
-    RvLevelAdapter(Context ctx, levelPlayManager[] levels) {
+    RvLevelAdapter(Context ctx, LevelData[] levels) {
         //생성자
         this.levels = levels;
         this.ctx = ctx;
@@ -53,17 +54,20 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
     @Override
     public void onBindViewHolder(RvLevelAdapter.ViewHolder holder, final int position) {
         TextView tv = holder.itemView.findViewById(R.id.tv_item_level_name);
-        tv.setText(this.levels[position].name);
+        tv.setText(this.levels[position].getName());
         tv = holder.itemView.findViewById(R.id.tv_item_level_size);
-        String temp = levels[position].width + "X" + levels[position].height;
+        String temp = levels[position].getWidth() + "X" + levels[position].getHeight();
         tv.setText(temp);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //클릭 시 해당 게임을 플레이하는 GameActivity로 이동
-                intent.putExtra("name", levels[position].name);
-                intent.putExtra("dataset", levels[position].dataSet);
+                intent.putExtra("name", levels[position].getName());
+                intent.putExtra("width", levels[position].getWidth());
+                intent.putExtra("height", levels[position].getHeight());
+                intent.putExtra("dataset", levels[position].getDataSet());
+                intent.putExtra("savedata", levels[position].getSaveData());
                 ctx.startActivity(intent);
             }
         });

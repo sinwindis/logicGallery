@@ -1,6 +1,7 @@
 package com.example.nemologic.gameactivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -16,8 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.utils.BoardItemTouchListener;
-import com.example.nemologic.data.levelPlayManager;
+import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.R;
+
+import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -37,7 +40,7 @@ public class GameActivity extends AppCompatActivity {
     private RvColumnAdapter rvColumnAdapter;
 
     private GridLayoutManager glm;
-    private levelPlayManager gld;
+    private LevelPlayManager gld;
 
     int[][] rowDataSet;
     int[][] columnDataSet;
@@ -613,17 +616,18 @@ public class GameActivity extends AppCompatActivity {
         rv_row = findViewById(R.id.rv_row);
         rv_column = findViewById(R.id.rv_column);
 
-        int[][] dummyData = {{0, 1, 0, 1, 1, 0, 1, 0, 1, 1},
-                             {0, 1, 0, 1, 1, 1, 1, 1, 0, 0},
-                             {1, 1, 0, 1, 0, 1, 1, 1, 1, 1},
-                             {0, 1, 1, 0, 0, 0, 0, 1, 0, 1},
-                             {1, 1, 0, 1, 0, 1, 1, 1, 1, 1},
-                             {1, 1, 0, 1, 0, 1, 1, 1, 1, 1},
-                             {1, 1, 0, 1, 0, 1, 1, 1, 1, 1}};
-        gld = new levelPlayManager("dummy", dummyData);
+        String name = Objects.requireNonNull(getIntent().getExtras()).getString("name");
+        int width = Objects.requireNonNull(getIntent().getExtras()).getInt("width");
+        int height = Objects.requireNonNull(getIntent().getExtras()).getInt("height");
+        String dataSet = Objects.requireNonNull(getIntent().getExtras()).getString("dataset");
+        String saveData = Objects.requireNonNull(getIntent().getExtras()).getString("savedata");
+
+
+        gld = new LevelPlayManager(name, width, height, dataSet, saveData);
 
         dragTemp = new int[gld.height][gld.width];
         makeGameBoard();
+        refreshBoard();
 
         showStackNum();
     }

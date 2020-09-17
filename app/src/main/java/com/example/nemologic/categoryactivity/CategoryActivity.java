@@ -20,18 +20,18 @@ public class CategoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
-//        RecyclerView rv_category = findViewById(R.id.rv_category);
-//
-//        ArrayList<CategoryData> categories = DataManager.loadCategory(this);
-//
-//        String[] dummy_data = new String[categories.size()];
-//
-//        for(int i = 0; i < categories.size(); i++)
-//        {
-//            dummy_data[i] = categories.get(i).getName();
-//        }
-//
-//        rv_category.setLayoutManager(new LinearLayoutManager(this));
-//        rv_category.setAdapter(new RvCategoryAdapter(this, dummy_data));
+        RecyclerView rv_category = findViewById(R.id.rv_category);
+
+        ArrayList<String> categories = DataManager.getCategoriesFromXml(this);
+
+        String[] categoryStringArray = new String[categories.size()];
+
+        for(int i = 0; i < categories.size(); i++)
+        {
+            categoryStringArray[i] = categories.get(i);
+        }
+
+        rv_category.setLayoutManager(new LinearLayoutManager(this));
+        rv_category.setAdapter(new RvCategoryAdapter(this, categoryStringArray));
     }
 }

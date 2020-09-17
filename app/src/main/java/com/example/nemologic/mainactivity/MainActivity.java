@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor;
 
         ArrayList<String> categories = DataManager.getCategoriesFromXml(this);
-        Log.d("categories", String.valueOf(categories));
 
         for(int i = 0; i < categories.size(); i++)
         {
@@ -52,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
             while(cursor.moveToNext()) {
                 String name = cursor.getString(cursor.getColumnIndex(SqlManager.CreateLevelDB.NAME));
-
-                Log.d("getLevelCursorBC test", name + " " + category);
             }
         }
 

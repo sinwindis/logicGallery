@@ -7,44 +7,30 @@ import java.util.Arrays;
 public class LevelData {
 
     private String name;
+    private int width;
+    private int height;
     private int progress;
-    private int[][] dataSet;
-    private int[][] saveData;
+    private String dataSet;
+    private String saveData = "";
 
 
     public LevelData(String name, int width, int height, int progress, String dataSet, String saveData)
     {
         this.name = name;
-        this.dataSet = parseDataSet(dataSet, width, height);
+        this.width = width;
+        this.height = height;
+        this.dataSet = dataSet;
         this.progress = progress;
         if(progress == 1)
         {
             //예전에 플레이하던 레벨의 경우에만 세이브데이터를 파싱해서 저장한다.
-            this.saveData = parseDataSet(saveData, width, height);
+            this.saveData = saveData;
         }
 
     }
 
-    private int[][] parseDataSet(String dataSet, int width, int height)
-    {
-        String[] rawTemp = dataSet.split(" ");
-        int[][] dataTemp = new int[height][width];
 
-        this.dataSet = new int[height][width];
-
-        for(int y = 0; y < height; y++)
-        {
-            for(int x = 0; x < width; x++)
-            {
-                dataTemp[y][x] = Integer.parseInt(rawTemp[x + y*width]);
-            }
-        }
-
-        return dataTemp;
-    }
-
-
-    public int[][] getDataSet()
+    public String getDataSet()
     {
         return this.dataSet;
     }
@@ -56,5 +42,8 @@ public class LevelData {
 
     public int getProgress() {return this.progress;}
 
-    public int[][] getSaveData() { return this.saveData;}
+    public String getSaveData() { return this.saveData;}
+
+    public int getWidth() {return this.width;}
+    public int getHeight() {return this.height;}
 }
