@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.sql.SQLException;
-import java.util.Locale;
+import java.util.ArrayList;
 
 public class DbOpenHelper {
 
@@ -25,16 +25,21 @@ public class DbOpenHelper {
 
         @Override
         public void onCreate(SQLiteDatabase db){
-            db.execSQL(LevelDB.CreateDB._CREATE);
-            db.execSQL(CategoryDB.CreateDB._CREATE);
+            //모든 카테고리에 해당하는 레벨 테이블을 만들어야 하는데...
+            ArrayList<String> categories = DataManager.getCategoriesFromXml(ctx);
+            for(int i = 0; i < categories.size(); i++)
+            {
+                db.execSQL(SqlManager.CreateLevelDB.getCreateStr(categories.get(i)));
+            }
+            db.execSQL(SqlManager.CreateCategoryDB._CREATE);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
 
             //savedata를 보존하면서 db를 업데이트하는 기능을 구현해야 함
-            db.execSQL("DROP TABLE IF EXISTS "+ LevelDB.CreateDB._TABLENAME);
-            db.execSQL("DROP TABLE IF EXISTS "+ CategoryDB.CreateDB._TABLENAME);
+            //db.execSQL("DROP TABLE IF EXISTS "+ SqlManager.CreateLevelDB.getCreateStr());
+            //db.execSQL("DROP TABLE IF EXISTS "+ CategoryDB.CreateDB._TABLENAME);
             onCreate(db);
         }
     }
@@ -59,33 +64,28 @@ public class DbOpenHelper {
 
     public long insertLevel(String name, String category, int width, int height, String dataSet){
         ContentValues values = new ContentValues();
-        values.put(LevelDB.CreateDB.NAME, name);
-        values.put(LevelDB.CreateDB.CATEGORY, category);
-        values.put(LevelDB.CreateDB.WIDTH, width);
-        values.put(LevelDB.CreateDB.HEIGHT, height);
-        values.put(LevelDB.CreateDB.PROGRESS, 0);
-        values.put(LevelDB.CreateDB.DATASET, dataSet);
+        values.put(SqlManager.CreateLevelDB.NAME, name);
+        values.put(SqlManager.CreateLevelDB.WIDTH, width);
+        values.put(SqlManager.CreateLevelDB.HEIGHT, height);
+        values.put(SqlManager.CreateLevelDB.PROGRESS, 0);
+        values.put(SqlManager.CreateLevelDB.DATASET, dataSet);
 
-        return mDB.insert(LevelDB.CreateDB._TABLENAME, null, values);
+        return mDB.insert(category, null, values);
     }
 
     public long insertCategory(String name){
         ContentValues values = new ContentValues();
-        values.put(CategoryDB.CreateDB.NAME, name);
+        values.put(SqlManager.CreateCategoryDB.NAME, name);
 
-        return mDB.insert(CategoryDB.CreateDB._TABLENAME, null, values);
+        return mDB.insert(SqlManager.CreateCategoryDB._TABLENAME, null, values);
     }
 
     public Cursor getCategoryCursor(){
-        return mDB.query(LevelDB.CreateDB._TABLENAME, null, null, null, null, null, null);
-    }
-
-    public Cursor getLevelCursor(){
-        return mDB.query(LevelDB.CreateDB._TABLENAME, null, null, null, null, null, null);
+        return mDB.query(SqlManager.CreateCategoryDB._TABLENAME, null, null, null, null, null, null);
     }
 
     public Cursor getLevelCursorByCategory(String category){
-        Cursor c = mDB.rawQuery( "SELECT * FROM " + LevelDB.CreateDB._TABLENAME + " WHERE " + LevelDB.CreateDB.CATEGORY + " = '" + category + "';", null);
+        Cursor c = mDB.rawQuery( "SELECT * FROM " + category + ";", null);
 
         return c;
     }
