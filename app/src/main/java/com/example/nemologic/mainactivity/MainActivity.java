@@ -13,9 +13,10 @@ import com.example.nemologic.categoryactivity.CategoryActivity;
 import com.example.nemologic.R;
 import com.example.nemologic.data.DataManager;
 import com.example.nemologic.data.DbOpenHelper;
-import com.example.nemologic.data.LevelDB;
+import com.example.nemologic.data.SqlManager;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,23 +40,23 @@ public class MainActivity extends AppCompatActivity {
         }
         mDbOpenHelper.create();
 
-        Cursor cursor =  mDbOpenHelper.getLevelCursor();
+        Cursor cursor;
 
-        while(cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex(LevelDB.CreateDB.NAME));
-            String category = cursor.getString(cursor.getColumnIndex(LevelDB.CreateDB.CATEGORY));
+        ArrayList<String> categories = DataManager.getCategoriesFromXml(this);
+        Log.d("categories", String.valueOf(categories));
 
-            Log.d("getLevelCursor test", name + " " + category);
+        for(int i = 0; i < categories.size(); i++)
+        {
+            String category = categories.get(i);
+            cursor =  mDbOpenHelper.getLevelCursorByCategory(category);
+
+            while(cursor.moveToNext()) {
+                String name = cursor.getString(cursor.getColumnIndex(SqlManager.CreateLevelDB.NAME));
+
+                Log.d("getLevelCursorBC test", name + " " + category);
+            }
         }
 
-        cursor =  mDbOpenHelper.getLevelCursorByCategory("dummy1");
-
-        while(cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex(LevelDB.CreateDB.NAME));
-            String category = cursor.getString(cursor.getColumnIndex(LevelDB.CreateDB.CATEGORY));
-
-            Log.d("getLevelCursorBC test", name + " " + category);
-        }
 
         mDbOpenHelper.close();
 
