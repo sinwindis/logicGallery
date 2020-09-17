@@ -1,6 +1,8 @@
 package com.example.nemologic.data;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 public class LevelPlayManager {
 
@@ -121,6 +123,26 @@ public class LevelPlayManager {
             if (width >= 0) System.arraycopy(checkStack[stackNum][y], 0, checkedSet[y], 0, width);
         }
 
+    }
+
+    public boolean isGameEnd()
+    {
+        for(int y = 0; y < height; y++)
+        {
+            for(int x = 0; x < width; x++)
+            {
+                if(dataSet[y][x] == 1 && checkedSet[y][x] != 1)
+                {
+                    return false;
+                }
+                else if(dataSet[y][x] != 1 && checkedSet[y][x] == 1)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public int getStackNum()
