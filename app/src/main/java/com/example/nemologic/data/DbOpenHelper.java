@@ -1,13 +1,18 @@
 package com.example.nemologic.data;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.CharArrayBuffer;
+import android.database.ContentObserver;
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -75,6 +80,15 @@ public class DbOpenHelper {
         return mDB.insert(category, null, values);
     }
 
+    public int updateLevel(String name, String category, int progress, String saveData){
+        ContentValues values = new ContentValues();
+
+        values.put(SqlManager.CreateLevelDB.SAVEDATA, saveData);
+        values.put(SqlManager.CreateLevelDB.PROGRESS, progress);
+
+        return mDB.update(category, values, SqlManager.CreateLevelDB.NAME + "=?", new String[]{name});
+    }
+
     public long insertCategory(String name){
         ContentValues values = new ContentValues();
         values.put(SqlManager.CreateCategoryDB.NAME, name);
@@ -88,6 +102,13 @@ public class DbOpenHelper {
 
     public Cursor getLevelCursorByCategory(String category){
         Cursor c = mDB.rawQuery( "SELECT * FROM " + category + ";", null);
+
+        return c;
+    }
+
+    public Cursor getLevelCursorByCategoryAndName(String category, String name){
+
+        Cursor c = mDB.rawQuery( "SELECT * FROM " + category + " WHERE name='" + name + "';", null);
 
         return c;
     }

@@ -1,11 +1,19 @@
 package com.example.nemologic.data;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
+
+import java.sql.SQLException;
+import java.util.Objects;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class LevelPlayManager {
 
+    public String category;
     public String name;
     public int[][] dataSet;
     public int[][] checkedSet;
@@ -18,6 +26,7 @@ public class LevelPlayManager {
 
     private int[][] parseDataSet(String dataSet, int width, int height)
     {
+
         String[] rawTemp = dataSet.split(" ");
         int[][] dataTemp = new int[height][width];
 
@@ -32,8 +41,46 @@ public class LevelPlayManager {
         return dataTemp;
     }
 
-    public LevelPlayManager(String name, int width, int height, String dataSet, String saveData)
+    private String parseDataSetToString(int[][] dataSet)
     {
+        String saveData = "";
+
+        for(int y = 0; y < height; y++)
+        {
+            for(int x = 0; x < width; x++)
+            {
+                saveData +=  dataSet[y][x] + " ";
+            }
+        }
+
+        return saveData;
+    }
+
+    public void savePlayData(Context ctx)
+    {
+
+        DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
+        try {
+            mDbOpenHelper.open();
+
+            mDbOpenHelper.updateLevel(name, category, 1, parseDataSetToString(checkedSet));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        mDbOpenHelper.close();
+
+        SharedPreferences lastPlayPref = ((Activity)ctx).getSharedPreferences("LASTPLAY", MODE_PRIVATE);
+        SharedPreferences.Editor editor = lastPlayPref.edit();
+        editor.putString("name", name);
+        editor.putString("category", category);
+
+        editor.commit();
+    }
+
+    public LevelPlayManager(String category, String name, int width, int height, String dataSet, String saveData)
+    {
+        this.category = category;
         this.name = name;
         this.dataSet = parseDataSet(dataSet, width, height);
         this.height = height;
@@ -42,6 +89,13 @@ public class LevelPlayManager {
         {
             //저장 데이터가 없으면 새로 빈 array 할당
             this.checkedSet = new int[height][width];
+            for(int y = 0; y < height; y++)
+            {
+                for(int x = 0; x < width; x++)
+                {
+                    this.checkedSet[y][x] = 0;
+                }
+            }
         }
         else
         {
@@ -54,12 +108,9 @@ public class LevelPlayManager {
         {
             for(int x = 0; x < width; x++)
             {
-                this.checkedSet[y][x] = 0;
                 this.checkStack[0][y][x] = 0;
             }
         }
-
-
     }
 
     private void expandStackSize()

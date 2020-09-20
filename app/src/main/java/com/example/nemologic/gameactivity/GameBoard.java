@@ -3,6 +3,7 @@ package com.example.nemologic.gameactivity;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,12 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nemologic.R;
 import com.example.nemologic.data.LevelPlayManager;
 
+import java.util.Arrays;
+
 public class GameBoard {
 
     private RecyclerView rv_board;
 
     private GridLayoutManager glm;
-    private LevelPlayManager lpm;
+    private RvBoardAdapter rba;
+    public LevelPlayManager lpm;
 
     ColumnIndexViewMaker civm;
     RowIndexViewMaker rivm;
@@ -301,6 +305,7 @@ public class GameBoard {
             setMacroMode(pos);
             dragManage();
             refreshBoard();
+            showDrag();
             updateNumColor();
         }
 
@@ -313,6 +318,7 @@ public class GameBoard {
 
             dragManage();
             refreshBoard();
+            showDrag();
             updateNumColor();
         }
 
@@ -327,6 +333,7 @@ public class GameBoard {
             removeDragTemp();
             lpm.pushCheckStack();
             refreshBoard();
+            showDrag();
             updateNumColor();
 
 
@@ -340,6 +347,7 @@ public class GameBoard {
             removeDragTemp();
             lpm.pushCheckStack();
             refreshBoard();
+            showDrag();
             updateNumColor();
             showStackNum();
 
@@ -353,6 +361,7 @@ public class GameBoard {
             removeDragTemp();
             lpm.pushCheckStack();
             refreshBoard();
+            showDrag();
             updateNumColor();
             showStackNum();
 
@@ -376,7 +385,40 @@ public class GameBoard {
 
 
 
-    private void refreshBoard()
+    public void refreshBoard()
+    {
+        for(int y = 0; y < lpm.height; y++)
+        {
+            for(int x = 0; x < lpm.width; x++)
+            {
+                ImageView view =  (ImageView) glm.findViewByPosition(x + y * lpm.width);
+
+                if(view == null)
+                {
+                    continue;
+                }
+
+                switch(lpm.checkedSet[y][x])
+                {
+                    case 0:
+                        view.setImageResource(R.drawable.border_1px_transparent);
+                        view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                        break;
+                    case 1:
+                        view.setImageResource(R.drawable.border_1px_transparent);
+                        view.setBackgroundColor(Color.parseColor("#000000"));
+                        break;
+                    case 2:
+                        view.setImageResource(R.drawable.border_1px_x);
+                        view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                        break;
+                }
+
+            }
+        }
+    }
+
+    private void showDrag()
     {
         for(int y = 0; y < lpm.height; y++)
         {
@@ -384,28 +426,12 @@ public class GameBoard {
             {
                 ImageView view =  (ImageView) glm.findViewByPosition(x + y * lpm.width);
                 if(view == null)
-                    return;
-
-                if(dragTemp[y][x] == 0)
                 {
-                    //dragTemp가 0인 경우 checkedSet에 있는 값대로 화면에 표현해 준다.
-                    switch(lpm.checkedSet[y][x])
-                    {
-                        case 0:
-                            view.setImageResource(R.drawable.border_1px_transparent);
-                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            break;
-                        case 1:
-                            view.setImageResource(R.drawable.border_1px_transparent);
-                            view.setBackgroundColor(Color.parseColor("#000000"));
-                            break;
-                        case 2:
-                            view.setImageResource(R.drawable.border_1px_x);
-                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            break;
-                    }
+                    continue;
                 }
-                else if(dragTemp[y][x] == 1)
+
+
+                if(dragTemp[y][x] == 1)
                 {
                     //dragTemp가 1인 경우 드래그된 칸은 macroMode에 맞게 그래픽을 갱신해 준다.
                     switch(macroMode)
@@ -448,7 +474,6 @@ public class GameBoard {
                             break;
                     }
                 }
-
             }
         }
     }
@@ -460,7 +485,7 @@ public class GameBoard {
 
         glm = new GridLayoutManager(ctx, lpm.width);
 
-        RvBoardAdapter rba = new RvBoardAdapter(lpm.height, lpm.width);
+        rba = new RvBoardAdapter(lpm.height, lpm.width);
 
         rv_board = ((Activity)ctx).findViewById(R.id.rv_board);
 
@@ -514,7 +539,5 @@ public class GameBoard {
                 showStackNum();
             }
         });
-
-        refreshBoard();
     }
 }

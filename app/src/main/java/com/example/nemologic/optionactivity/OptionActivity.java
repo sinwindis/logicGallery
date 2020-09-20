@@ -14,4 +14,6 @@ public class OptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option);
     }
+
+
 }

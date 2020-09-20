@@ -1,12 +1,9 @@
 package com.example.nemologic.data;
 
-import android.util.Log;
-
-import java.util.Arrays;
-
 public class LevelData {
 
     private String name;
+    private String category;
     private int width;
     private int height;
     private int progress;
@@ -14,8 +11,9 @@ public class LevelData {
     private String saveData = "";
 
 
-    public LevelData(String name, int width, int height, int progress, String dataSet, String saveData)
+    public LevelData(String category, String name, int width, int height, int progress, String dataSet, String saveData)
     {
+        this.category = category;
         this.name = name;
         this.width = width;
         this.height = height;
@@ -34,6 +32,8 @@ public class LevelData {
     {
         return this.dataSet;
     }
+
+    public String getCategory() {return this.category;}
 
     public String getName()
     {

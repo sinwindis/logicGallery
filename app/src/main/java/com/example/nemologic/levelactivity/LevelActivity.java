@@ -2,6 +2,7 @@ package com.example.nemologic.levelactivity;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.data.LevelPlayManager;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class LevelActivity extends AppCompatActivity {
@@ -28,11 +30,11 @@ public class LevelActivity extends AppCompatActivity {
         TextView tv_category = findViewById(R.id.tv_item_level_category);
         RecyclerView rv_level = findViewById(R.id.rv_level);
 
-        String categoryName = Objects.requireNonNull(getIntent().getExtras()).getString("category");
+        String category = Objects.requireNonNull(getIntent().getExtras()).getString("category");
 
 
 
-        tv_category.setText(categoryName);
+        tv_category.setText(category);
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(this);
         try {
@@ -42,7 +44,7 @@ public class LevelActivity extends AppCompatActivity {
         }
 
 
-        Cursor levelCursor =  mDbOpenHelper.getLevelCursorByCategory(categoryName);
+        Cursor levelCursor =  mDbOpenHelper.getLevelCursorByCategory(category);
         LevelData[] levelData = new LevelData[levelCursor.getCount()];
         int count = 0;
 
@@ -58,7 +60,9 @@ public class LevelActivity extends AppCompatActivity {
                 saveData = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.SAVEDATA));
 
 
-            levelData[count] = new LevelData(name, width, height, progress, dataSet, saveData);
+            Log.d("LevelActivity", "progress: " + progress);
+            Log.d("LevelActivity", "saveData: " + saveData);
+            levelData[count] = new LevelData(category, name, width, height, progress, dataSet, saveData);
             count++;
         }
 

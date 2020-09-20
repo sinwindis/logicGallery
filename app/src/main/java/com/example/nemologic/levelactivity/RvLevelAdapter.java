@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.LevelData;
-import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.gameactivity.GameActivity;
 
 public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHolder> {
@@ -63,11 +62,8 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
             @Override
             public void onClick(View view) {
                 //클릭 시 해당 게임을 플레이하는 GameActivity로 이동
+                intent.putExtra("category", levels[position].getCategory());;
                 intent.putExtra("name", levels[position].getName());
-                intent.putExtra("width", levels[position].getWidth());
-                intent.putExtra("height", levels[position].getHeight());
-                intent.putExtra("dataset", levels[position].getDataSet());
-                intent.putExtra("savedata", levels[position].getSaveData());
                 ctx.startActivity(intent);
             }
         });
