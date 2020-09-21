@@ -73,7 +73,7 @@ public class DataManager {
         SharedPreferences versionSavePref = ctx.getSharedPreferences("VERSION", MODE_PRIVATE);
 
         //마지막 플레이한 레벨의 이름과 카테고리를 받아온다.
-        final String categoryVersion = versionSavePref.getString("ver_category", "0");
+        final String categoryVersion = versionSavePref.getString("categoryVersion", "0");
         String currentVersion = categoryVersion;
 
         String version = "0";
@@ -141,7 +141,7 @@ public class DataManager {
 
         //카테고리 버전을 sharedPreferences에 업데이트 해준다.
         SharedPreferences.Editor editor = versionSavePref.edit();
-        editor.putString("ver_category", version);
+        editor.putString("categoryVersion", version);
 
         editor.apply();
     }
@@ -159,9 +159,8 @@ public class DataManager {
 
         //get version
         SharedPreferences versionSavePref = ctx.getSharedPreferences("VERSION", MODE_PRIVATE);
-        final String levelVersion = versionSavePref.getString("ver_level", "0");
+        final String levelVersion = versionSavePref.getString("levelVersion", "0");
         //get version
-        Log.d("loadLevel", "sp ver_level: " + levelVersion);
 
         String levelName = "";
         String categoryName = "";
@@ -243,11 +242,9 @@ public class DataManager {
 
         //버전을 갱신해 준다.
         SharedPreferences.Editor editor = versionSavePref.edit();
-        editor.putString("ver_level", version);
+        editor.putString("levelVersion", version);
 
         editor.apply();
-
-        Log.d("DataManager", "saved Level version: " + version);
 
     }
 }
