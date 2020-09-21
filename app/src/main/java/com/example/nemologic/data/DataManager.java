@@ -1,6 +1,10 @@
 package com.example.nemologic.data;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.example.nemologic.R;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -10,6 +14,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 //대집도..
 //raw xml 파일에서 읽은 level의 데이터를 db에 차곡차곡 쌓는 역할로 바뀔 것
@@ -28,10 +34,6 @@ public class DataManager {
         InputStream categoryInputStream;
         ArrayList<String> categories = new ArrayList<>();
 
-        //get version
-        String currentVersion = "0";
-        //get version
-
         try {
             categoryInputStream = ctx.getResources().openRawResource(R.raw.categories);
 
@@ -39,23 +41,6 @@ public class DataManager {
             XmlPullParser parser = factory.newPullParser();
             parser.setInput(new InputStreamReader(categoryInputStream, "UTF-8"));
             int eventType = parser.getEventType();
-            String version;
-
-            while(eventType != XmlPullParser.END_DOCUMENT) {
-                if (eventType == XmlPullParser.START_TAG) {
-                    String startTag = parser.getName();
-                    if (startTag.equals("version")) {
-                        version = parser.nextText();
-                        if(version.equals(currentVersion))
-                        {
-                            //해당 태그 아래부터 카테고리 명을 insert하기 시작한다.
-                            eventType = parser.next();
-                            break;
-                        }
-                    }
-                }
-                eventType = parser.next();
-            }
 
             while(eventType != XmlPullParser.END_DOCUMENT) {
                 if (eventType == XmlPullParser.START_TAG) {
@@ -75,10 +60,70 @@ public class DataManager {
         return categories;
     }
 
+
     public static void loadCategory(Context ctx)
     {
         //xml파일에 저장된 데이터를 category db에 저장합니다.
         //게임의 버전을 인식하여 추가해야 할 카테고리만 자동으로 추가합니다.
+
+        InputStream categoryInputStream;
+        ArrayList<String> categories = new ArrayList<>();
+
+        //get version
+        SharedPreferences versionSavePref = ctx.getSharedPreferences("VERSION", MODE_PRIVATE);
+
+        //마지막 플레이한 레벨의 이름과 카테고리를 받아온다.
+        final String categoryVersion = versionSavePref.getString("ver_category", "0");
+        String currentVersion = categoryVersion;
+
+        String version = "0";
+
+        //get version
+
+        try {
+            categoryInputStream = ctx.getResources().openRawResource(R.raw.categories);
+
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(new InputStreamReader(categoryInputStream, "UTF-8"));
+            int eventType = parser.getEventType();
+
+
+            while(eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    String startTag = parser.getName();
+                    if (startTag.equals("version")) {
+                        version = parser.nextText();
+                        if(version.equals(currentVersion))
+                        {
+                            //해당 태그 아래부터 카테고리 명을 insert하기 시작한다.
+                            eventType = parser.next();
+                            break;
+                        }
+
+                    }
+                }
+                eventType = parser.next();
+            }
+
+            while(eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
+                    String startTag = parser.getName();
+                    if (startTag.equals("name")) {
+                        categories.add(parser.nextText());
+                    }
+                    else if(startTag.equals("version"))
+                    {
+                        version = parser.nextText();
+                    }
+                }
+                eventType = parser.next();
+            }
+
+
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        }
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
@@ -87,8 +132,6 @@ public class DataManager {
             e.printStackTrace();
         }
 
-        ArrayList<String> categories = getCategoriesFromXml(ctx);
-
         for(int i = 0; i < categories.size(); i++)
         {
             mDbOpenHelper.insertCategory(categories.get(i));
@@ -96,8 +139,11 @@ public class DataManager {
 
         mDbOpenHelper.close();
 
-        //카테고리 버전을 업데이트 해준다.
-        //~~
+        //카테고리 버전을 sharedPreferences에 업데이트 해준다.
+        SharedPreferences.Editor editor = versionSavePref.edit();
+        editor.putString("ver_category", version);
+
+        editor.apply();
     }
 
     public static void loadLevel(Context ctx)
@@ -112,8 +158,10 @@ public class DataManager {
         InputStream levelInputStream;
 
         //get version
-        String currentVersion = "0";
+        SharedPreferences versionSavePref = ctx.getSharedPreferences("VERSION", MODE_PRIVATE);
+        final String levelVersion = versionSavePref.getString("ver_level", "0");
         //get version
+        Log.d("loadLevel", "sp ver_level: " + levelVersion);
 
         String levelName = "";
         String categoryName = "";
@@ -121,7 +169,7 @@ public class DataManager {
         int levelHeight = 0;
         String levelData = "";
 
-        String version;
+        String version = "0";
 
         try {
             levelInputStream = ctx.getResources().openRawResource(R.raw.levels);
@@ -136,7 +184,7 @@ public class DataManager {
                     String startTag = parser.getName();
                     if (startTag.equals("version")) {
                         version = parser.nextText();
-                        if(version.equals(currentVersion))
+                        if(version.equals(levelVersion))
                         {
                             //해당 태그 아래부터 카테고리 명을 insert하기 시작한다.
                             eventType = parser.next();
@@ -169,6 +217,9 @@ public class DataManager {
                             case "data":
                                 levelData = parser.nextText();
                                 break;
+                            case "version":
+                                version = parser.nextText();
+                                break;
                         }
                         break;
                     case XmlPullParser.END_TAG:
@@ -191,5 +242,12 @@ public class DataManager {
         mDbOpenHelper.close();
 
         //버전을 갱신해 준다.
+        SharedPreferences.Editor editor = versionSavePref.edit();
+        editor.putString("ver_level", version);
+
+        editor.apply();
+
+        Log.d("DataManager", "saved Level version: " + version);
+
     }
 }

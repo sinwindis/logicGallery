@@ -29,4 +29,15 @@
     </level>
 
     <version>0.1</version>
+
+    <level>
+        <lname>dummyLevel4</lname>
+        <cname>dummy2</cname>
+        <width>10</width>
+        <height>10</height>
+        <data>0 1 0 1 1 0 1 0 1 1 0 1 0 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 0 1 1 0 0 0 0 1 0 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1 1 0 1 1 1 1 0 0 1 1 0 0 1 1 0 1</data>
+
+    </level>
+
+    <version>0.2</version>
 </resources>
