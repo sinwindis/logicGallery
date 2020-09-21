@@ -49,7 +49,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topbar"
-        app:layout_constraintBottom_toTopOf="@id/ad"
+        app:layout_constraintBottom_toTopOf="@id/adView"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -87,8 +87,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:textSize="35sp"
-                    android:text="Dummy"/>
+                    android:textSize="35sp"/>
 
                 <TextView
                     android:id="@+id/tv_item_level_size"
@@ -99,8 +98,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:textSize="20sp"
-                    android:text="10X10"/>
+                    android:textSize="20sp"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -144,17 +142,29 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ad"
+
+    <com.google.android.gms.ads.AdView
+
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+
+        android:id="@+id/adView"
+
         android:layout_width="match_parent"
         android:layout_height="150px"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="#abcdef"
-        >
+
+        android:layout_centerHorizontal="true"
+
+        android:layout_alignParentBottom="true"
+
+        ads:adSize="BANNER"
+
+        ads:adUnitId="@string/banner_ad_unit_id_for_test">
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.gms.ads.AdView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

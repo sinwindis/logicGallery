@@ -182,6 +182,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textColor="#000000"
+        android:text="0/0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/img_toggle"
         app:layout_constraintTop_toBottomOf="@id/board"
