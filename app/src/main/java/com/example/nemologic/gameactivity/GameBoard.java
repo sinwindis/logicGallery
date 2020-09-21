@@ -2,6 +2,7 @@ package com.example.nemologic.gameactivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +20,15 @@ import com.example.nemologic.data.LevelPlayManager;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class GameBoard {
+
+    SharedPreferences optionPref;
+    boolean smartDrag;
+    boolean oneLineDrag;
+    boolean autoX;
+
 
     private RecyclerView rv_board;
 
@@ -48,7 +57,7 @@ public class GameBoard {
 
     //0: 체크, 1: X
     int touchMode = 0;
-    //0: 공백 -> 체크, 1: 공백 -> X, 2: 체크 -> 공백, 3: 체크 -> X, 4: X -> 공백, 5: X -> 체크
+    //0: 공백 1: 체크 2: X
     int macroMode = 0;
     
     Context ctx;
@@ -61,15 +70,27 @@ public class GameBoard {
         initialize();
     }
 
+    public void loadOption()
+    {
+        optionPref = ctx.getSharedPreferences("OPTION", MODE_PRIVATE);
+        smartDrag = optionPref.getBoolean("smartDrag", true);
+        oneLineDrag = optionPref.getBoolean("oneLineDrag", true);
+        autoX = optionPref.getBoolean("autoX", false);
+    }
+
     private void initialize()
     {
         dragTemp = new int[lpm.height][lpm.width];
+        rv_board = ((Activity)ctx).findViewById(R.id.rv_board);
+
         ll_count = ((Activity)ctx).findViewById(R.id.ll_count);
         btn_toggle = ((Activity)ctx).findViewById(R.id.img_toggle);
         btn_prev = ((Activity)ctx).findViewById(R.id.img_prev);
         btn_next = ((Activity)ctx).findViewById(R.id.img_next);
         tv_count = ((Activity)ctx).findViewById(R.id.tv_count);
         tv_stack = ((Activity)ctx).findViewById(R.id.tv_stack);
+
+        loadOption();
     }
 
 
@@ -96,11 +117,16 @@ public class GameBoard {
         int dragEndX;
         int dragEndY;
 
+        //한 줄만 드래그하기 옵션의 경우 터치가 끝난 지점과 실제 드래그한 지점이 다를 수 있기 때문에 정확한 값을 저장하기 위함
         int lastX;
         int lastY;
 
         int dragCount;
 
+        //저번 드래그했을 때 남아있는 드래그 범위를 없애준다
+        removeDragTemp();
+
+        //터치한 시작점과 끝점을 이용해서 드래그한 범위를 지정해줌
         if(touchStartX > touchEndX)
         {
             dragStartX = touchEndX;
@@ -123,30 +149,43 @@ public class GameBoard {
             dragEndY = touchEndY;
         }
 
-        removeDragTemp();
 
-        if(dragEndX - dragStartX > dragEndY - dragStartY)
+        if(oneLineDrag)
         {
-            //가로 방향 드래그가 더 길 경우
-            //가로 방향 한 줄만 드래그시킨다.
-            dragCount = dragEndX - dragStartX + 1;
-            dragEndY = touchStartY;
-            dragStartY = touchStartY;
+            //한 줄만 드래그하기 옵션이 켜져 있을 경우
+            if(dragEndX - dragStartX > dragEndY - dragStartY)
+            {
+                //가로 방향 드래그가 더 길 경우
+                //가로 방향 한 줄만 드래그시킨다.
+                dragCount = dragEndX - dragStartX + 1;
+                dragEndY = touchStartY;
+                dragStartY = touchStartY;
 
-            //마지막으로 선택된 칸의 위치를 lastX와 lastY에 저장해 둔다.
-            lastX = touchEndX;
-            lastY = touchStartY;
+                //마지막으로 선택된 칸의 위치를 lastX와 lastY에 저장해 둔다.
+                lastX = touchEndX;
+                lastY = touchStartY;
+            }
+            else
+            {
+                //세로 방향 드래그가 더 길 경우
+                dragCount = dragEndY - dragStartY + 1;
+                dragEndX = touchStartX;
+                dragStartX = touchStartX;
+
+                lastX = touchStartX;
+                lastY = touchEndY;
+            }
         }
         else
         {
-            dragCount = dragEndY - dragStartY + 1;
-            dragEndX = touchStartX;
-            dragStartX = touchStartX;
-
-            lastX = touchStartX;
+            //마지막으로 터치한 지점의 좌표값과 드래그한 넓이를 대입해준다.
+            lastX = touchEndX;
             lastY = touchEndY;
+            dragCount = (dragEndX - dragStartX + 1) * (dragEndY - dragStartY + 1);
         }
 
+
+        //마지막 드래그한 칸의 가로줄과 세로줄에 하이라이트를 해 준다.
         for(int y = 0; y < lpm.height; y++)
         {
             dragTemp[y][lastX] = 2;
@@ -156,14 +195,20 @@ public class GameBoard {
             dragTemp[lastY][x] = 2;
         }
 
+
         for(int y = dragStartY; y <= dragEndY; y++)
         {
             for(int x = dragStartX; x <= dragEndX; x++)
             {
-                if(lpm.checkedSet[y][x] == lpm.checkedSet[touchStartY][touchStartX])
+                if(lpm.checkedSet[y][x] == lpm.checkedSet[touchStartY][touchStartX] && smartDrag)
                 {
                     //본인이 처음 선택한 것이랑 현재 드래그된 칸이 똑같은 유형이라면
-                    //dragTemp에 해당 칸을 저장해 둔다.
+                    //dragTemp 에 해당 칸을 저장해 둔다.
+                    dragTemp[y][x] = 1;
+                }
+                else if(!smartDrag)
+                {
+                    //스마트드래그가 꺼져 있다면 드래그한 모든 칸을 dragTemp 에 저장한다.
                     dragTemp[y][x] = 1;
                 }
             }
@@ -176,6 +221,49 @@ public class GameBoard {
 
         ll_count.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
 
+    }
+    
+    private void checkAutoX()
+    {
+        if(!autoX)
+        {
+            //autoX 옵션이 꺼져있으면 바로 종료
+            return;
+        }
+        
+        //row 의 경우
+        for(int row = 0; row < lpm.height; row++)
+        {
+            if(rivm.rvRowAdapter.endRow[row])
+            {
+                //해당 row가 완성됐다면
+                for(int x = 0; x < lpm.width; x++)
+                {
+                    if(lpm.checkedSet[row][x] == 0)
+                    {
+                        //해당 칸이 공백이면 x로 채워준다.
+                        lpm.checkedSet[row][x] = 2;
+                    }
+                }
+            }
+        }
+
+        //column 의 경우
+        for(int column = 0; column < lpm.width; column++)
+        {
+            if(civm.rvColumnAdapter.endColumn[column])
+            {
+                //해당 column가 완성됐다면
+                for(int x = 0; x < lpm.height; x++)
+                {
+                    if(lpm.checkedSet[x][column] == 0)
+                    {
+                        //해당 칸이 공백이면 x로 채워준다.
+                        lpm.checkedSet[x][column] = 2;
+                    }
+                }
+            }
+        }
     }
 
     private void setDragChecked()
@@ -191,53 +279,21 @@ public class GameBoard {
                 switch(macroMode)
                 {
                     case 0:
-                        //공백 -> 체크
-                        if(lpm.checkedSet[y][x] == 0)
-                        {
-                            lpm.checkedSet[y][x] = 1;
-                        }
+                        //공백
+                        lpm.checkedSet[y][x] = 0;
                         break;
                     case 1:
-                        //공백 -> X
-                        if(lpm.checkedSet[y][x] == 0)
-                        {
-                            lpm.checkedSet[y][x] = 2;
-                        }
+                        //체크
+                        lpm.checkedSet[y][x] = 1;
                         break;
                     case 2:
-                        //체크 -> 공백
-                        if(lpm.checkedSet[y][x] == 1)
-                        {
-                            lpm.checkedSet[y][x] = 0;
-                        }
+                        //X
+                        lpm.checkedSet[y][x] = 2;
                         break;
-                    case 3:
-                        //체크 -> X
-                        if(lpm.checkedSet[y][x] == 1)
-                        {
-                            lpm.checkedSet[y][x] = 2;
-                        }
-                        break;
-                    case 4:
-                        //X -> 공백
-                        if(lpm.checkedSet[y][x] == 2)
-                        {
-                            lpm.checkedSet[y][x] = 0;
-                        }
-                    case 5:
-                        //X -> 체크
-                        if(lpm.checkedSet[y][x] == 2)
-                        {
-                            lpm.checkedSet[y][x] = 1;
-                        }
-
                 }
             }
         }
     }
-
-
-
 
     private void setMacroMode(int pos)
     {
@@ -252,39 +308,29 @@ public class GameBoard {
         if(touchMode == 0)
         {
             //체크모드
-            if(lpm.checkedSet[y][x] == 0)
-            {
-                //공백 -> 체크
-                macroMode = 0;
-            }
-            else if(lpm.checkedSet[y][x] == 2)
-            {
-                //X -> 체크
-                macroMode = 5;
-            }
-            else if(lpm.checkedSet[y][x] == 1)
+            if(lpm.checkedSet[y][x] == 1)
             {
                 //체크 -> 공백
-                macroMode = 2;
+                macroMode = 0;
+            }
+            else
+            {
+                //체크
+                macroMode = 1;
             }
         }
         else
         {
             //X모드
-            if(lpm.checkedSet[y][x] == 0)
-            {
-                //공백 -> X
-                macroMode = 1;
-            }
-            else if(lpm.checkedSet[y][x] == 2)
+            if(lpm.checkedSet[y][x] == 2)
             {
                 //X -> 공백
-                macroMode = 4;
+                macroMode = 0;
             }
-            else if(lpm.checkedSet[y][x] == 1)
+            else
             {
-                //체크 -> X
-                macroMode = 3;
+                //X
+                macroMode = 2;
             }
         }
     }
@@ -333,10 +379,10 @@ public class GameBoard {
             setDragChecked();
             removeDragTemp();
             lpm.pushCheckStack();
-            refreshBoard();
-            showDrag();
             updateNumColor();
+            checkAutoX();
             showStackNum();
+            refreshBoard();
 
 
             lpm.isGameEnd();
@@ -348,10 +394,10 @@ public class GameBoard {
             setDragChecked();
             removeDragTemp();
             lpm.pushCheckStack();
-            refreshBoard();
-            showDrag();
             updateNumColor();
+            checkAutoX();
             showStackNum();
+            refreshBoard();
 
             lpm.isGameEnd();
         }
@@ -362,10 +408,10 @@ public class GameBoard {
             setDragChecked();
             removeDragTemp();
             lpm.pushCheckStack();
-            refreshBoard();
-            showDrag();
             updateNumColor();
+            checkAutoX();
             showStackNum();
+            refreshBoard();
 
             lpm.isGameEnd();
         }
@@ -384,8 +430,6 @@ public class GameBoard {
             rivm.rvRowAdapter.updateNumColor(i, lpm.checkedSet);
         }
     }
-
-
 
     public void refreshBoard()
     {
@@ -439,22 +483,19 @@ public class GameBoard {
                     switch(macroMode)
                     {
                         case 0:
-                        case 5:
+                            //공백
+                            view.setImageResource(R.drawable.border_2dp_transparent);
+                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            break;
+                        case 1:
                             //체크
                             view.setImageResource(R.drawable.border_2dp_transparent);
                             view.setBackgroundColor(Color.parseColor("#000000"));
                             break;
-                        case 1:
-                        case 3:
+                        case 2:
                             //X
                             view.setImageResource(R.drawable.border_2dp_x);
                             view.setBackgroundColor(Color.parseColor("#ffffff"));
-                            break;
-                        case 2:
-                        case 4:
-                            //공백
-                            view.setImageResource(R.drawable.border_2dp_transparent);
-                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                             break;
                     }
                 }
@@ -488,9 +529,6 @@ public class GameBoard {
         glm = new GridLayoutManager(ctx, lpm.width);
 
         rba = new RvBoardAdapter(lpm.checkedSet);
-        Log.d("GameBoard", "lpm.checkedSet: " + Arrays.deepToString(lpm.checkedSet));
-
-        rv_board = ((Activity)ctx).findViewById(R.id.rv_board);
 
         rv_board.setLayoutManager(glm);
         rv_board.addOnItemTouchListener(boardTouchListener);

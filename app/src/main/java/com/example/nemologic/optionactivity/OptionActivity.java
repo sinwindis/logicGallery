@@ -33,8 +33,8 @@ public class OptionActivity extends AppCompatActivity {
         btn_cancel = findViewById(R.id.btn_cancel);
 
         SharedPreferences optionPref = getSharedPreferences("OPTION", MODE_PRIVATE);
-        boolean smartDrag = optionPref.getBoolean("smartDrag", false);
-        boolean oneLineDrag = optionPref.getBoolean("oneLineDrag", false);
+        boolean smartDrag = optionPref.getBoolean("smartDrag", true);
+        boolean oneLineDrag = optionPref.getBoolean("oneLineDrag", true);
         boolean autoX = optionPref.getBoolean("autoX", false);
 
         cb_smartDrag.setChecked(smartDrag);

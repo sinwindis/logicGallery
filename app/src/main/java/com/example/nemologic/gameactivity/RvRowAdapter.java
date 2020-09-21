@@ -23,11 +23,11 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
 
     int[][] dataSet;
     int[] idxNumSet;
-    Context ctx;
-    List<TextView> tvlist = new ArrayList<>();
+    public boolean[] endRow;
+    List<TextView> tvList = new ArrayList<>();
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ViewHolder(View itemView) {
             super(itemView) ;
@@ -35,15 +35,16 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
         }
     }
 
-    RvRowAdapter(int[][] dataSet, Context ctx) {
+    RvRowAdapter(int[][] dataSet) {
         //생성자
         this.dataSet = dataSet.clone();
-        this.ctx = ctx;
         this.idxNumSet = new int[dataSet.length];
         for(int i = 0; i < dataSet.length; i++)
         {
             idxNumSet[i] = 0;
         }
+        endRow = new boolean[dataSet.length];
+
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -62,10 +63,10 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(RvRowAdapter.ViewHolder holder, int position) {
-        tvlist.add((TextView)  holder.itemView.findViewById(R.id.tv_item_row));
+        tvList.add((TextView)  holder.itemView.findViewById(R.id.tv_item_row));
 
         //첫 번째 숫자부터 0 이라면 textview에 표시
-        tvlist.get(position).append(String.valueOf(dataSet[position][0]));
+        tvList.get(position).append(String.valueOf(dataSet[position][0]));
         if(dataSet[position][0] != 0)
         {
             idxNumSet[position]++;
@@ -75,7 +76,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
         {
             if(dataSet[position][i] != 0)
             {
-                tvlist.get(position).append(' ' + String.valueOf(dataSet[position][i]));
+                tvList.get(position).append(' ' + String.valueOf(dataSet[position][i]));
                 idxNumSet[position]++;
             }
             else
@@ -92,6 +93,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
 
     private boolean[] getIdxMatch(int rowNum, int[][] checkedSet)
     {
+        endRow[rowNum] = false;
         boolean[] checkTemp = new boolean[idxNumSet[rowNum]];
         int sumTemp = 0;
         int checkIdx = 0;
@@ -249,6 +251,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
                     }
                 }
                 Arrays.fill(checkTemp, true);
+                endRow[rowNum] = true;
                 return checkTemp;
             }
         }
@@ -264,6 +267,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
         {
             //모든 idx가 맞춰졌을 때
             Arrays.fill(checkTemp, true);
+            endRow[rowNum] = true;
             return checkTemp;
         }
 
@@ -275,7 +279,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
         //숫자가 다 채워질 경우 색 바꾸기
         boolean[] checkTemp = getIdxMatch(columnNum, checkedSet);
 
-        tvlist.get(columnNum).setText("");
+        tvList.get(columnNum).setText("");
         SpannableStringBuilder numStr;
         for(int i = 0; i < idxNumSet[columnNum]; i++)
         {
@@ -288,7 +292,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
             {
                 numStr.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), 0, numStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            tvlist.get(columnNum).append(numStr);
+            tvList.get(columnNum).append(numStr);
         }
     }
 }

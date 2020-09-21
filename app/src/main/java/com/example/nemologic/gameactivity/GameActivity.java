@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -33,12 +35,17 @@ public class GameActivity extends AppCompatActivity {
     private String dataSet;
     private String saveData;
 
+    Intent optionIntent;
 
+    Button btn_option;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        optionIntent = new Intent(this, OptionActivity.class);
+        btn_option = findViewById(R.id.btn_option);
 
         //db와 연결해 해당 게임레벨 데이터를 받아올 준비를 한다.
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(this);
@@ -102,6 +109,13 @@ public class GameActivity extends AppCompatActivity {
             .setCancelable(false) // 백버튼으로 팝업창이 닫히지 않도록 한다.
             .show();
 
+
+        btn_option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(optionIntent);
+            }
+        });
 
     }
 

@@ -31,7 +31,7 @@ public class ColumnIndexViewMaker {
 
         rv_column = ((Activity)ctx).findViewById(R.id.rv_column);
 
-        rvColumnAdapter = new RvColumnAdapter(idxDataSet, ctx);
+        rvColumnAdapter = new RvColumnAdapter(idxDataSet);
         rv_column.setLayoutManager(new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false));
         rv_column.setAdapter(rvColumnAdapter);
     }

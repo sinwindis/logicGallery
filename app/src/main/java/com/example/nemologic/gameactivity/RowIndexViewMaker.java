@@ -28,7 +28,7 @@ public class RowIndexViewMaker {
 
         rv_row = ((Activity)ctx).findViewById(R.id.rv_row);
 
-        rvRowAdapter = new RvRowAdapter(idxDataSet, ctx);
+        rvRowAdapter = new RvRowAdapter(idxDataSet);
         rv_row.setLayoutManager(new LinearLayoutManager(ctx));
         rv_row.setAdapter(rvRowAdapter);
     }
