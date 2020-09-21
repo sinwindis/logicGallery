@@ -17,6 +17,7 @@ import com.example.nemologic.R;
 import com.example.nemologic.data.LevelPlayManager;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class GameBoard {
 
@@ -391,7 +392,7 @@ public class GameBoard {
         {
             for(int x = 0; x < lpm.width; x++)
             {
-                ImageView view =  (ImageView) glm.findViewByPosition(x + y * lpm.width);
+                ImageView view = Objects.requireNonNull(glm.findViewByPosition(x + y * lpm.width)).findViewById(R.id.iv_item_board);
 
                 if(view == null)
                 {
@@ -485,14 +486,14 @@ public class GameBoard {
 
         glm = new GridLayoutManager(ctx, lpm.width);
 
-        rba = new RvBoardAdapter(lpm.height, lpm.width);
+        rba = new RvBoardAdapter(lpm.checkedSet);
+        Log.d("GameBoard", "lpm.checkedSet: " + Arrays.deepToString(lpm.checkedSet));
 
         rv_board = ((Activity)ctx).findViewById(R.id.rv_board);
 
         rv_board.setLayoutManager(glm);
-        rv_board.setAdapter(rba);
-
         rv_board.addOnItemTouchListener(boardTouchListener);
+        rv_board.setAdapter(rba);
 
         civm = new ColumnIndexViewMaker(lpm.dataSet);
         rivm = new RowIndexViewMaker(lpm.dataSet);

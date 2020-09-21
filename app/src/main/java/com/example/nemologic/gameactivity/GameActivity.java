@@ -40,6 +40,7 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        //db와 연결해 해당 게임레벨 데이터를 받아올 준비를 한다.
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(this);
         try {
             mDbOpenHelper.open();
@@ -47,11 +48,11 @@ public class GameActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //intent로 받은 category와 level의 이름을 String으로 저장한다.
         category = Objects.requireNonNull(getIntent().getExtras()).getString("category");
         name = Objects.requireNonNull(getIntent().getExtras()).getString("name");
 
-        Log.d("GameActivity", "category: " + category + " name: " + name);
-
+        //게임레벨과 카테고리의 이름을 이용해 db에서 데이터를 받아오고 이를 lpm 인스턴스에 대입한다.
         Cursor levelCursor =  mDbOpenHelper.getLevelCursorByCategoryAndName(category, name);
         levelCursor.moveToNext();
 
@@ -66,39 +67,42 @@ public class GameActivity extends AppCompatActivity {
 
         lpm = new LevelPlayManager(category, name, width, height, dataSet, saveData);
 
+        //gameBoard를 제작한다.
         gameBoard = new GameBoard(this, lpm);
 
-        AlertDialog.Builder oDialog = new AlertDialog.Builder(this,
+        //기존 게임을 이어서 할 지 확인한다.
+        AlertDialog.Builder loadDialog = new AlertDialog.Builder(this,
                 android.R.style.Theme_DeviceDefault_Light_Dialog);
 
-        gameBoard.makeGameBoard();
-
-        oDialog.setMessage("기존 데이터를 불러오시겠습니까?")
-                .setTitle("데이터 load")
-                .setPositiveButton("예", new DialogInterface.OnClickListener()
+        loadDialog
+            .setMessage("기존 데이터를 불러오시겠습니까?")
+            .setTitle("데이터 load")
+            .setPositiveButton("예", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
                 {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                    }
-                })
-                .setNeutralButton("아니오", new DialogInterface.OnClickListener()
+                    gameBoard.makeGameBoard();
+                }
+            })
+            .setNeutralButton("아니오", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
                 {
-                    public void onClick(DialogInterface dialog, int which)
+                    for(int y = 0; y < height; y++)
                     {
-                        for(int y = 0; y < height; y++)
+                        for(int x = 0; x < width; x++)
                         {
-                            for(int x = 0; x < width; x++)
-                            {
-                                //lpm.checkedSet[height][width] = 0;
-                            }
+                            lpm.checkedSet[y][x] = 0;
+                            gameBoard.makeGameBoard();
                         }
                     }
-                })
-                .setCancelable(false) // 백버튼으로 팝업창이 닫히지 않도록 한다.
-                .show();
+                }
+            })
+            .setCancelable(false) // 백버튼으로 팝업창이 닫히지 않도록 한다.
+            .show();
 
-        gameBoard.refreshBoard();
+
     }
 
     @Override
