@@ -38,6 +38,7 @@ public class GameActivity extends AppCompatActivity {
     Intent optionIntent;
 
     Button btn_option;
+    Button btn_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class GameActivity extends AppCompatActivity {
 
         optionIntent = new Intent(this, OptionActivity.class);
         btn_option = findViewById(R.id.btn_option);
+        btn_back = findViewById(R.id.btn_back);
 
         //db와 연결해 해당 게임레벨 데이터를 받아올 준비를 한다.
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(this);
@@ -116,12 +118,27 @@ public class GameActivity extends AppCompatActivity {
                 startActivity(optionIntent);
             }
         });
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                finish();
+            }
+        });
 
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+
+        gameBoard.loadOption();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
 
         lpm.savePlayData(this);
     }

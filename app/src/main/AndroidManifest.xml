@@ -11,10 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".gameactivity.GameActivity">
+        <activity android:name=".gameactivity.GameActivity"
+            android:screenOrientation="portrait">
+
 
         </activity>
-        <activity android:name=".mainactivity.MainActivity">
+        <activity android:name=".mainactivity.MainActivity"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,14 +26,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".categoryactivity.CategoryActivity">
+        <activity android:name=".categoryactivity.CategoryActivity"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".levelactivity.LevelActivity">
+        <activity android:name=".levelactivity.LevelActivity"
+            android:screenOrientation="portrait">
 
         </activity>
 
-        <activity android:name=".optionactivity.OptionActivity">
+        <activity android:name=".optionactivity.OptionActivity"
+            android:screenOrientation="portrait">
 
         </activity>
 

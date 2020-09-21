@@ -52,6 +52,15 @@ public class OptionActivity extends AppCompatActivity {
                 editor.putBoolean("autoX", cb_autoX.isChecked());
 
                 editor.apply();
+
+                finish();
+            }
+        });
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
