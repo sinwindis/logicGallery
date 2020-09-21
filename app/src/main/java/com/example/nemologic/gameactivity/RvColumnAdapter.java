@@ -279,7 +279,15 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
         SpannableStringBuilder numStr;
         for(int i = 0; i < idxNumSet[rowNum]; i++)
         {
-            numStr = new SpannableStringBuilder('\n' + String.valueOf(dataSet[rowNum][i]));
+            if(i == 0)
+            {
+                numStr = new SpannableStringBuilder(String.valueOf(dataSet[rowNum][i]));
+            }
+            else
+            {
+                numStr = new SpannableStringBuilder('\n' + String.valueOf(dataSet[rowNum][i]));
+            }
+
             if(checkTemp[i])
             {
                 numStr.setSpan(new ForegroundColorSpan(Color.parseColor("#a0a0a0")), 0, numStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

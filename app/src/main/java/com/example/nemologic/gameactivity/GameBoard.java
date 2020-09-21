@@ -336,6 +336,7 @@ public class GameBoard {
             refreshBoard();
             showDrag();
             updateNumColor();
+            showStackNum();
 
 
             lpm.isGameEnd();

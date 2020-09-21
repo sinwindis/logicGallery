@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         btn_option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(optionIntent, 1);
+                startActivity(optionIntent);
             }
         });
 
