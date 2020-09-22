@@ -19,34 +19,15 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id"/>
 
-        <activity android:name=".gameactivity.GameActivity"
-            android:screenOrientation="portrait">
-
-
-        </activity>
-        <activity android:name=".mainactivity.MainActivity"
-            android:screenOrientation="portrait">
-
+        <activity android:name=".mainactivity.MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity android:name=".categoryactivity.CategoryActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity android:name=".levelactivity.LevelActivity"
-            android:screenOrientation="portrait">
 
         </activity>
 
-        <activity android:name=".optionactivity.OptionActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
 
     </application>
 

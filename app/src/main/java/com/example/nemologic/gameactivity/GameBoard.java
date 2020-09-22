@@ -29,6 +29,7 @@ public class GameBoard {
     boolean oneLineDrag;
     boolean autoX;
 
+    private View targetView;
 
     private RecyclerView rv_board;
 
@@ -60,11 +61,9 @@ public class GameBoard {
     //0: 공백 1: 체크 2: X
     int macroMode = 0;
     
-    Context ctx;
-    
-    public GameBoard(Context ctx, LevelPlayManager lpm)
+    public GameBoard(View view, LevelPlayManager lpm)
     {
-        this.ctx = ctx;
+        targetView = view;
         this.lpm = lpm;
 
         initialize();
@@ -72,7 +71,7 @@ public class GameBoard {
 
     public void loadOption()
     {
-        optionPref = ctx.getSharedPreferences("OPTION", MODE_PRIVATE);
+        optionPref = targetView.getContext().getSharedPreferences("OPTION", MODE_PRIVATE);
         smartDrag = optionPref.getBoolean("smartDrag", true);
         oneLineDrag = optionPref.getBoolean("oneLineDrag", true);
         autoX = optionPref.getBoolean("autoX", false);
@@ -81,14 +80,15 @@ public class GameBoard {
     private void initialize()
     {
         dragTemp = new int[lpm.height][lpm.width];
-        rv_board = ((Activity)ctx).findViewById(R.id.rv_board);
+        rv_board = targetView.findViewById(R.id.rv_board);
 
-        ll_count = ((Activity)ctx).findViewById(R.id.ll_count);
-        btn_toggle = ((Activity)ctx).findViewById(R.id.img_toggle);
-        btn_prev = ((Activity)ctx).findViewById(R.id.img_prev);
-        btn_next = ((Activity)ctx).findViewById(R.id.img_next);
-        tv_count = ((Activity)ctx).findViewById(R.id.tv_count);
-        tv_stack = ((Activity)ctx).findViewById(R.id.tv_stack);
+        ll_count = targetView.findViewById(R.id.ll_count);
+        btn_toggle = targetView.findViewById(R.id.img_toggle);
+        btn_prev = targetView.findViewById(R.id.img_prev);
+        btn_next = targetView.findViewById(R.id.img_next);
+
+        tv_count = targetView.findViewById(R.id.tv_count);
+        tv_stack = targetView.findViewById(R.id.tv_stack);
 
         loadOption();
     }
@@ -525,8 +525,7 @@ public class GameBoard {
     public void makeGameBoard()
     {
         //로직 게임판을 만듭니다.
-
-        glm = new GridLayoutManager(ctx, lpm.width);
+        glm = new GridLayoutManager(targetView.getContext(), lpm.width);
 
         rba = new RvBoardAdapter(lpm.checkedSet);
 
@@ -534,11 +533,13 @@ public class GameBoard {
         rv_board.addOnItemTouchListener(boardTouchListener);
         rv_board.setAdapter(rba);
 
+
+
         civm = new ColumnIndexViewMaker(lpm.dataSet);
         rivm = new RowIndexViewMaker(lpm.dataSet);
 
-        civm.setView(ctx);
-        rivm.setView(ctx);
+        civm.setView(targetView);
+        rivm.setView(targetView);
 
         btn_toggle.setOnClickListener(new Button.OnClickListener() {
             @Override

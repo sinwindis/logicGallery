@@ -1,11 +1,16 @@
 package com.example.nemologic.levelactivity;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,30 +18,37 @@ import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelData;
 import com.example.nemologic.data.SqlManager;
-import com.example.nemologic.data.LevelPlayManager;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Objects;
 
-public class LevelActivity extends AppCompatActivity {
+public class LevelFragment extends Fragment {
 
+    private Context ctx;
+
+    public LevelFragment(Context ctx) {
+        // Required empty public constructor
+        this.ctx = ctx;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_level);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        TextView tv_category = findViewById(R.id.tv_item_level_category);
-        RecyclerView rv_level = findViewById(R.id.rv_level);
+        View fragmentView = inflater.inflate(R.layout.fragment_level, container, false);
 
-        String category = Objects.requireNonNull(getIntent().getExtras()).getString("category");
+        TextView tv_category = fragmentView.findViewById(R.id.tv_item_level_category);
+        RecyclerView rv_level = fragmentView.findViewById(R.id.rv_level);
 
+        String category = "";
 
+        if(getArguments() != null){
+            category = getArguments().getString("category"); // 전달한 key 값
+        }
 
-        tv_category.setText(category);
+        //tv_category.setText(category);
 
-        DbOpenHelper mDbOpenHelper = new DbOpenHelper(this);
+        DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
             mDbOpenHelper.open();
         } catch (SQLException e) {
@@ -68,7 +80,9 @@ public class LevelActivity extends AppCompatActivity {
 
         mDbOpenHelper.close();
 
-        rv_level.setLayoutManager(new LinearLayoutManager(this));
-        rv_level.setAdapter(new RvLevelAdapter(this, levelData));
+        rv_level.setLayoutManager(new LinearLayoutManager(ctx));
+        rv_level.setAdapter(new RvLevelAdapter(ctx, levelData));
+
+        return fragmentView;
     }
 }

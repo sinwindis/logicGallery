@@ -1,18 +1,23 @@
 package com.example.nemologic.optionactivity;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.example.nemologic.R;
 
-public class OptionActivity extends AppCompatActivity {
+import static android.content.Context.MODE_PRIVATE;
 
+public class OptionFragment extends Fragment {
 
+    private Context ctx;
     CheckBox cb_smartDrag;
     CheckBox cb_oneLineDrag;
     CheckBox cb_autoX;
@@ -20,19 +25,25 @@ public class OptionActivity extends AppCompatActivity {
     Button btn_accept;
     Button btn_cancel;
 
+    public OptionFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_option);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        cb_smartDrag = findViewById(R.id.cb_smartdrag);
-        cb_oneLineDrag = findViewById(R.id.cb_oneline);
-        cb_autoX = findViewById(R.id.cb_autox);
+        View fragmentView = inflater.inflate(R.layout.fragment_option, container, false);
+        final Context thisContext = fragmentView.getContext();
 
-        btn_accept = findViewById(R.id.btn_accept);
-        btn_cancel = findViewById(R.id.btn_cancel);
+        cb_smartDrag = fragmentView.findViewById(R.id.cb_smartdrag);
+        cb_oneLineDrag = fragmentView.findViewById(R.id.cb_oneline);
+        cb_autoX = fragmentView.findViewById(R.id.cb_autox);
 
-        SharedPreferences optionPref = getSharedPreferences("OPTION", MODE_PRIVATE);
+        btn_accept = fragmentView.findViewById(R.id.btn_accept);
+        btn_cancel = fragmentView.findViewById(R.id.btn_cancel);
+
+        SharedPreferences optionPref = thisContext.getSharedPreferences("OPTION", MODE_PRIVATE);
         boolean smartDrag = optionPref.getBoolean("smartDrag", true);
         boolean oneLineDrag = optionPref.getBoolean("oneLineDrag", true);
         boolean autoX = optionPref.getBoolean("autoX", false);
@@ -44,7 +55,7 @@ public class OptionActivity extends AppCompatActivity {
         btn_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences optionPref = getSharedPreferences("OPTION", MODE_PRIVATE);
+                SharedPreferences optionPref = thisContext.getSharedPreferences("OPTION", MODE_PRIVATE);
 
                 SharedPreferences.Editor editor = optionPref.edit();
                 editor.putBoolean("smartDrag", cb_smartDrag.isChecked());
@@ -53,23 +64,17 @@ public class OptionActivity extends AppCompatActivity {
 
                 editor.apply();
 
-                finish();
+                getFragmentManager().popBackStack();
             }
         });
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                getFragmentManager().popBackStack();
             }
         });
+
+        return fragmentView;
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //옵션 저장할지 물어보기
-    }
-
-
 }

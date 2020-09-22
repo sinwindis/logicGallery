@@ -1,23 +1,24 @@
 package com.example.nemologic.levelactivity;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
+import com.example.nemologic.mainactivity.MainActivity;
 import com.example.nemologic.data.LevelData;
-import com.example.nemologic.gameactivity.GameActivity;
+import com.example.nemologic.gameactivity.GameFragment;
 
 public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHolder> {
 
     LevelData[] levels;
-    Intent intent;
     Context ctx;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
@@ -33,7 +34,6 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         //생성자
         this.levels = levels;
         this.ctx = ctx;
-        this.intent = new Intent(ctx, GameActivity.class);
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -62,9 +62,13 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
             @Override
             public void onClick(View view) {
                 //클릭 시 해당 게임을 플레이하는 GameActivity로 이동
-                intent.putExtra("category", levels[position].getCategory());;
-                intent.putExtra("name", levels[position].getName());
-                ctx.startActivity(intent);
+                Fragment dest = new GameFragment();
+                // Fragment 생성
+                Bundle bundle = new Bundle();
+                bundle.putString("category", levels[position].getCategory());
+                bundle.putString("name", levels[position].getName());
+                dest.setArguments(bundle);
+                ((MainActivity)ctx).fragmentMove(dest);
             }
         });
     }

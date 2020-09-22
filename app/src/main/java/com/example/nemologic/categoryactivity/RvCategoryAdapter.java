@@ -1,23 +1,24 @@
 package com.example.nemologic.categoryactivity;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-import com.example.nemologic.levelactivity.LevelActivity;
+import com.example.nemologic.mainactivity.MainActivity;
+import com.example.nemologic.levelactivity.LevelFragment;
 
 public class RvCategoryAdapter extends RecyclerView.Adapter<RvCategoryAdapter.ViewHolder> {
 
     String[] names;
     Context ctx;
-    Intent intent;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -32,7 +33,6 @@ public class RvCategoryAdapter extends RecyclerView.Adapter<RvCategoryAdapter.Vi
         //생성자
         this.names = names.clone();
         this.ctx = ctx;
-        this.intent = new Intent(ctx, LevelActivity.class);
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -58,8 +58,13 @@ public class RvCategoryAdapter extends RecyclerView.Adapter<RvCategoryAdapter.Vi
             @Override
             public void onClick(View view) {
                 //클릭 시 해당 카테고리에 해당하는 게임 레벨들을 나열하는 LevelActivity로 이동
-                intent.putExtra("category", names[categoryPos]);
-                ctx.startActivity(intent);
+
+                Fragment dest = new LevelFragment(ctx);
+                // Fragment 생성
+                Bundle bundle = new Bundle();
+                bundle.putString("category", names[categoryPos]);
+                dest.setArguments(bundle);
+                ((MainActivity)ctx).fragmentMove(dest);
             }
         });
 

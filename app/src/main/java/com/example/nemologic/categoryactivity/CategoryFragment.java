@@ -1,39 +1,46 @@
 package com.example.nemologic.categoryactivity;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-import com.example.nemologic.data.CategoryData;
-import com.example.nemologic.data.DataManager;
 import com.example.nemologic.data.DbOpenHelper;
-import com.example.nemologic.data.LevelData;
 import com.example.nemologic.data.SqlManager;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class CategoryActivity extends AppCompatActivity {
+public class CategoryFragment extends Fragment {
 
+    Context ctx;
+
+    public CategoryFragment(Context ctx) {
+        // Required empty public constructor
+        this.ctx = ctx;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        RecyclerView rv_category = findViewById(R.id.rv_category);
+        View fragmentView = inflater.inflate(R.layout.fragment_category, container, false);
 
-        DbOpenHelper mDbOpenHelper = new DbOpenHelper(this);
+        RecyclerView rv_category = fragmentView.findViewById(R.id.rv_category);
+
+        DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
             mDbOpenHelper.open();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
 
         Cursor categoryCursor =  mDbOpenHelper.getCategoryCursor();
         ArrayList<String> categoryArray = new ArrayList<>();
@@ -53,7 +60,9 @@ public class CategoryActivity extends AppCompatActivity {
             categoryStringArray[i] = categoryArray.get(i);
         }
 
-        rv_category.setLayoutManager(new LinearLayoutManager(this));
-        rv_category.setAdapter(new RvCategoryAdapter(this, categoryStringArray));
+        rv_category.setLayoutManager(new LinearLayoutManager(ctx));
+        rv_category.setAdapter(new RvCategoryAdapter(ctx, categoryStringArray));
+
+        return fragmentView;
     }
 }

@@ -2,6 +2,7 @@ package com.example.nemologic.gameactivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,14 +23,14 @@ public class RowIndexViewMaker {
         this.dataSet = dataSet.clone();
     }
 
-    public void setView(Context ctx)
+    public void setView(View view)
     {
         makeIdxDataSet();
 
-        rv_row = ((Activity)ctx).findViewById(R.id.rv_row);
+        rv_row = view.findViewById(R.id.rv_row);
 
         rvRowAdapter = new RvRowAdapter(idxDataSet);
-        rv_row.setLayoutManager(new LinearLayoutManager(ctx));
+        rv_row.setLayoutManager(new LinearLayoutManager(view.getContext()));
         rv_row.setAdapter(rvRowAdapter);
     }
 

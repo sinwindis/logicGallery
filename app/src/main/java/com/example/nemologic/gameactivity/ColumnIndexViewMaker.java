@@ -3,6 +3,7 @@ package com.example.nemologic.gameactivity;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,14 +26,14 @@ public class ColumnIndexViewMaker {
         this.dataSet = dataSet.clone();
     }
     
-    public void setView(Context ctx)
+    public void setView(View view)
     {
         makeIdxDataSet();
 
-        rv_column = ((Activity)ctx).findViewById(R.id.rv_column);
+        rv_column = view.findViewById(R.id.rv_column);
 
         rvColumnAdapter = new RvColumnAdapter(idxDataSet);
-        rv_column.setLayoutManager(new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false));
+        rv_column.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         rv_column.setAdapter(rvColumnAdapter);
     }
 
