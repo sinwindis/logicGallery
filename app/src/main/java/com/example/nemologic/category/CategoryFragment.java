@@ -1,4 +1,4 @@
-package com.example.nemologic.categoryactivity;
+package com.example.nemologic.category;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -1,11 +1,9 @@
-package com.example.nemologic.gameactivity;
+package com.example.nemologic.game;
 
 import android.graphics.Rect;
-import android.media.Image;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

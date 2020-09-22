@@ -1,4 +1,4 @@
-package com.example.nemologic.optionactivity;
+package com.example.nemologic.option;
 
 import android.content.Context;
 import android.content.SharedPreferences;

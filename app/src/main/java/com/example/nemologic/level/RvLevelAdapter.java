@@ -1,4 +1,4 @@
-package com.example.nemologic.levelactivity;
+package com.example.nemologic.level;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nemologic.R;
 import com.example.nemologic.mainactivity.MainActivity;
 import com.example.nemologic.data.LevelData;
-import com.example.nemologic.gameactivity.GameFragment;
+import com.example.nemologic.game.GameFragment;
 
 public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHolder> {
 

@@ -1,28 +1,20 @@
-package com.example.nemologic.gameactivity;
+package com.example.nemologic.game;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
-import com.example.nemologic.data.LevelData;
 import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.data.SqlManager;
-import com.example.nemologic.levelactivity.RvLevelAdapter;
 
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Objects;
 
 public class GameFragment extends Fragment {
 

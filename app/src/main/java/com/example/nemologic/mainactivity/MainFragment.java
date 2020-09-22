@@ -13,12 +13,12 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.nemologic.R;
-import com.example.nemologic.categoryactivity.CategoryFragment;
+import com.example.nemologic.category.CategoryFragment;
 import com.example.nemologic.data.DataManager;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.SqlManager;
-import com.example.nemologic.gameactivity.GameFragment;
-import com.example.nemologic.optionactivity.OptionFragment;
+import com.example.nemologic.game.GameFragment;
+import com.example.nemologic.option.OptionFragment;
 
 import java.sql.SQLException;
 import java.util.Objects;

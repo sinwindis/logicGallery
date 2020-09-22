@@ -1,4 +1,4 @@
-package com.example.nemologic.gameactivity;
+package com.example.nemologic.game;
 
 import android.content.Context;
 import android.graphics.Color;

@@ -1,4 +1,4 @@
-package com.example.nemologic.categoryactivity;
+package com.example.nemologic.category;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.mainactivity.MainActivity;
-import com.example.nemologic.levelactivity.LevelFragment;
+import com.example.nemologic.level.LevelFragment;
 
 public class RvCategoryAdapter extends RecyclerView.Adapter<RvCategoryAdapter.ViewHolder> {
 

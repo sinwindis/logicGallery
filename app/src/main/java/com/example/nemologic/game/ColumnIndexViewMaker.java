@@ -1,16 +1,11 @@
-package com.example.nemologic.gameactivity;
+package com.example.nemologic.game;
 
-import android.app.Activity;
-import android.content.Context;
-import android.util.Log;
 import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-
-import java.util.Arrays;
 
 public class ColumnIndexViewMaker {
     

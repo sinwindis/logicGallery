@@ -1,4 +1,4 @@
-package com.example.nemologic.levelactivity;
+package com.example.nemologic.level;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +19,6 @@ import com.example.nemologic.data.LevelData;
 import com.example.nemologic.data.SqlManager;
 
 import java.sql.SQLException;
-import java.util.Objects;
 
 public class LevelFragment extends Fragment {
 

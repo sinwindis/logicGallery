@@ -1,10 +1,7 @@
-package com.example.nemologic.gameactivity;
+package com.example.nemologic.game;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nemologic.R;
 import com.example.nemologic.data.LevelPlayManager;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
