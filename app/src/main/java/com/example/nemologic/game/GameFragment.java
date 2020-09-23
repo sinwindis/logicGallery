@@ -1,13 +1,13 @@
 package com.example.nemologic.game;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -15,11 +15,9 @@ import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.data.SqlManager;
-import com.example.nemologic.mainactivity.MainActivity;
-import com.example.nemologic.option.OptionFragment;
+import com.example.nemologic.option.OptionDialog;
 
 import java.sql.SQLException;
-import java.util.Objects;
 
 public class GameFragment extends Fragment {
 
@@ -85,7 +83,16 @@ public class GameFragment extends Fragment {
         btn_option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new OptionFragment());
+                OptionDialog optionDialog = new OptionDialog();
+
+                optionDialog.makeOptionDialog(getActivity());
+                optionDialog.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        gameBoard.loadOption();
+                    }
+                });
+                optionDialog.dialog.show();
             }
         });
 
@@ -96,12 +103,7 @@ public class GameFragment extends Fragment {
     public void onStop()
     {
         super.onStop();
-    }
+        lpm.savePlayData(ctx);
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        gameBoard.loadOption();
     }
 }

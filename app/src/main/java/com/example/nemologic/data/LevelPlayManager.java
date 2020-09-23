@@ -43,17 +43,17 @@ public class LevelPlayManager {
 
     private String parseDataSetToString(int[][] dataSet)
     {
-        String saveData = "";
+        StringBuilder saveData = new StringBuilder();
 
         for(int y = 0; y < height; y++)
         {
             for(int x = 0; x < width; x++)
             {
-                saveData +=  dataSet[y][x] + " ";
+                saveData.append(dataSet[y][x]).append(" ");
             }
         }
 
-        return saveData;
+        return saveData.toString();
     }
 
     public void savePlayData(Context ctx)
@@ -70,12 +70,12 @@ public class LevelPlayManager {
 
         mDbOpenHelper.close();
 
-        SharedPreferences lastPlayPref = ((Activity)ctx).getSharedPreferences("LASTPLAY", MODE_PRIVATE);
+        SharedPreferences lastPlayPref = ctx.getSharedPreferences("LASTPLAY", MODE_PRIVATE);
         SharedPreferences.Editor editor = lastPlayPref.edit();
         editor.putString("name", name);
         editor.putString("category", category);
 
-        editor.commit();
+        editor.apply();
     }
 
     public LevelPlayManager(String category, String name, int width, int height, String dataSet, String saveData)

@@ -1,6 +1,7 @@
 package com.example.nemologic.mainactivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -18,10 +19,9 @@ import com.example.nemologic.data.DataManager;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.game.GameFragment;
-import com.example.nemologic.option.OptionFragment;
+import com.example.nemologic.option.OptionDialog;
 
 import java.sql.SQLException;
-import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -50,7 +50,10 @@ public class MainFragment extends Fragment {
         btn_option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new OptionFragment());
+                OptionDialog optionDialog = new OptionDialog();
+
+                optionDialog.makeOptionDialog(getActivity());
+                optionDialog.dialog.show();
             }
         });
 

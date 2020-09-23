@@ -1,5 +1,6 @@
 package com.example.nemologic.game;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,6 +53,7 @@ public class GameBoard {
     int touchEndY;
 
     int[][] dragTemp;
+
 
     //0: 체크, 1: X
     int touchMode = 0;
@@ -524,6 +527,9 @@ public class GameBoard {
         glm = new GridLayoutManager(targetView.getContext(), lpm.width);
 
         rba = new RvBoardAdapter(lpm.checkedSet);
+
+        rv_board.addItemDecoration(new DividerItemDecoration(targetView.getContext(), DividerItemDecoration.VERTICAL));
+        rv_board.addItemDecoration(new DividerItemDecoration(targetView.getContext(), DividerItemDecoration.HORIZONTAL));
 
         rv_board.setLayoutManager(glm);
         rv_board.addOnItemTouchListener(boardTouchListener);
