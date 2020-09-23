@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -13,8 +15,11 @@ import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.data.SqlManager;
+import com.example.nemologic.mainactivity.MainActivity;
+import com.example.nemologic.option.OptionFragment;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class GameFragment extends Fragment {
 
@@ -75,6 +80,28 @@ public class GameFragment extends Fragment {
 
         gameBoard.makeGameBoard();
 
+        Button btn_option = fragmentView.findViewById(R.id.btn_option);
+
+        btn_option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new OptionFragment());
+            }
+        });
+
         return fragmentView;
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        gameBoard.loadOption();
     }
 }

@@ -17,6 +17,7 @@ import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelData;
 import com.example.nemologic.data.SqlManager;
+import com.example.nemologic.mainactivity.MainActivity;
 
 import java.sql.SQLException;
 
@@ -35,7 +36,6 @@ public class LevelFragment extends Fragment {
 
         View fragmentView = inflater.inflate(R.layout.fragment_level, container, false);
 
-        TextView tv_category = fragmentView.findViewById(R.id.tv_item_level_category);
         RecyclerView rv_level = fragmentView.findViewById(R.id.rv_level);
 
         String category = "";
@@ -43,8 +43,6 @@ public class LevelFragment extends Fragment {
         if(getArguments() != null){
             category = getArguments().getString("category"); // 전달한 key 값
         }
-
-        //tv_category.setText(category);
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
