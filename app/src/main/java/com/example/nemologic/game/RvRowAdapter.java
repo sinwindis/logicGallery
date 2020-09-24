@@ -67,10 +67,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
 
         //첫 번째 숫자부터 0 이라면 textview에 표시
         tvList.get(position).append(String.valueOf(dataSet[position][0]));
-        if(dataSet[position][0] != 0)
-        {
-            idxNumSet[position]++;
-        }
+        idxNumSet[position]++;
         //그 이후는 0이면 표시 skip
         for(int i = 1; i < dataSet[position].length; i++)
         {

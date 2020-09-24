@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,17 +61,14 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
         return new ViewHolder(view);
     }
 
-    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
+    // onBindViewHolder() - position 에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(RvColumnAdapter.ViewHolder holder, int position) {
         tvList.add((TextView)  holder.itemView.findViewById(R.id.tv_item_column));
 
-        //첫 번째 숫자부터 0 이라면 textview에 표시
+        //첫 번째 숫자부터 0 이라면 textView 에 표시
         tvList.get(position).append(String.valueOf(dataSet[position][0]));
-        if(dataSet[position][0] != 0)
-        {
-            idxNumSet[position]++;
-        }
+        idxNumSet[position]++;
         //그 이후는 0이면 표시 skip
         for(int i = 1; i < dataSet[position].length; i++)
         {
