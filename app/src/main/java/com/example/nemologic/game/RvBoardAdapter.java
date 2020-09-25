@@ -69,7 +69,7 @@ public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHold
                 iv.setImageResource(R.drawable.border_1px_x);
                 iv.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 break;
-                
+
         }
     }
 

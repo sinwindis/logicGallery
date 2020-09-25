@@ -1,13 +1,17 @@
 package com.example.nemologic.game;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -16,6 +20,8 @@ import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.option.OptionDialog;
+
+import org.w3c.dom.Text;
 
 import java.sql.SQLException;
 
@@ -37,6 +43,7 @@ public class GameFragment extends Fragment {
     public GameFragment() {
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,21 +85,40 @@ public class GameFragment extends Fragment {
 
         gameBoard.makeGameBoard();
 
-        Button btn_option = fragmentView.findViewById(R.id.btn_option);
+        TextView tv_name = fragmentView.findViewById(R.id.tv_name);
+        tv_name.setText(name);
+        ImageView img_option = fragmentView.findViewById(R.id.img_option);
 
-        btn_option.setOnClickListener(new View.OnClickListener() {
+        img_option.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setAlpha(0.5F);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        view.setAlpha(1F);
+                        OptionDialog optionDialog = new OptionDialog();
+
+                        optionDialog.makeOptionDialog(getActivity());
+                        optionDialog.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                gameBoard.loadOption();
+                            }
+                        });
+                        optionDialog.dialog.show();
+                }
+                return false;
+            }
+        });
+
+        img_option.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                OptionDialog optionDialog = new OptionDialog();
 
-                optionDialog.makeOptionDialog(getActivity());
-                optionDialog.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        gameBoard.loadOption();
-                    }
-                });
-                optionDialog.dialog.show();
             }
         });
 

@@ -1,16 +1,19 @@
 package com.example.nemologic.mainactivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.nemologic.R;
@@ -19,9 +22,11 @@ import com.example.nemologic.data.DataManager;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.game.GameFragment;
+import com.example.nemologic.levelcreate.LevelCreateFragment;
 import com.example.nemologic.option.OptionDialog;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -30,10 +35,10 @@ public class MainFragment extends Fragment {
     Context ctx;
 
     public MainFragment(Context ctx) {
-        // Required empty public constructor
         this.ctx = ctx;
     }
 
+    @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,17 +48,60 @@ public class MainFragment extends Fragment {
         final View fragmentView = inflater.inflate(R.layout.fragment_main, container, false);
         Context ctx = fragmentView.getContext();
 
-        Button btn_continue = fragmentView.findViewById(R.id.btn_continue);
-        Button btn_category = fragmentView.findViewById(R.id.btn_category);
-        Button btn_option = fragmentView.findViewById(R.id.btn_option);
+        ImageView img_continue = fragmentView.findViewById(R.id.img_continue);
+        ConstraintLayout cl_category = fragmentView.findViewById(R.id.cl_category);
+        ImageView img_option = fragmentView.findViewById(R.id.img_option);
+        ImageView img_plus = fragmentView.findViewById(R.id.img_plus);
 
-        btn_option.setOnClickListener(new View.OnClickListener() {
+        img_option.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setAlpha(0.5F);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        view.setAlpha(1F);
+                        OptionDialog optionDialog = new OptionDialog();
+
+                        optionDialog.makeOptionDialog(getActivity());
+                        optionDialog.dialog.show();
+                }
+                return false;
+            }
+        });
+
+        img_option.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                OptionDialog optionDialog = new OptionDialog();
 
-                optionDialog.makeOptionDialog(getActivity());
-                optionDialog.dialog.show();
+            }
+        });
+
+        img_plus.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setAlpha(0.5F);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        view.setAlpha(1F);
+                        ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new LevelCreateFragment(mainActivityCtx));
+
+                }
+                return false;
+            }
+        });
+
+        img_plus.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
@@ -83,11 +131,9 @@ public class MainFragment extends Fragment {
 
         TextView tv_item_level_size = fragmentView.findViewById(R.id.tv_item_level_size);
 
-        if(lastPlayName.isEmpty() || lastPlayCategory.isEmpty())
-        {
-
-        }
-        else
+        assert lastPlayName != null;
+        assert lastPlayCategory != null;
+        if(!lastPlayName.isEmpty() && !lastPlayCategory.isEmpty())
         {
             cursor =  mDbOpenHelper.getLevelCursorByCategoryAndName(lastPlayCategory, lastPlayName);
 
@@ -103,41 +149,42 @@ public class MainFragment extends Fragment {
                 tv_item_level_size.setText(lastPlayWidth + " X " + lastPlayHeight);
             }
         }
-
-
         mDbOpenHelper.close();
-
-//        btn_category.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(categoryIntent);
-//            }
-//        });
 //
-        btn_continue.setOnClickListener(new View.OnClickListener() {
+        img_continue.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setAlpha(0.5F);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        view.setAlpha(1F);
+                        GameFragment gameFragment = new GameFragment();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("category", lastPlayCategory);
+                        bundle.putString("name", lastPlayName);
+                        gameFragment.setArguments(bundle);
+
+                        ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(gameFragment);
+
+                }
+                return false;
+            }
+        });
+        img_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GameFragment gameFragment = new GameFragment();
 
-                Bundle bundle = new Bundle();
-                bundle.putString("category", lastPlayCategory);
-                bundle.putString("name", lastPlayName);
-                gameFragment.setArguments(bundle);
-
-                ((MainActivity)getActivity()).fragmentMove(gameFragment);
             }
         });
 
-//        Fragment fragment = new OptionFragment();
-//        // Fragment 생성
-//        Bundle bundle = new Bundle();
-//        //bundle.putString("param1", param1);
-//        fragment.setArguments(bundle);
-
-        btn_category.setOnClickListener(new View.OnClickListener() {
+        cl_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).fragmentMove(new CategoryFragment(mainActivityCtx));
+                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new CategoryFragment(mainActivityCtx));
             }
         });
 

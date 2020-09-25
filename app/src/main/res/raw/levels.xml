@@ -2,11 +2,11 @@
 <resources>
     <version>0</version>
     <level>
-        <lname>dummyLevel1</lname>
-        <cname>dummy1</cname>
+        <lname>토끼</lname>
+        <cname>동물</cname>
         <width>5</width>
         <height>5</height>
-        <data>0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0</data>
+        <data>0 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 1 1 1 0 0 0 0 0 0</data>
 
     </level>
 
@@ -40,4 +40,15 @@
     </level>
 
     <version>0.2</version>
+
+    <level>
+        <lname>dummyLevel5</lname>
+        <cname>dummy3</cname>
+        <width>7</width>
+        <height>7</height>
+        <data>0 1 0 1 0 1 0 1 1 1 1 0 1 1 0 1 1 1 0 1 1 0 1 1 1 0 0 1 0 1 1 1 1 1 0 0 1 0 1 0 1 1 1 0 1 1 1 0 1</data>
+
+    </level>
+
+    <version>0.3</version>
 </resources>

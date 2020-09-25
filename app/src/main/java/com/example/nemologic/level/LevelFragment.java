@@ -10,10 +10,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
+import com.example.nemologic.category.VerticalSpaceItemDecoration;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelData;
 import com.example.nemologic.data.SqlManager;
@@ -43,6 +45,10 @@ public class LevelFragment extends Fragment {
         if(getArguments() != null){
             category = getArguments().getString("category"); // 전달한 key 값
         }
+
+        TextView tv_categoryName = fragmentView.findViewById(R.id.tv_category);
+
+        tv_categoryName.setText(category);
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
@@ -76,7 +82,8 @@ public class LevelFragment extends Fragment {
 
         mDbOpenHelper.close();
 
-        rv_level.setLayoutManager(new LinearLayoutManager(ctx));
+        rv_level.addItemDecoration(new LevelItemDecoration(30));
+        rv_level.setLayoutManager(new GridLayoutManager(ctx, 2));
         rv_level.setAdapter(new RvLevelAdapter(ctx, levelData));
 
         return fragmentView;

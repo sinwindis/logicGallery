@@ -1,6 +1,5 @@
 package com.example.nemologic.game;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -83,8 +81,8 @@ public class GameBoard {
 
         ll_count = targetView.findViewById(R.id.ll_count);
         btn_toggle = targetView.findViewById(R.id.img_toggle);
-        btn_prev = targetView.findViewById(R.id.img_prev);
-        btn_next = targetView.findViewById(R.id.img_next);
+        btn_prev = targetView.findViewById(R.id.img_prevstack);
+        btn_next = targetView.findViewById(R.id.img_nextstack);
 
         tv_count = targetView.findViewById(R.id.tv_count);
         tv_stack = targetView.findViewById(R.id.tv_stack);
@@ -528,8 +526,7 @@ public class GameBoard {
 
         rba = new RvBoardAdapter(lpm.checkedSet);
 
-        rv_board.addItemDecoration(new DividerItemDecoration(targetView.getContext(), DividerItemDecoration.VERTICAL));
-        rv_board.addItemDecoration(new DividerItemDecoration(targetView.getContext(), DividerItemDecoration.HORIZONTAL));
+        rv_board.addItemDecoration(new GameBoardBorder(targetView.getContext(), R.drawable.border_gameboard_normal, R.drawable.border_gameboard_accent, lpm.width));
 
         rv_board.setLayoutManager(glm);
         rv_board.addOnItemTouchListener(boardTouchListener);

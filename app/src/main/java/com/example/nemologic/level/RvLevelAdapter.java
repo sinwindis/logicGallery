@@ -44,7 +44,7 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
         View view = inflater.inflate(R.layout.item_level, parent, false) ;
-        view.setLayoutParams(new RecyclerView.LayoutParams(400, 400));
+        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/2 - 15, parent.getMeasuredWidth()/2 - 15));
 
         return new ViewHolder(view);
     }

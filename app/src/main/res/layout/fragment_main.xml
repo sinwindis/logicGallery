@@ -5,40 +5,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e0e0e0">
+    android:background="@color/colorBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_navi_level"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#ff00ff"
+        android:background="@drawable/background_main"
 
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.7">
 
-        <Button
-            android:id="@+id/btn_option"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:text="옵션"
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorBackground"
 
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/cl_continue_info"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.6"
+            app:layout_constraintDimensionRatio="2:1"
+            >
+
+
+        </ImageView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_continue_info"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#ffffff"
+            android:background="@color/colorBackground"
 
+            app:layout_constraintTop_toBottomOf="@id/img_logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.6"
             app:layout_constraintDimensionRatio="1:1">
@@ -49,7 +58,6 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
                 android:textColor="#000000"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -66,43 +74,91 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="20sp"/>
 
+            <ImageView
+                android:id="@+id/img_continue"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent="0.5"
+                app:layout_constraintHeight_default="percent"
+                app:layout_constraintHeight_percent="0.5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/ic_play"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/btn_continue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/img_option"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_option"
+
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_continue_info"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="Continue">
-        </Button>
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/img_plus"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_plus"
+
+            app:layout_constraintEnd_toStartOf="@id/img_option"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/btn_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintEnd_toStartOf="@id/btn_bigpuzzle"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_navi_level"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Category">
-    </Button>
-
-    <Button
-        android:id="@+id/btn_bigpuzzle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_category"
         app:layout_constraintTop_toBottomOf="@id/cl_navi_level"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Big Puzzle">
-    </Button>
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_category"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.5"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/cl_bigpuzzle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1">
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_bigpuzzle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimary"
+
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.5"
+
+            app:layout_constraintStart_toEndOf="@id/cl_category"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1">
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

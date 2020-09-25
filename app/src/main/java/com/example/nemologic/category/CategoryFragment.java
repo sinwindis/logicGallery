@@ -62,6 +62,8 @@ public class CategoryFragment extends Fragment {
             categoryStringArray[i] = categoryArray.get(i);
         }
 
+        rv_category.addItemDecoration(new VerticalSpaceItemDecoration(100));
+
         rv_category.setLayoutManager(new LinearLayoutManager(ctx));
         rv_category.setAdapter(new RvCategoryAdapter(ctx, categoryStringArray));
 
