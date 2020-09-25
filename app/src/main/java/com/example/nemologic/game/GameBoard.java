@@ -40,6 +40,7 @@ public class GameBoard {
     private TextView tv_count;
 
     private LinearLayout ll_count;
+    private LinearLayout ll_drag;
 
     private Button btn_toggle;
     private Button btn_prev;
@@ -80,6 +81,7 @@ public class GameBoard {
         rv_board = targetView.findViewById(R.id.rv_board);
 
         ll_count = targetView.findViewById(R.id.ll_count);
+        ll_drag = targetView.findViewById(R.id.ll_drag);
         btn_toggle = targetView.findViewById(R.id.img_toggle);
         btn_prev = targetView.findViewById(R.id.img_prevstack);
         btn_next = targetView.findViewById(R.id.img_nextstack);
@@ -103,6 +105,7 @@ public class GameBoard {
         }
 
         ll_count.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        ll_drag.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
     }
 
     private void dragManage()
@@ -211,13 +214,25 @@ public class GameBoard {
             }
         }
         tv_count.setText(String.valueOf(dragCount));
-        view = (ImageView) glm.findViewByPosition(touchStartY * lpm.width + touchStartX);
-        assert view != null;
-        ll_count.setX(view.getX() + view.getWidth());
-        ll_count.setY(view.getY());
+        View firstTouchView = glm.findViewByPosition(touchStartY * lpm.width + touchStartX);
+        View firstDragView = glm.findViewByPosition(dragStartY * lpm.width + dragStartX);
+        View lastDragView = glm.findViewByPosition(dragEndY * lpm.width + dragEndX);
+        assert firstTouchView != null;
+        ll_count.setX(firstTouchView.getX() + firstTouchView.getWidth());
+        ll_count.setY(firstTouchView.getY());
 
         ll_count.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
 
+        assert firstDragView != null;
+        assert lastDragView != null;
+
+        int dragWidth = (int) (lastDragView.getX() - firstDragView.getX() + lastDragView.getWidth()) + 20;
+        int dragHeight = (int) (lastDragView.getY() - firstDragView.getY() + lastDragView.getHeight()) + 20;
+
+        ll_drag.setX(firstDragView.getX() - 10);
+        ll_drag.setY(firstDragView.getY() - 10);
+
+        ll_drag.setLayoutParams(new LinearLayout.LayoutParams(dragWidth, dragHeight));
     }
     
     private void checkAutoX()
@@ -444,15 +459,15 @@ public class GameBoard {
                 switch(lpm.checkedSet[y][x])
                 {
                     case 0:
-                        view.setImageResource(R.drawable.border_1px_transparent);
+                        view.setImageResource(R.drawable.background_transparent);
                         view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                         break;
                     case 1:
-                        view.setImageResource(R.drawable.border_1px_transparent);
+                        view.setImageResource(R.drawable.background_transparent);
                         view.setBackgroundColor(Color.parseColor("#000000"));
                         break;
                     case 2:
-                        view.setImageResource(R.drawable.border_1px_x);
+                        view.setImageResource(R.drawable.background_x);
                         view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                         break;
                 }
@@ -481,17 +496,17 @@ public class GameBoard {
                     {
                         case 0:
                             //공백
-                            view.setImageResource(R.drawable.border_2dp_transparent);
+                            view.setImageResource(R.drawable.background_transparent);
                             view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                             break;
                         case 1:
                             //체크
-                            view.setImageResource(R.drawable.border_2dp_transparent);
+                            view.setImageResource(R.drawable.background_transparent);
                             view.setBackgroundColor(Color.parseColor("#000000"));
                             break;
                         case 2:
                             //X
-                            view.setImageResource(R.drawable.border_2dp_x);
+                            view.setImageResource(R.drawable.background_x);
                             view.setBackgroundColor(Color.parseColor("#ffffff"));
                             break;
                     }
@@ -501,15 +516,15 @@ public class GameBoard {
                     switch(lpm.checkedSet[y][x])
                     {
                         case 0:
-                            view.setImageResource(R.drawable.border_1px_transparent);
+                            view.setImageResource(R.drawable.background_transparent);
                             view.setBackgroundColor(Color.parseColor("#aaeeff"));
                             break;
                         case 1:
-                            view.setImageResource(R.drawable.border_1px_transparent);
+                            view.setImageResource(R.drawable.background_transparent);
                             view.setBackgroundColor(Color.parseColor("#113355"));
                             break;
                         case 2:
-                            view.setImageResource(R.drawable.border_1px_x);
+                            view.setImageResource(R.drawable.background_x);
                             view.setBackgroundColor(Color.parseColor("#aaeeff"));
                             break;
                     }
