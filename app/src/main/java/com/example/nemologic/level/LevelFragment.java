@@ -1,15 +1,19 @@
 package com.example.nemologic.level;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +36,7 @@ public class LevelFragment extends Fragment {
         this.ctx = ctx;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,18 +78,42 @@ public class LevelFragment extends Fragment {
             if(progress == 1)
                 saveData = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.SAVEDATA));
 
-
-            Log.d("LevelActivity", "progress: " + progress);
-            Log.d("LevelActivity", "saveData: " + saveData);
             levelData[count] = new LevelData(category, name, width, height, progress, dataSet, saveData);
             count++;
         }
 
         mDbOpenHelper.close();
 
-        rv_level.addItemDecoration(new LevelItemDecoration(30));
+        rv_level.addItemDecoration(new LevelItemDecoration(15));
         rv_level.setLayoutManager(new GridLayoutManager(ctx, 2));
         rv_level.setAdapter(new RvLevelAdapter(ctx, levelData));
+
+        ImageView img_back = fragmentView.findViewById(R.id.img_back);
+
+        img_back.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setAlpha(0.5F);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        view.setAlpha(1F);
+                        getFragmentManager().popBackStackImmediate();
+                }
+                return false;
+            }
+        });
+
+        img_back.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });
 
         return fragmentView;
     }

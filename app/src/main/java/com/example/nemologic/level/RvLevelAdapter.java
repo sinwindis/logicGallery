@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
@@ -44,7 +45,7 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
         View view = inflater.inflate(R.layout.item_level, parent, false) ;
-        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/2 - 15, parent.getMeasuredWidth()/2 - 15));
+        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/2 - 15, (int) ((parent.getMeasuredWidth()/2 - 15)*1.3)));
 
         return new ViewHolder(view);
     }
@@ -58,7 +59,11 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         String temp = levels[position].getWidth() + "X" + levels[position].getHeight();
         tv.setText(temp);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        RecyclerView rv_board = holder.itemView.findViewById(R.id.rv_level_board);
+        rv_board.setLayoutManager(new GridLayoutManager(ctx, levels[position].getWidth()));
+        rv_board.setAdapter(new RvLevelBoardAdapter(levels[position].getParsedSaveData()));
+
+        holder.itemView.findViewById(R.id.cl_touchbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //클릭 시 해당 게임을 플레이하는 GameActivity로 이동

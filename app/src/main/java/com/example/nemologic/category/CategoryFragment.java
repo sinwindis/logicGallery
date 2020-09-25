@@ -1,14 +1,18 @@
 package com.example.nemologic.category;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +33,7 @@ public class CategoryFragment extends Fragment {
         this.ctx = ctx;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,6 +71,33 @@ public class CategoryFragment extends Fragment {
 
         rv_category.setLayoutManager(new LinearLayoutManager(ctx));
         rv_category.setAdapter(new RvCategoryAdapter(ctx, categoryStringArray));
+
+        ImageView img_back = fragmentView.findViewById(R.id.img_back);
+
+        img_back.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setAlpha(0.5F);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        view.setAlpha(1F);
+                        getFragmentManager().popBackStackImmediate();
+                }
+                return false;
+            }
+        });
+
+        img_back.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });
 
         return fragmentView;
     }

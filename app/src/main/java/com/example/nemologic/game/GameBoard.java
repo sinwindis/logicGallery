@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +40,7 @@ public class GameBoard {
     private TextView tv_stack;
     private TextView tv_count;
 
-    private LinearLayout ll_count;
+    private ConstraintLayout cl_count;
     private LinearLayout ll_drag;
 
     private Button btn_toggle;
@@ -80,7 +81,7 @@ public class GameBoard {
         dragTemp = new int[lpm.height][lpm.width];
         rv_board = targetView.findViewById(R.id.rv_board);
 
-        ll_count = targetView.findViewById(R.id.ll_count);
+        cl_count = targetView.findViewById(R.id.cl_count);
         ll_drag = targetView.findViewById(R.id.ll_drag);
         btn_toggle = targetView.findViewById(R.id.img_toggle);
         btn_prev = targetView.findViewById(R.id.img_prevstack);
@@ -104,7 +105,7 @@ public class GameBoard {
             }
         }
 
-        ll_count.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        cl_count.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
         ll_drag.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
     }
 
@@ -213,15 +214,21 @@ public class GameBoard {
                 }
             }
         }
-        tv_count.setText(String.valueOf(dragCount));
-        View firstTouchView = glm.findViewByPosition(touchStartY * lpm.width + touchStartX);
+        if(dragCount > 1)
+        {
+            tv_count.setText(String.valueOf(dragCount));
+            View firstTouchView = glm.findViewByPosition(touchStartY * lpm.width + touchStartX);
+            assert firstTouchView != null;
+
+            cl_count.setX(firstTouchView.getX());
+            cl_count.setY(firstTouchView.getY());
+
+            cl_count.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
+        }
+
+
         View firstDragView = glm.findViewByPosition(dragStartY * lpm.width + dragStartX);
         View lastDragView = glm.findViewByPosition(dragEndY * lpm.width + dragEndX);
-        assert firstTouchView != null;
-        ll_count.setX(firstTouchView.getX() + firstTouchView.getWidth());
-        ll_count.setY(firstTouchView.getY());
-
-        ll_count.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
 
         assert firstDragView != null;
         assert lastDragView != null;
@@ -365,7 +372,6 @@ public class GameBoard {
             dragManage();
             refreshBoard();
             showDrag();
-            updateNumColor();
         }
 
         @Override
@@ -378,7 +384,6 @@ public class GameBoard {
             dragManage();
             refreshBoard();
             showDrag();
-            updateNumColor();
         }
 
 
@@ -431,7 +436,7 @@ public class GameBoard {
 
     };
 
-    private void updateNumColor()
+    public void updateNumColor()
     {
         for(int i = 0; i < lpm.width; i++)
         {
@@ -546,8 +551,6 @@ public class GameBoard {
         rv_board.setLayoutManager(glm);
         rv_board.addOnItemTouchListener(boardTouchListener);
         rv_board.setAdapter(rba);
-
-
 
         civm = new ColumnIndexViewMaker(lpm.dataSet);
         rivm = new RowIndexViewMaker(lpm.dataSet);

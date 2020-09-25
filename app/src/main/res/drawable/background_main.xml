@@ -10,9 +10,9 @@
     android:bottom="5dp">   <!-- adjust borders width here -->
     <shape android:shape="rectangle">
         <gradient
-            android:endColor="@color/colorPrimary"
-            android:startColor="@color/colorPrimaryDark"
-            android:angle="90"/>  <!-- background color -->
+            android:endColor="@color/colorPrimaryBackground"
+            android:startColor="@color/colorBackground"
+            android:angle="45"/>  <!-- background color -->
     </shape>
 </item>
 </layer-list>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,13 +16,17 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.category.CategoryFragment;
 import com.example.nemologic.data.DataManager;
 import com.example.nemologic.data.DbOpenHelper;
+import com.example.nemologic.data.LevelData;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.game.GameFragment;
+import com.example.nemologic.level.RvLevelBoardAdapter;
 import com.example.nemologic.levelcreate.LevelCreateFragment;
 import com.example.nemologic.option.OptionDialog;
 
@@ -33,6 +38,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainFragment extends Fragment {
 
     Context ctx;
+    LevelData lastPlayLevel;
 
     public MainFragment(Context ctx) {
         this.ctx = ctx;
@@ -133,23 +139,34 @@ public class MainFragment extends Fragment {
 
         assert lastPlayName != null;
         assert lastPlayCategory != null;
+        
         if(!lastPlayName.isEmpty() && !lastPlayCategory.isEmpty())
         {
             cursor =  mDbOpenHelper.getLevelCursorByCategoryAndName(lastPlayCategory, lastPlayName);
 
-            cursor.moveToNext();
-            int lastPlayWidth = cursor.getInt(cursor.getColumnIndex(SqlManager.CreateLevelDB.WIDTH));
-            int lastPlayHeight = cursor.getInt(cursor.getColumnIndex(SqlManager.CreateLevelDB.HEIGHT));
-
-
-
             if(cursor.getCount() > 0)
             {
+                cursor.moveToNext();
+                int width = cursor.getInt(cursor.getColumnIndex(SqlManager.CreateLevelDB.WIDTH));
+                int height = cursor.getInt(cursor.getColumnIndex(SqlManager.CreateLevelDB.HEIGHT));
+                int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.CreateLevelDB.PROGRESS));
+                String dataSet = cursor.getString(cursor.getColumnIndex(SqlManager.CreateLevelDB.DATASET));
+                String saveData = "";
+                if(progress == 1)
+                    saveData = cursor.getString(cursor.getColumnIndex(SqlManager.CreateLevelDB.SAVEDATA));
+
+                lastPlayLevel = new LevelData(lastPlayCategory, lastPlayName, width, height, progress, dataSet, saveData);
+
                 tv_item_level_name.setText(lastPlayName);
-                tv_item_level_size.setText(lastPlayWidth + " X " + lastPlayHeight);
+                tv_item_level_size.setText(width + " X " + height);
             }
+
         }
         mDbOpenHelper.close();
+
+        RecyclerView rv_board = fragmentView.findViewById(R.id.rv_level_board);
+        rv_board.setLayoutManager(new GridLayoutManager(ctx, lastPlayLevel.getWidth()));
+        rv_board.setAdapter(new RvLevelBoardAdapter(lastPlayLevel.getParsedSaveData()));
 //
         img_continue.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("ClickableViewAccessibility")

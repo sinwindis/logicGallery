@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="30sp"
-                    android:textColor="#000000"
+                    android:textColor="@color/colorBlack"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -52,7 +52,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
-                android:id="@+id/img_prevstack"
+                android:id="@+id/img_back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="10dp"
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:text="0/0"
                 android:textSize="20sp"
-                android:textColor="#000000"
+                android:textColor="@color/colorBlack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -99,7 +99,8 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_top">
+        app:layout_constraintTop_toBottomOf="@id/cl_top"
+        android:overScrollMode="never">
 
     </androidx.recyclerview.widget.RecyclerView>
 

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
@@ -87,6 +88,7 @@ public class GameFragment extends Fragment {
 
         TextView tv_name = fragmentView.findViewById(R.id.tv_name);
         tv_name.setText(name);
+
         ImageView img_option = fragmentView.findViewById(R.id.img_option);
 
         img_option.setOnTouchListener(new View.OnTouchListener() {
@@ -122,7 +124,40 @@ public class GameFragment extends Fragment {
             }
         });
 
+        ImageView img_back = fragmentView.findViewById(R.id.img_back);
+
+        img_back.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setAlpha(0.5F);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        view.setAlpha(1F);
+                        getFragmentManager().popBackStackImmediate();
+                }
+                return false;
+            }
+        });
+
+        img_back.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });
+
         return fragmentView;
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
     }
 
     @Override

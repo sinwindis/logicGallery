@@ -6,7 +6,7 @@
     android:layout_margin="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#e0e0e0">
+    android:background="@color/colorBackground">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_option_smartdrag"
@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:textColor="#000000"
+                android:textColor="@color/colorBlack"
                 android:text="똑똑한 드래그 방식"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +33,7 @@
                 android:id="@+id/cb_smartdrag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="#000000"
+                android:buttonTint="@color/colorBlack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:textColor="#000000"
+                android:textColor="@color/colorBlack"
                 android:text="언제나 한 줄만 드래그"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -65,7 +65,7 @@
                 android:id="@+id/cb_oneline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="#000000"
+                android:buttonTint="@color/colorBlack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -87,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:textColor="#000000"
+                android:textColor="@color/colorBlack"
                 android:text="완성된 라인의 빈 칸을 X로 채우기"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -97,7 +97,7 @@
                 android:id="@+id/cb_autox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="#000000"
+                android:buttonTint="@color/colorBlack"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

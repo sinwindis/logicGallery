@@ -27,6 +27,26 @@ public class LevelData {
 
     }
 
+    public int[][] getParsedSaveData()
+    {
+        int[][] dataTemp = new int[height][width];
+
+        if(saveData.equals(""))
+            return dataTemp;
+
+        String[] rawTemp = saveData.split(" ");
+
+        for(int y = 0; y < height; y++)
+        {
+            for(int x = 0; x < width; x++)
+            {
+                dataTemp[y][x] = Integer.parseInt(rawTemp[x + y*width]);
+            }
+        }
+
+        return dataTemp;
+    }
+
 
     public String getDataSet()
     {

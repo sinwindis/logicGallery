@@ -2,93 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@drawable/background_main">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_navi_level"
+        android:id="@+id/cl_top"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@drawable/background_main"
-
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.7">
-
-        <ImageView
-            android:id="@+id/img_logo"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorBackground"
-
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/cl_continue_info"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.6"
-            app:layout_constraintDimensionRatio="2:1"
-            >
-
-
-        </ImageView>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_continue_info"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorBackground"
-
-            app:layout_constraintTop_toBottomOf="@id/img_logo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.6"
-            app:layout_constraintDimensionRatio="1:1">
-
-            <TextView
-                android:id="@+id/tv_item_level_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textSize="35sp"/>
-
-            <TextView
-                android:id="@+id/tv_item_level_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:textColor="#000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:textSize="20sp"/>
-
-            <ImageView
-                android:id="@+id/img_continue"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintWidth_default="percent"
-                app:layout_constraintWidth_percent="0.5"
-                app:layout_constraintHeight_default="percent"
-                app:layout_constraintHeight_percent="0.5"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:src="@drawable/ic_play"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        >
 
         <ImageView
             android:id="@+id/img_option"
@@ -111,6 +36,113 @@
 
             app:layout_constraintEnd_toStartOf="@id/img_option"
             app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_navi_level"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_top"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.7">
+
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorBackground"
+
+            app:layout_constraintTop_toBottomOf="@id/cl_continue_info"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.6"
+            app:layout_constraintDimensionRatio="2:1"
+            >
+
+
+        </ImageView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_continue_info"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorBackground"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/img_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.6"
+            app:layout_constraintDimensionRatio="1:1.1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_level_board"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent="0.7"
+                app:layout_constraintDimensionRatio="1:1">
+
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+            <TextView
+                android:id="@+id/tv_item_level_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_level_board"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="25sp"/>
+
+            <TextView
+                android:id="@+id/tv_item_level_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/rv_level_board"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="15sp"/>
+
+            <ImageView
+                android:id="@+id/img_continue"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent="0.5"
+                app:layout_constraintHeight_default="percent"
+                app:layout_constraintHeight_percent="0.5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:src="@drawable/ic_play"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,7 +2,9 @@
 <resources>
     <color name="colorItemBackground">#f5fffe</color>
     <color name="colorBackground">#ecf4f3</color>
+    <color name="colorPrimaryBackground">#90b0c0</color>
     <color name="colorPrimary">#68b0ab</color>
     <color name="colorPrimaryDark">#006a71</color>
     <color name="colorAccent">#ff7e67</color>
+    <color name="colorBlack">#404040</color>
 </resources>

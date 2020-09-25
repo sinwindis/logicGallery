@@ -19,7 +19,7 @@
             android:id="@+id/cl_name"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="30sp"
-                    android:textColor="#000000"
+                    android:textColor="@color/colorBlack"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -52,7 +52,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
-                android:id="@+id/img_prev"
+                android:id="@+id/img_back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="10dp"
@@ -168,8 +168,8 @@
 
         </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_count"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_count"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="#ffffff"
@@ -182,12 +182,16 @@
                     android:id="@+id/tv_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000000"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/colorBlack"
                     android:textSize="20sp">
 
                 </TextView>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -241,7 +245,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textColor="#000000"
+            android:textColor="@color/colorBlack"
             android:text="0/0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_toggle"
