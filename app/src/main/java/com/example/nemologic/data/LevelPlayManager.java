@@ -20,6 +20,7 @@ public class LevelPlayManager {
     public int[][][] checkStack;
     public int height;
     public int width;
+    public int progress;
 
     public int stackNum = 0;
     public int stackMaxNum = 0;
@@ -58,33 +59,51 @@ public class LevelPlayManager {
 
     public void savePlayData(Context ctx)
     {
-
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
+        Log.d("savePlayData", "progress: " + progress);
+        SharedPreferences lastPlayPref = ctx.getSharedPreferences("LASTPLAY", MODE_PRIVATE);
+        SharedPreferences.Editor editor = lastPlayPref.edit();
         try {
             mDbOpenHelper.open();
 
-            mDbOpenHelper.updateLevel(name, category, 1, parseDataSetToString(checkedSet));
+            if(progress == 1)
+            {
+                //저번 플레이 저장
+                mDbOpenHelper.updateLevel(name, category, 1, parseDataSetToString(checkedSet));
+                //가장 최근에 한 게임 데이터 갱신하기
+
+                editor.putString("name", name);
+                editor.putString("category", category);
+            }
+
+            else if(progress == 2)
+            {
+                //게임 완료
+                mDbOpenHelper.updateLevel(name, category, 2, "");
+                //가장 최근에 한 게임 데이터 없애기
+
+                editor.putString("name", "");
+                editor.putString("category", "");
+            }
+            editor.apply();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         mDbOpenHelper.close();
 
-        SharedPreferences lastPlayPref = ctx.getSharedPreferences("LASTPLAY", MODE_PRIVATE);
-        SharedPreferences.Editor editor = lastPlayPref.edit();
-        editor.putString("name", name);
-        editor.putString("category", category);
 
-        editor.apply();
     }
 
-    public LevelPlayManager(String category, String name, int width, int height, String dataSet, String saveData)
+    public LevelPlayManager(String category, String name, int progress, int width, int height, String dataSet, String saveData)
     {
         this.category = category;
         this.name = name;
         this.dataSet = parseDataSet(dataSet, width, height);
         this.height = height;
         this.width = width;
+        this.progress = progress;
         if(saveData.isEmpty())
         {
             //저장 데이터가 없으면 새로 빈 array 할당
@@ -192,7 +211,6 @@ public class LevelPlayManager {
                 }
             }
         }
-
         return true;
     }
 

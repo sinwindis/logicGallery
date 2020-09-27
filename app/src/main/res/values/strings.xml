@@ -2,5 +2,7 @@
     <string name="app_name">nemoLogic</string>
     <string name="admob_app_id">ca-app-pub-9444386713531243~4932680796</string>
     <string name="banner_ad_unit_id">ca-app-pub-9444386713531243/8680354114</string>
+    <string name="popup_ad_unit_id">ca-app-pub-9444386713531243/6098809845</string>
     <string name="banner_ad_unit_id_for_test">ca-app-pub-3940256099942544/6300978111</string>
+
 </resources>

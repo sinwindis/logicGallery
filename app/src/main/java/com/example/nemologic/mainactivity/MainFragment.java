@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.category.CategoryFragment;
+import com.example.nemologic.category.CategoryFragmentNoRv;
 import com.example.nemologic.data.DataManager;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelData;
@@ -54,62 +54,10 @@ public class MainFragment extends Fragment {
         final View fragmentView = inflater.inflate(R.layout.fragment_main, container, false);
         Context ctx = fragmentView.getContext();
 
-        ImageView img_continue = fragmentView.findViewById(R.id.img_continue);
-        ConstraintLayout cl_category = fragmentView.findViewById(R.id.cl_category);
-        ImageView img_option = fragmentView.findViewById(R.id.img_option);
-        ImageView img_plus = fragmentView.findViewById(R.id.img_plus);
+        final ConstraintLayout cl_continue = fragmentView.findViewById(R.id.cl_continue_info);
+        ConstraintLayout cl_continue_touchbox = fragmentView.findViewById(R.id.cl_continue_touchbox);
+        Button btn_category = fragmentView.findViewById(R.id.btn_category);
 
-        img_option.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setAlpha(0.5F);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        view.setAlpha(1F);
-                        OptionDialog optionDialog = new OptionDialog();
-
-                        optionDialog.makeOptionDialog(getActivity());
-                        optionDialog.dialog.show();
-                }
-                return false;
-            }
-        });
-
-        img_option.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        img_plus.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setAlpha(0.5F);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        view.setAlpha(1F);
-                        ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new LevelCreateFragment(mainActivityCtx));
-
-                }
-                return false;
-            }
-        });
-
-        img_plus.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         //DB를 갱신해 준다.
         DataManager.loadLevel(ctx);
@@ -137,8 +85,11 @@ public class MainFragment extends Fragment {
 
         TextView tv_item_level_size = fragmentView.findViewById(R.id.tv_item_level_size);
 
+        boolean dataLoad = false;
+
         assert lastPlayName != null;
         assert lastPlayCategory != null;
+        RecyclerView rv_board = fragmentView.findViewById(R.id.rv_level_board);
         
         if(!lastPlayName.isEmpty() && !lastPlayCategory.isEmpty())
         {
@@ -146,6 +97,7 @@ public class MainFragment extends Fragment {
 
             if(cursor.getCount() > 0)
             {
+                dataLoad = true;
                 cursor.moveToNext();
                 int width = cursor.getInt(cursor.getColumnIndex(SqlManager.CreateLevelDB.WIDTH));
                 int height = cursor.getInt(cursor.getColumnIndex(SqlManager.CreateLevelDB.HEIGHT));
@@ -159,49 +111,126 @@ public class MainFragment extends Fragment {
 
                 tv_item_level_name.setText(lastPlayName);
                 tv_item_level_size.setText(width + " X " + height);
-            }
 
+                rv_board.setLayoutManager(new GridLayoutManager(ctx, lastPlayLevel.getWidth()));
+                rv_board.setAdapter(new RvLevelBoardAdapter(lastPlayLevel.getParsedSaveData()));
+            }
         }
         mDbOpenHelper.close();
 
-        RecyclerView rv_board = fragmentView.findViewById(R.id.rv_level_board);
-        rv_board.setLayoutManager(new GridLayoutManager(ctx, lastPlayLevel.getWidth()));
-        rv_board.setAdapter(new RvLevelBoardAdapter(lastPlayLevel.getParsedSaveData()));
-//
-        img_continue.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
+        final boolean isContinue = dataLoad;
+
+
+        //버튼 클릭리스너 부분
+        //옵션 버튼
+        ImageView img_option = fragmentView.findViewById(R.id.img_option);
+
+        img_option.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
+
+                switch (motionEvent.getActionMasked())
+                {
                     case MotionEvent.ACTION_DOWN:
                         view.setAlpha(0.5F);
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        view.setAlpha(1F);
-                        GameFragment gameFragment = new GameFragment();
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("category", lastPlayCategory);
-                        bundle.putString("name", lastPlayName);
-                        gameFragment.setArguments(bundle);
-
-                        ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(gameFragment);
-
+                        view.setAlpha(1.0F);
+                        break;
                 }
+
                 return false;
             }
         });
-        img_continue.setOnClickListener(new View.OnClickListener() {
+
+        img_option.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
+                OptionDialog optionDialog = new OptionDialog();
 
+                optionDialog.makeOptionDialog(getActivity());
+                optionDialog.dialog.show();
             }
         });
 
-        cl_category.setOnClickListener(new View.OnClickListener() {
+        //추가 버튼
+        ImageView img_plus = fragmentView.findViewById(R.id.img_plus);
+        img_plus.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getActionMasked())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setAlpha(0.5F);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        view.setAlpha(1.0F);
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        img_plus.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new CategoryFragment(mainActivityCtx));
+                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new LevelCreateFragment(mainActivityCtx));
+            }
+        });
+
+        //이어하기 버튼
+        cl_continue_touchbox.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getActionMasked())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        cl_continue.setAlpha(0.5F);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        cl_continue.setAlpha(1.0F);
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        cl_continue_touchbox.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if(isContinue)
+                {
+                    GameFragment gameFragment = new GameFragment();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("category", lastPlayCategory);
+                    bundle.putString("name", lastPlayName);
+                    gameFragment.setArguments(bundle);
+
+                    ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(gameFragment);
+                }
+            }
+        });
+
+//
+
+        btn_category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new CategoryFragmentNoRv(mainActivityCtx));
             }
         });
 

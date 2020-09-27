@@ -2,6 +2,7 @@ package com.example.nemologic.level;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,17 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
 
         RecyclerView rv_board = holder.itemView.findViewById(R.id.rv_level_board);
         rv_board.setLayoutManager(new GridLayoutManager(ctx, levels[position].getWidth()));
-        rv_board.setAdapter(new RvLevelBoardAdapter(levels[position].getParsedSaveData()));
+        if(levels[position].getProgress() == 1)
+        {
+            //저장된 게임이면
+            rv_board.setAdapter(new RvLevelBoardAdapter(levels[position].getParsedSaveData()));
+        }
+        else if(levels[position].getProgress() == 2)
+        {
+            //완료한 게임이면
+            Log.d("levelAdapter", "완료된 게임 어댑터");
+            rv_board.setAdapter(new RvLevelBoardAdapter(levels[position].getParsedDataSet()));
+        }
 
         holder.itemView.findViewById(R.id.cl_touchbox).setOnClickListener(new View.OnClickListener() {
             @Override

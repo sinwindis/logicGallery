@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,17 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-import com.example.nemologic.category.VerticalSpaceItemDecoration;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelData;
 import com.example.nemologic.data.SqlManager;
-import com.example.nemologic.mainactivity.MainActivity;
 
 import java.sql.SQLException;
 
@@ -51,7 +46,7 @@ public class LevelFragment extends Fragment {
             category = getArguments().getString("category"); // 전달한 key 값
         }
 
-        TextView tv_categoryName = fragmentView.findViewById(R.id.tv_category);
+        TextView tv_categoryName = fragmentView.findViewById(R.id.tv_category_title);
 
         tv_categoryName.setText(category);
 

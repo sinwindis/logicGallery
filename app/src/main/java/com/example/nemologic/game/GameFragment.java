@@ -79,10 +79,12 @@ public class GameFragment extends Fragment {
         if(progress == 1)
             saveData = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.SAVEDATA));
 
-        lpm = new LevelPlayManager(category, name, width, height, dataSet, saveData);
+        lpm = new LevelPlayManager(category, name, progress, width, height, dataSet, saveData);
+
+        mDbOpenHelper.close();
 
         //gameBoard를 제작한다.
-        gameBoard = new GameBoard(fragmentView, lpm);
+        gameBoard = new GameBoard(this, fragmentView, lpm);
 
         gameBoard.makeGameBoard();
 
@@ -165,6 +167,5 @@ public class GameFragment extends Fragment {
     {
         super.onStop();
         lpm.savePlayData(ctx);
-
     }
 }

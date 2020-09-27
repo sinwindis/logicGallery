@@ -9,13 +9,17 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.nemologic.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
 public class MainActivity extends AppCompatActivity {
 
+    //InterstitialAd mIntersisialAd;
+
     public void fragmentMove(Fragment dest)
     {
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+        t.setCustomAnimations(R.anim.anim_fade_in, R.anim.anim_fade_out, R.anim.anim_fade_in, R.anim.anim_fade_out);
         t.replace(R.id.fl_main, dest);
         t.addToBackStack(null);
         t.commit();
@@ -35,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         AdView mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+//        mIntersisialAd = new InterstitialAd(this);
+//        mIntersisialAd.setAdUnitId(getString(R.string.popup_ad_unit_id));
+//        mIntersisialAd.loadAd(new AdRequest.Builder().build());
     }
 
 }

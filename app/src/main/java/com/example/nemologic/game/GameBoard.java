@@ -1,18 +1,22 @@
 package com.example.nemologic.game;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
+import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelPlayManager;
 
 import java.util.Objects;
@@ -25,6 +29,8 @@ public class GameBoard {
     boolean smartDrag;
     boolean oneLineDrag;
     boolean autoX;
+
+    GameFragment parent;
 
     private View targetView;
 
@@ -60,10 +66,11 @@ public class GameBoard {
     //0: 공백 1: 체크 2: X
     int macroMode = 0;
     
-    public GameBoard(View view, LevelPlayManager lpm)
+    public GameBoard(GameFragment ctx, View view, LevelPlayManager lpm)
     {
         targetView = view;
         this.lpm = lpm;
+        this.parent = ctx;
 
         initialize();
     }
@@ -321,8 +328,6 @@ public class GameBoard {
 
         touchStartX = x;
         touchStartY = y;
-        touchEndX = x;
-        touchEndY = y;
 
         if(touchMode == 0)
         {
@@ -361,76 +366,71 @@ public class GameBoard {
         tv_stack.setText(str_stack);
     }
 
+    private void setGameEnd()
+    {
+        lpm.progress = 2;
+        lpm.savePlayData(parent.getContext());
+        //parent.getFragmentManager().popBackStackImmediate();
+    }
+
+    private void clickUpAction()
+    {
+        setDragChecked();
+        removeDragTemp();
+        lpm.pushCheckStack();
+        updateNumColor();
+        checkAutoX();
+        showStackNum();
+        refreshBoard();
+
+        if(lpm.isGameEnd())
+        {
+            setGameEnd();
+        }
+    }
+
+    private void clickAction(int pos)
+    {
+        touchEndX = pos % lpm.width;
+        touchEndY = pos / lpm.width;
+
+        dragManage();
+        refreshBoard();
+        showDrag();
+    }
+
     private BoardItemTouchListener boardTouchListener = new BoardItemTouchListener("touchable") {
 
         @Override
         public void onDownTouchableView(int pos) {
-            // Write log here.
-            // This is an abstract method, you must implement.
 
             setMacroMode(pos);
-            dragManage();
-            refreshBoard();
-            showDrag();
+            clickAction(pos);
         }
 
         @Override
         public void onMoveTouchableView(int pos) {
-            // Write log here.
-            // This is an abstract method, you must implement.
-            touchEndX = pos % lpm.width;
-            touchEndY = pos / lpm.width;
 
-            dragManage();
-            refreshBoard();
-            showDrag();
+            clickAction(pos);
         }
 
-
-
-        /////////////////////////////
 
         @Override
         public void onClickUp(int pos, RecyclerView.ViewHolder holder)
         {
-            setDragChecked();
-            removeDragTemp();
-            lpm.pushCheckStack();
-            updateNumColor();
-            checkAutoX();
-            showStackNum();
-            refreshBoard();
-
-
-            lpm.isGameEnd();
+            clickUpAction();
         }
 
         @Override
         public void onLongClickUp(int pos, RecyclerView.ViewHolder holder)
         {
-            setDragChecked();
-            removeDragTemp();
-            lpm.pushCheckStack();
-            updateNumColor();
-            checkAutoX();
-            showStackNum();
-            refreshBoard();
-
-            lpm.isGameEnd();
+            clickUpAction();
         }
 
         @Override
         public void onDragMultiUp(int endPos, RecyclerView.ViewHolder holder)
         {
-            setDragChecked();
-            removeDragTemp();
-            lpm.pushCheckStack();
-            updateNumColor();
-            checkAutoX();
-            showStackNum();
-            refreshBoard();
-
-            lpm.isGameEnd();
+            clickUpAction();
         }
 
 

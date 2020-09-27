@@ -3,8 +3,10 @@ package com.example.nemologic.category;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,15 +52,35 @@ public class RvCategoryAdapter extends RecyclerView.Adapter<RvCategoryAdapter.Vi
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
-    public void onBindViewHolder(RvCategoryAdapter.ViewHolder holder, int position) {
-        TextView tv = holder.itemView.findViewById(R.id.tv_item_category_name);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+
+        Button tv = holder.itemView.findViewById(R.id.btn_category_name);
         tv.setText(this.names[position]);
         final int categoryPos = position;
+
+        holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //터치 다운, 업 시 알파값 조정해서 시각효과 주기
+                switch (motionEvent.getActionMasked())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setAlpha(0.5F);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        view.setAlpha(1.0F);
+                        break;
+                }
+
+                return false;
+            }
+        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //클릭 시 해당 카테고리에 해당하는 게임 레벨들을 나열하는 LevelActivity로 이동
-
                 Fragment dest = new LevelFragment(ctx);
                 // Fragment 생성
                 Bundle bundle = new Bundle();
