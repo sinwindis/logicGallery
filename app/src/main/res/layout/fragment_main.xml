@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhiteDark">
+    android:background="@color/colorBackground">
 
     <ImageView
         android:id="@+id/img_option"
@@ -36,87 +36,24 @@
         android:text="NemoLogic"
 
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cl_continue_info"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_continue_info"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/item_mainbackground"
-        android:layout_marginBottom="40dp"
-
-        app:layout_constraintBottom_toTopOf="@id/btn_continue"
+        app:layout_constraintBottom_toTopOf="@id/rv_level_board"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        />
 
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.5"
-        app:layout_constraintDimensionRatio="1:1.1">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_level_board"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="100dp"
 
-        <TextView
-            android:id="@+id/tv_item_level_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorBlack"
-            android:fontFamily="@font/paybooc_bold"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/cl_board_border"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="15sp"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_board_border"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/background_border_round"
-
-            app:layout_constraintBottom_toTopOf="@id/tv_item_level_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_item_level_size"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintDimensionRatio="1:1">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_level_board"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_margin="10dp"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_category"
+        android:overScrollMode="never">
 
 
-            </androidx.recyclerview.widget.RecyclerView>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/tv_item_level_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorBlack"
-            android:fontFamily="@font/paybooc_bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_board_border"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="20sp"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_continue_touchbox"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <Button
         android:id="@+id/btn_continue"

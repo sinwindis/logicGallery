@@ -1,4 +1,4 @@
-package com.example.nemologic.level;
+package com.example.nemologic.mainactivity;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -12,9 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 
-import java.nio.channels.ClosedSelectorException;
-
-public class RvLevelBoardAdapter extends RecyclerView.Adapter<RvLevelBoardAdapter.ViewHolder> {
+public class RvContinueLevelAdapter extends RecyclerView.Adapter<RvContinueLevelAdapter.ViewHolder> {
 
     int height;
     int width;
@@ -31,7 +29,7 @@ public class RvLevelBoardAdapter extends RecyclerView.Adapter<RvLevelBoardAdapte
         }
     }
 
-    public RvLevelBoardAdapter(int[][] checkedSet) {
+    public RvContinueLevelAdapter(int[][] checkedSet) {
         //생성자
         this.checkedSet = checkedSet.clone();
         this.height = checkedSet.length;
@@ -41,20 +39,19 @@ public class RvLevelBoardAdapter extends RecyclerView.Adapter<RvLevelBoardAdapte
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @NonNull
     @Override
-    public RvLevelBoardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RvContinueLevelAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext() ;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
         View view = inflater.inflate(R.layout.item_board, parent, false);
         view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.width + 1, parent.getMeasuredHeight()/this.height));
 
-
         return new ViewHolder(view);
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
-    public void onBindViewHolder(@NonNull RvLevelBoardAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RvContinueLevelAdapter.ViewHolder holder, int position) {
 
         ImageView iv = (ImageView) holder.itemView;
 
@@ -63,10 +60,10 @@ public class RvLevelBoardAdapter extends RecyclerView.Adapter<RvLevelBoardAdapte
         {
             case 0:
             case 2:
-                iv.setBackgroundColor(Color.parseColor("#ffffff"));
+                iv.setBackgroundColor(Color.parseColor("#00000000"));
                 break;
             case 1:
-                iv.setBackgroundColor(Color.parseColor("#888888"));
+                iv.setBackgroundColor(Color.parseColor("#606060"));
                 break;
 
         }

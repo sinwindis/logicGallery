@@ -22,6 +22,8 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
 
     LevelData[] levels;
     Context ctx;
+    int marginSize;
+    int rowItemNum;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -32,10 +34,12 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         }
     }
 
-    RvLevelAdapter(Context ctx, LevelData[] levels) {
+    RvLevelAdapter(Context ctx, LevelData[] levels, int marginSize, int rowItemNum) {
         //생성자
         this.levels = levels;
         this.ctx = ctx;
+        this.marginSize = marginSize;
+        this.rowItemNum = rowItemNum;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -46,7 +50,7 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
         View view = inflater.inflate(R.layout.item_level, parent, false) ;
-        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/2 - 15, (int) ((parent.getMeasuredWidth()/2 - 15)*1.3)));
+        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/rowItemNum, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         return new ViewHolder(view);
     }
@@ -54,12 +58,16 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(RvLevelAdapter.ViewHolder holder, final int position) {
-        TextView tv = holder.itemView.findViewById(R.id.tv_item_level_name);
-        tv.setText(this.levels[position].getName());
-        tv = holder.itemView.findViewById(R.id.tv_item_level_size);
-        String temp = levels[position].getWidth() + "X" + levels[position].getHeight();
-        tv.setText(temp);
 
+        //레벨 아이템 이름 표시
+        ((TextView) holder.itemView.findViewById(R.id.tv_item_level_name)).setText(this.levels[position].getName());
+
+        //레벨 아이템 사이즈 표시
+        String temp = levels[position].getWidth() + "X" + levels[position].getHeight();
+
+        ((TextView)holder.itemView.findViewById(R.id.tv_item_level_size)).setText(temp);
+
+        //레벨 아이템 진행 상황 표시
         RecyclerView rv_board = holder.itemView.findViewById(R.id.rv_level_board);
         rv_board.setLayoutManager(new GridLayoutManager(ctx, levels[position].getWidth()));
         if(levels[position].getProgress() == 1)

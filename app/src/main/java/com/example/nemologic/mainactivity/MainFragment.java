@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -19,14 +19,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-import com.example.nemologic.category.CategoryFragment;
 import com.example.nemologic.category.CategoryFragmentNoRv;
 import com.example.nemologic.data.DataManager;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelData;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.game.GameFragment;
-import com.example.nemologic.level.RvLevelBoardAdapter;
 import com.example.nemologic.levelcreate.LevelCreateFragment;
 import com.example.nemologic.option.OptionDialog;
 
@@ -54,9 +52,6 @@ public class MainFragment extends Fragment {
         final View fragmentView = inflater.inflate(R.layout.fragment_main, container, false);
         Context ctx = fragmentView.getContext();
 
-        final ConstraintLayout cl_continue = fragmentView.findViewById(R.id.cl_continue_info);
-        ConstraintLayout cl_continue_touchbox = fragmentView.findViewById(R.id.cl_continue_touchbox);
-        Button btn_category = fragmentView.findViewById(R.id.btn_category);
 
 
         //DB를 갱신해 준다.
@@ -80,10 +75,6 @@ public class MainFragment extends Fragment {
         mDbOpenHelper.create();
 
         Cursor cursor;
-
-        TextView tv_item_level_name = fragmentView.findViewById(R.id.tv_item_level_name);
-
-        TextView tv_item_level_size = fragmentView.findViewById(R.id.tv_item_level_size);
 
         boolean dataLoad = false;
 
@@ -109,17 +100,13 @@ public class MainFragment extends Fragment {
 
                 lastPlayLevel = new LevelData(lastPlayCategory, lastPlayName, width, height, progress, dataSet, saveData);
 
-                tv_item_level_name.setText(lastPlayName);
-                tv_item_level_size.setText(width + " X " + height);
-
                 rv_board.setLayoutManager(new GridLayoutManager(ctx, lastPlayLevel.getWidth()));
-                rv_board.setAdapter(new RvLevelBoardAdapter(lastPlayLevel.getParsedSaveData()));
+                rv_board.setAdapter(new RvContinueLevelAdapter(lastPlayLevel.getParsedSaveData()));
             }
         }
         mDbOpenHelper.close();
 
         final boolean isContinue = dataLoad;
-
 
         //버튼 클릭리스너 부분
         //옵션 버튼
@@ -187,27 +174,13 @@ public class MainFragment extends Fragment {
         });
 
         //이어하기 버튼
-        cl_continue_touchbox.setOnTouchListener(new View.OnTouchListener() {
+        Button btn_continue = fragmentView.findViewById(R.id.btn_continue);
+        if(!isContinue)
+        {
+            btn_continue.setLayoutParams(new ConstraintLayout.LayoutParams(0, 0));
+        }
 
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                switch (motionEvent.getActionMasked())
-                {
-                    case MotionEvent.ACTION_DOWN:
-                        cl_continue.setAlpha(0.5F);
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        cl_continue.setAlpha(1.0F);
-                        break;
-                }
-
-                return false;
-            }
-        });
-
-        cl_continue_touchbox.setOnClickListener(new View.OnClickListener() {
+        btn_continue.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -225,7 +198,8 @@ public class MainFragment extends Fragment {
             }
         });
 
-//
+        //카테고리 버튼
+        Button btn_category = fragmentView.findViewById(R.id.btn_category);
 
         btn_category.setOnClickListener(new View.OnClickListener() {
             @Override

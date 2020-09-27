@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.nemologic.R;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
 public class MainActivity extends AppCompatActivity {

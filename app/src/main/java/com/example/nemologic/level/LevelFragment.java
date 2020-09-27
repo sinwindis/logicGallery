@@ -79,9 +79,15 @@ public class LevelFragment extends Fragment {
 
         mDbOpenHelper.close();
 
-        rv_level.addItemDecoration(new LevelItemDecoration(15));
-        rv_level.setLayoutManager(new GridLayoutManager(ctx, 2));
-        rv_level.setAdapter(new RvLevelAdapter(ctx, levelData));
+        int marginSize = 50;
+        int rowItemNum = 3;
+
+        rv_level.addItemDecoration(new LevelItemDecoration(marginSize, rowItemNum));
+        rv_level.setLayoutManager(new GridLayoutManager(ctx, 3));
+
+
+
+        rv_level.setAdapter(new RvLevelAdapter(ctx, levelData, marginSize, rowItemNum));
 
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
 
