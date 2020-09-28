@@ -6,7 +6,7 @@
         <gradient
             android:endColor="@color/colorBackground"
             android:startColor="@color/colorWhite"
-            android:angle="45"/>  <!-- background color -->
+            android:angle="90"/>  <!-- background color -->
     </shape>
 </item>
 </layer-list>

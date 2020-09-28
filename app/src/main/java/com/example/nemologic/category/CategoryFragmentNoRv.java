@@ -90,7 +90,6 @@ public class CategoryFragmentNoRv extends Fragment {
 
 
 
-
         //////////////////fragment button events
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
 

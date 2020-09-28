@@ -19,6 +19,7 @@ import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelData;
 import com.example.nemologic.data.SqlManager;
+import com.example.nemologic.game.BoardItemTouchListener;
 
 import java.sql.SQLException;
 
@@ -38,7 +39,7 @@ public class LevelFragment extends Fragment {
 
         View fragmentView = inflater.inflate(R.layout.fragment_level, container, false);
 
-        RecyclerView rv_level = fragmentView.findViewById(R.id.rv_level);
+        final RecyclerView rv_level = fragmentView.findViewById(R.id.rv_level);
 
         String category = "";
 
@@ -60,7 +61,8 @@ public class LevelFragment extends Fragment {
 
         Cursor levelCursor =  mDbOpenHelper.getLevelCursorByCategory(category);
         LevelData[] levelData = new LevelData[levelCursor.getCount()];
-        int count = 0;
+        int fullCount = 0;
+        int clearCount = 0;
 
         while(levelCursor.moveToNext()) {
 
@@ -73,21 +75,40 @@ public class LevelFragment extends Fragment {
             if(progress == 1)
                 saveData = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.SAVEDATA));
 
-            levelData[count] = new LevelData(category, name, width, height, progress, dataSet, saveData);
-            count++;
+            levelData[fullCount] = new LevelData(category, name, width, height, progress, dataSet, saveData);
+            fullCount++;
+            if(progress == 2)
+            {
+                clearCount++;
+            }
         }
-
         mDbOpenHelper.close();
 
-        int marginSize = 50;
+        ((TextView)fragmentView.findViewById(R.id.tv_level_num)).setText(clearCount + "/" + fullCount);
+
         int rowItemNum = 3;
 
-        rv_level.addItemDecoration(new LevelItemDecoration(marginSize, rowItemNum));
-        rv_level.setLayoutManager(new GridLayoutManager(ctx, 3));
+        rv_level.setLayoutManager(new GridLayoutManager(ctx, rowItemNum));
+        rv_level.setAdapter(new RvLevelAdapter(ctx, levelData, rowItemNum));
 
 
+        rv_level.addOnItemTouchListener(new LevelItemTouchListener("touchable") {
 
-        rv_level.setAdapter(new RvLevelAdapter(ctx, levelData, marginSize, rowItemNum));
+            @Override
+            public void onDownTouchableView(int pos) {
+
+                rv_level.getChildAt(pos).setAlpha(0.5F);
+            }
+
+            @Override
+            public void onClickUp(int pos)
+            {
+                rv_level.getChildAt(pos).setAlpha(1.0F);
+            }
+
+
+        });
+
 
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
 

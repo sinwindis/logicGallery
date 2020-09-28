@@ -4,8 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,15 +16,17 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
+import com.example.nemologic.levelcreate.LevelCreateFragment;
 import com.example.nemologic.mainactivity.MainActivity;
 import com.example.nemologic.data.LevelData;
 import com.example.nemologic.game.GameFragment;
+
+import java.util.Objects;
 
 public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHolder> {
 
     LevelData[] levels;
     Context ctx;
-    int marginSize;
     int rowItemNum;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
@@ -34,11 +38,10 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         }
     }
 
-    RvLevelAdapter(Context ctx, LevelData[] levels, int marginSize, int rowItemNum) {
+    RvLevelAdapter(Context ctx, LevelData[] levels, int rowItemNum) {
         //생성자
         this.levels = levels;
         this.ctx = ctx;
-        this.marginSize = marginSize;
         this.rowItemNum = rowItemNum;
     }
 
@@ -81,6 +84,8 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
             Log.d("levelAdapter", "완료된 게임 어댑터");
             rv_board.setAdapter(new RvLevelBoardAdapter(levels[position].getParsedDataSet()));
         }
+
+        final View itemView = holder.itemView;
 
         holder.itemView.findViewById(R.id.cl_touchbox).setOnClickListener(new View.OnClickListener() {
             @Override

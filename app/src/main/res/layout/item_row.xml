@@ -13,6 +13,8 @@
         android:paddingStart="0dp"
         android:paddingEnd="3dp"
         android:textColor="@color/colorBlack"
+        android:textSize="10sp"
+        android:fontFamily="@font/paybooc_bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
