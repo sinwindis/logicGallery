@@ -1,22 +1,20 @@
 package com.example.nemologic.game;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelPlayManager;
 
 import java.util.Objects;
@@ -49,9 +47,11 @@ public class GameBoard {
     private ConstraintLayout cl_count;
     private LinearLayout ll_drag;
 
-    private Button btn_toggle;
-    private Button btn_prev;
-    private Button btn_next;
+    private ImageView img_toggle;
+    private ImageView img_prev;
+    private ImageView img_next;
+    private ImageView img_hint;
+    private ImageView img_tutorial;
 
     int touchStartX;
     int touchStartY;
@@ -90,9 +90,11 @@ public class GameBoard {
 
         cl_count = targetView.findViewById(R.id.cl_count);
         ll_drag = targetView.findViewById(R.id.ll_drag);
-        btn_toggle = targetView.findViewById(R.id.img_toggle);
-        btn_prev = targetView.findViewById(R.id.img_prevstack);
-        btn_next = targetView.findViewById(R.id.img_nextstack);
+        img_toggle = targetView.findViewById(R.id.img_toggle);
+        img_prev = targetView.findViewById(R.id.img_prevstack);
+        img_next = targetView.findViewById(R.id.img_nextstack);
+        img_hint = targetView.findViewById(R.id.img_hint);
+        img_tutorial = targetView.findViewById(R.id.img_tutorial);
 
         tv_count = targetView.findViewById(R.id.tv_count);
         tv_stack = targetView.findViewById(R.id.tv_stack);
@@ -522,15 +524,15 @@ public class GameBoard {
                     {
                         case 0:
                             view.setImageResource(R.drawable.background_transparent);
-                            view.setBackgroundColor(Color.parseColor("#aaeeff"));
+                            view.setBackgroundColor(Color.parseColor("#82C3FF"));
                             break;
                         case 1:
                             view.setImageResource(R.drawable.background_transparent);
-                            view.setBackgroundColor(Color.parseColor("#113355"));
+                            view.setBackgroundColor(Color.parseColor("#406F9A"));
                             break;
                         case 2:
                             view.setImageResource(R.drawable.background_x);
-                            view.setBackgroundColor(Color.parseColor("#aaeeff"));
+                            view.setBackgroundColor(Color.parseColor("#82C3FF"));
                             break;
                     }
                 }
@@ -539,6 +541,7 @@ public class GameBoard {
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     public void makeGameBoard()
     {
         //로직 게임판을 만듭니다.
@@ -558,24 +561,67 @@ public class GameBoard {
         civm.setView(targetView);
         rivm.setView(targetView);
 
-        btn_toggle.setOnClickListener(new Button.OnClickListener() {
+
+        img_toggle.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getActionMasked())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        img_toggle.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(touchMode == 0)
                 {
                     touchMode = 1;
-                    btn_toggle.setText("X");
+                    img_toggle.setImageResource(R.drawable.background_btn_x);
                 }
                 else
                 {
                     touchMode = 0;
-                    btn_toggle.setText("O");
+                    img_toggle.setImageResource(R.drawable.background_btn_o);
                 }
 
             }
         });
 
-        btn_next.setOnClickListener(new Button.OnClickListener() {
+
+
+        img_next.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getActionMasked())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        img_next.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -587,7 +633,27 @@ public class GameBoard {
             }
         });
 
-        btn_prev.setOnClickListener(new Button.OnClickListener() {
+        img_prev.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getActionMasked())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        img_prev.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 lpm.prevCheckStack();
@@ -595,6 +661,61 @@ public class GameBoard {
                 refreshBoard();
                 updateNumColor();
                 showStackNum();
+            }
+        });
+
+        //힌트 버튼
+        img_hint.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getActionMasked())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        img_hint.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+
+        //튜토리얼 버튼
+
+        img_tutorial.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getActionMasked())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        img_tutorial.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
             }
         });
     }

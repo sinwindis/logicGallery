@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -19,7 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-import com.example.nemologic.category.CategoryFragmentNoRv;
+import com.example.nemologic.category.CategoryFragment;
 import com.example.nemologic.data.DataManager;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelData;
@@ -50,7 +49,7 @@ public class MainFragment extends Fragment {
         final Context mainActivityCtx = ctx;
 
         final View fragmentView = inflater.inflate(R.layout.fragment_main, container, false);
-        Context ctx = fragmentView.getContext();
+        final Context ctx = fragmentView.getContext();
 
 
 
@@ -114,17 +113,18 @@ public class MainFragment extends Fragment {
 
         img_option.setOnTouchListener(new View.OnTouchListener() {
 
+            @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setAlpha(0.5F);
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setAlpha(1.0F);
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
                         break;
                 }
 
@@ -153,11 +153,11 @@ public class MainFragment extends Fragment {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setAlpha(0.5F);
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setAlpha(1.0F);
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
                         break;
                 }
 
@@ -204,7 +204,7 @@ public class MainFragment extends Fragment {
         btn_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new CategoryFragmentNoRv(mainActivityCtx));
+                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new CategoryFragment(mainActivityCtx));
             }
         });
 

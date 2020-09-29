@@ -4,19 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_index">
+    android:background="@drawable/background_transparent">
 
-    <TextView
-        android:id="@+id/tv_item_row"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="0dp"
-        android:paddingEnd="3dp"
-        android:textColor="@color/colorBlack"
-        android:textSize="10sp"
-        android:fontFamily="@font/paybooc_bold"
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_option"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent">
+
+    </ImageView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

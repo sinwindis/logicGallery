@@ -29,15 +29,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-        t.add(R.id.fl_main, new MainFragment(this));
-        t.commit();
-
         //광고
         MobileAds.initialize(this, getString(R.string.admob_app_id));
         AdView mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+        t.add(R.id.fl_main, new MainFragment(this));
+        t.commit();
 
 //        mIntersisialAd = new InterstitialAd(this);
 //        mIntersisialAd.setAdUnitId(getString(R.string.popup_ad_unit_id));

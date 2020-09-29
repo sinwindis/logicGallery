@@ -2,6 +2,7 @@ package com.example.nemologic.game;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,9 @@ public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHold
     int height;
     int width;
     int[][] checkedSet;
+    float heightUnder = 0;
+    int heightOffset = 0;
+    int widthCount = 0;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -43,7 +47,25 @@ public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHold
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
         View view = inflater.inflate(R.layout.item_board, parent, false) ;
-        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.width, parent.getMeasuredHeight()/this.height));
+
+        if(widthCount % this.width == 0)
+        {
+            //매 줄의 첫 칸일 때
+
+            //height 는 여기서 한 번만 계산
+            heightUnder += parent.getMeasuredHeight()%this.height/((float)this.height);
+
+            if(heightUnder >= 1)
+            {
+                heightOffset = 1;
+                heightUnder--;
+            }
+        }
+
+        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.width + 1, parent.getMeasuredHeight()/this.height + heightOffset));
+
+        heightOffset = 0;
+        widthCount++;
 
         return new ViewHolder(view);
     }

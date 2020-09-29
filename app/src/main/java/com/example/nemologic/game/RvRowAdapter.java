@@ -25,6 +25,8 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     int[] idxNumSet;
     public boolean[] endRow;
     List<TextView> tvList = new ArrayList<>();
+    float heightUnder = 0;
+    int heightOffset = 0;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -55,7 +57,16 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
         View view = inflater.inflate(R.layout.item_row, parent, false) ;
-        view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, parent.getMeasuredHeight()/this.dataSet.length));
+
+        heightUnder += parent.getMeasuredHeight()%this.dataSet.length/((float)this.dataSet.length);
+
+        if(heightUnder >= 1)
+        {
+            heightOffset = 1;
+            heightUnder--;
+        }
+
+        view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, parent.getMeasuredHeight()/this.dataSet.length + heightOffset));
 
         return new ViewHolder(view);
     }

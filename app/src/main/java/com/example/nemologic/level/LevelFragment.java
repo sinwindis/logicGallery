@@ -113,17 +113,22 @@ public class LevelFragment extends Fragment {
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
 
         img_back.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
+
+            @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
+
+                switch (motionEvent.getActionMasked())
+                {
                     case MotionEvent.ACTION_DOWN:
-                        view.setAlpha(0.5F);
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        view.setAlpha(1F);
-                        getFragmentManager().popBackStackImmediate();
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        break;
                 }
+
                 return false;
             }
         });
@@ -134,6 +139,7 @@ public class LevelFragment extends Fragment {
             public void onClick(View view) {
 
 
+                getFragmentManager().popBackStackImmediate();
             }
         });
 

@@ -8,17 +8,16 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.SqlManager;
+import com.example.nemologic.level.LevelFragment;
 import com.example.nemologic.mainactivity.MainActivity;
 
 import java.sql.SQLException;
@@ -40,7 +39,7 @@ public class CategoryFragment extends Fragment {
 
         View fragmentView = inflater.inflate(R.layout.fragment_category, container, false);
 
-        RecyclerView rv_category = fragmentView.findViewById(R.id.rv_category);
+        LinearLayout ll_category = fragmentView.findViewById(R.id.ll_category);
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
@@ -60,31 +59,51 @@ public class CategoryFragment extends Fragment {
         }
 
         mDbOpenHelper.close();
-        String[] categoryStringArray = new String[categoryCursor.getCount()];
 
         for(int i = 0; i < categoryArray.size(); i++)
         {
-            categoryStringArray[i] = categoryArray.get(i);
+
+            View categoryBtnView = inflater.inflate(R.layout.item_category, container, false);
+            final String categoryName = categoryArray.get(i);
+
+            Button btn_item_category_name = categoryBtnView.findViewById(R.id.btn_category_name);
+            btn_item_category_name.setText(categoryName);
+
+            btn_item_category_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //클릭 시 해당 카테고리에 해당하는 게임 레벨들을 나열하는 LevelActivity로 이동
+                    Fragment dest = new LevelFragment(ctx);
+                    // Fragment 생성
+                    Bundle bundle = new Bundle();
+                    bundle.putString("category", categoryName);
+                    dest.setArguments(bundle);
+                    ((MainActivity)ctx).fragmentMove(dest);
+                }
+            });
+
+            ll_category.addView(categoryBtnView);
         }
 
-        rv_category.addItemDecoration(new VerticalSpaceItemDecoration(60));
 
-        rv_category.setLayoutManager(new LinearLayoutManager(ctx));
-        rv_category.setAdapter(new RvCategoryAdapter(ctx, categoryStringArray));
 
+        //////////////////fragment button events
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
 
         img_back.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
+            @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
+
+                switch (motionEvent.getActionMasked())
+                {
                     case MotionEvent.ACTION_DOWN:
-                        view.setAlpha(0.5F);
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        view.setAlpha(1F);
-                        getFragmentManager().popBackStackImmediate();
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        break;
                 }
                 return false;
             }
@@ -94,8 +113,7 @@ public class CategoryFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-
-
+                getFragmentManager().popBackStackImmediate();
             }
         });
 

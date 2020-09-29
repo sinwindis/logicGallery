@@ -94,26 +94,21 @@ public class GameFragment extends Fragment {
         ImageView img_option = fragmentView.findViewById(R.id.img_option);
 
         img_option.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
+            @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setAlpha(0.5F);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        view.setAlpha(1F);
-                        OptionDialog optionDialog = new OptionDialog();
 
-                        optionDialog.makeOptionDialog(getActivity());
-                        optionDialog.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialogInterface) {
-                                gameBoard.loadOption();
-                            }
-                        });
-                        optionDialog.dialog.show();
+                switch (motionEvent.getActionMasked())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        break;
                 }
+
                 return false;
             }
         });
@@ -123,22 +118,35 @@ public class GameFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                OptionDialog optionDialog = new OptionDialog();
+
+                optionDialog.makeOptionDialog(getActivity());
+                optionDialog.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        gameBoard.loadOption();
+                    }
+                });
+                optionDialog.dialog.show();
             }
         });
 
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
 
         img_back.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
+            @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
+
+                switch (motionEvent.getActionMasked())
+                {
                     case MotionEvent.ACTION_DOWN:
-                        view.setAlpha(0.5F);
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        view.setAlpha(1F);
-                        getFragmentManager().popBackStackImmediate();
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        break;
                 }
                 return false;
             }
@@ -149,6 +157,7 @@ public class GameFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                getFragmentManager().popBackStackImmediate();
 
             }
         });

@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +25,8 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
     int[] idxNumSet;
     List<TextView> tvList = new ArrayList<>();
     public boolean[] endColumn;
+    float widthUnder = 0;
+    int widthOffset = 0;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -56,7 +57,17 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
         View view = inflater.inflate(R.layout.item_column, parent, false) ;
-        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.dataSet.length, ViewGroup.LayoutParams.MATCH_PARENT));
+
+
+        widthUnder += parent.getMeasuredWidth()%this.dataSet.length/((float)this.dataSet.length);
+
+        if(widthUnder >= 1)
+        {
+            widthOffset = 1;
+            widthUnder--;
+        }
+
+        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.dataSet.length + widthOffset, ViewGroup.LayoutParams.MATCH_PARENT));
 
         return new ViewHolder(view);
     }
