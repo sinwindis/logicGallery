@@ -102,19 +102,21 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     private boolean[] getIdxMatch(int rowNum, int[][] checkedSet)
     {
         endRow[rowNum] = false;
-        boolean[] checkTemp = new boolean[idxNumSet[rowNum]];
+        int idxNum = idxNumSet[rowNum];
+        boolean[] checkTemp = new boolean[idxNum];
         int sumTemp = 0;
         int checkIdx = 0;
 
-        if(idxNumSet[rowNum] == 0)
+        if(dataSet[rowNum][0] == 0)
         {
-            //채워야할 칸이 0인 경우
+            //해당 row 에 채워야 할 칸이 없다면
+            //모든 칸을 채웠다고 반환한다
             checkTemp = new boolean[1];
             checkTemp[0] = true;
             return checkTemp;
         }
 
-        for(int i = 0; i < idxNumSet[rowNum]; i++)
+        for(int i = 0; i < idxNum; i++)
         {
             checkTemp[i] = false;
         }
@@ -124,18 +126,23 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
         {
             if(checkedSet[rowNum][i] == 0)
             {
-                //만약 공백이 나오면 반복문 종료
+                //만약 공백이 나오면 확인 반복문 종료
                 break;
             }
             else if(checkedSet[rowNum][i] == 1)
             {
-                //체크되어있을 경우 갯수를 센다
+                //체크되어있을 경우 개수를 센다
                 sumTemp++;
+            }
+            else if(checkedSet[rowNum][i] == 2)
+            {
+                //x 표시일 경우 센 개수를 리셋해준다
+                sumTemp = 0;
             }
 
             if(sumTemp == dataSet[rowNum][checkIdx])
             {
-                //이번 칸까지 체크를 셌는데 갯수가 맞다면
+                //이번 칸까지 체크를 셌는데 개수가 맞다면
 
                 if(i == checkedSet[rowNum].length - 1)
                 {
@@ -185,6 +192,11 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
             {
                 //체크되어있을 경우 갯수를 센다
                 sumTemp++;
+            }
+            else if(checkedSet[rowNum][i] == 2)
+            {
+                //x 표시일 경우 센 개수를 리셋해준다
+                sumTemp = 0;
             }
 
             if(sumTemp == dataSet[rowNum][checkIdx])
@@ -238,12 +250,22 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
             else
             {
                 //해당 칸이 채워져있지 않을 때
-                if(sumTemp == dataSet[rowNum][checkIdx])
+                //센 개수를 리셋해준다
+                sumTemp = 0;
+
+            }
+
+
+            if(sumTemp == dataSet[rowNum][checkIdx])
+            {
+                //sumTemp의 숫자가 dataSet에 저장된 숫자와 동일할 때
+                if(i == checkedSet[rowNum].length - 1 || checkedSet[rowNum][i + 1] != 1)
                 {
-                    //sumTemp의 숫자가 dataSet에 저장된 숫자와 동일할 때
+                    //마지막 칸이거나 다음칸에 체크가 안 되어 있을 때
                     sumTemp = 0;
                     checkIdx++;
                 }
+
             }
 
             if(checkIdx == idxNumSet[rowNum])

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,13 +129,18 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
             }
             else if(checkedSet[i][columnNum] == 1)
             {
-                //체크되어있을 경우 갯수를 센다
+                //체크되어있을 경우 개수를 센다
                 sumTemp++;
+            }
+            else if(checkedSet[i][columnNum] == 2)
+            {
+                //x 표시일 경우 개수를 리셋해준다
+                sumTemp = 0;
             }
 
             if(sumTemp == dataSet[columnNum][checkIdx])
             {
-                //이번 칸까지 체크를 셌는데 갯수가 맞다면
+                //이번 칸까지 체크를 셌는데 개수가 맞다면
 
                 if(i == checkedSet.length - 1)
                 {
@@ -184,6 +190,11 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
             {
                 //체크되어있을 경우 갯수를 센다
                 sumTemp++;
+            }
+            else if(checkedSet[i][columnNum] == 2)
+            {
+                //x 표시일 경우 개수를 리셋해준다
+                sumTemp = 0;
             }
 
             if(sumTemp == dataSet[columnNum][checkIdx])
@@ -237,12 +248,20 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
             else
             {
                 //해당 칸이 채워져있지 않을 때
-                if(sumTemp == dataSet[columnNum][checkIdx])
+                //센 개수를 리셋해준다
+                sumTemp = 0;
+            }
+
+            if(sumTemp == dataSet[columnNum][checkIdx])
+            {
+                //sumTemp의 숫자가 dataSet에 저장된 숫자와 동일할 때
+                if(i == checkedSet.length - 1 || checkedSet[i+1][columnNum] != 1)
                 {
-                    //sumTemp의 숫자가 dataSet에 저장된 숫자와 동일할 때
+                    //마지막 칸이거나 다음칸에 체크가 안 되어 있을 때
                     sumTemp = 0;
                     checkIdx++;
                 }
+
             }
 
             if(checkIdx == idxNumSet[columnNum])
