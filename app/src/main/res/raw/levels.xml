@@ -7,48 +7,19 @@
         <width>5</width>
         <height>5</height>
         <data>0 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 1 1 1 0 0 0 0 0 0</data>
+        <color>ffffff ffffff ffffff ffffff ffffff ffffff 804040 ffffff 804040 ffffff ffffff 804040 804040 804040 ffffff ffffff 804040 804040 804040 ffffff ffffff ffffff ffffff ffffff ffffff</color>
 
     </level>
 
     <level>
-        <lname>dummyLevel2</lname>
-        <cname>dummy2</cname>
-        <width>10</width>
-        <height>10</height>
-        <data>0 1 0 1 1 0 1 0 1 1 0 1 0 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 0 1 1 0 0 0 0 1 0 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1 1 0 1 1 1 1 0 0 1 1 0 0 1 1 0 1</data>
-
-    </level>
-
-    <level>
-        <lname>dummyLevel3</lname>
-        <cname>dummy2</cname>
-        <width>10</width>
-        <height>10</height>
-        <data>0 1 0 1 1 0 1 0 1 1 0 1 0 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 0 1 1 0 0 0 0 1 0 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1 1 0 1 1 1 1 0 0 1 1 0 0 1 1 0 1</data>
+        <lname>토끼2</lname>
+        <cname>동물</cname>
+        <width>5</width>
+        <height>5</height>
+        <data>0 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 1 1 1 0 0 0 0 0 0</data>
+        <color>ffffff ffffff ffffff ffffff ffffff ffffff 804040 ffffff 804040 ffffff ffffff 804040 804040 804040 ffffff ffffff 804040 804040 804040 ffffff ffffff ffffff ffffff ffffff ffffff</color>
 
     </level>
 
     <version>0.1</version>
-
-    <level>
-        <lname>dummyLevel4</lname>
-        <cname>dummy2</cname>
-        <width>10</width>
-        <height>10</height>
-        <data>0 1 0 1 1 0 1 0 1 1 0 1 0 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 0 1 1 0 0 0 0 1 0 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1 1 0 1 1 1 1 0 0 1 1 0 0 1 1 0 1</data>
-
-    </level>
-
-    <version>0.2</version>
-
-    <level>
-        <lname>dummyLevel5</lname>
-        <cname>dummy3</cname>
-        <width>7</width>
-        <height>7</height>
-        <data>0 1 0 1 0 1 0 1 1 1 1 0 1 1 0 1 1 1 0 1 1 0 1 1 1 0 0 1 0 1 1 1 1 1 0 0 1 0 1 0 1 1 1 0 1 1 1 0 1</data>
-
-    </level>
-
-    <version>0.3</version>
 </resources>

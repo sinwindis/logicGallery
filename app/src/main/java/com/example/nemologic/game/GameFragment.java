@@ -9,12 +9,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
@@ -22,26 +20,20 @@ import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.option.OptionDialog;
 
-import org.w3c.dom.Text;
-
 import java.sql.SQLException;
 
 public class GameFragment extends Fragment {
 
     private Context ctx;
+    private Context mainActivityContext;
     LevelPlayManager lpm;
 
     GameBoard gameBoard;
 
-    private String category;
-    private String name;
-    private int width;
-    private int height;
-    private String dataSet;
-    private String saveData;
+    private int id;
 
-
-    public GameFragment() {
+    public GameFragment(Context ctx) {
+        mainActivityContext = ctx;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -60,31 +52,35 @@ public class GameFragment extends Fragment {
             e.printStackTrace();
         }
 
-        //bundle로 받은 category와 level의 이름을 String으로 저장한다.
+        //bundle 로 받은 id 를 저장한다.
         if(getArguments() != null){
-            category = getArguments().getString("category");
-            name = getArguments().getString("name");
+            id = getArguments().getInt("id");
         }
 
         //게임레벨과 카테고리의 이름을 이용해 db에서 데이터를 받아오고 이를 lpm 인스턴스에 대입한다.
-        Cursor levelCursor =  mDbOpenHelper.getLevelCursorByCategoryAndName(category, name);
+        Cursor levelCursor =  mDbOpenHelper.getLevelCursorById(id);
         levelCursor.moveToNext();
 
-        name = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.NAME));
-        width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.WIDTH));
-        height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.HEIGHT));
-        int progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.PROGRESS));
-        dataSet = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.DATASET));
-        saveData = "";
+        String category = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.CATEGORY));
+        String name = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.NAME));
+        int width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
+        int height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
+        int progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.PROGRESS));
+        String dataSet = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.DATASET));
+        String colorSet = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.COLORSET));
+        String saveData = "";
         if(progress == 1)
-            saveData = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.SAVEDATA));
+            saveData = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.SAVEDATA));
 
-        lpm = new LevelPlayManager(category, name, progress, width, height, dataSet, saveData);
+        if(progress != 2)
+            progress = 1;
+
+        lpm = new LevelPlayManager(id, category, name, progress, width, height, dataSet, saveData, colorSet);
 
         mDbOpenHelper.close();
 
         //gameBoard를 제작한다.
-        gameBoard = new GameBoard(this, fragmentView, lpm);
+        gameBoard = new GameBoard(mainActivityContext, fragmentView, lpm);
 
         gameBoard.makeGameBoard();
 

@@ -2,12 +2,9 @@ package com.example.nemologic.level;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,16 +13,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-import com.example.nemologic.levelcreate.LevelCreateFragment;
+import com.example.nemologic.data.StringParser;
 import com.example.nemologic.mainactivity.MainActivity;
-import com.example.nemologic.data.LevelData;
+import com.example.nemologic.data.LevelThumbnailData;
 import com.example.nemologic.game.GameFragment;
-
-import java.util.Objects;
 
 public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHolder> {
 
-    LevelData[] levels;
+    LevelThumbnailData[] levels;
     Context ctx;
     int rowItemNum;
 
@@ -38,7 +33,7 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         }
     }
 
-    RvLevelAdapter(Context ctx, LevelData[] levels, int rowItemNum) {
+    RvLevelAdapter(Context ctx, LevelThumbnailData[] levels, int rowItemNum) {
         //생성자
         this.levels = levels;
         this.ctx = ctx;
@@ -76,13 +71,14 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         if(levels[position].getProgress() == 1)
         {
             //저장된 게임이면
-            rv_board.setAdapter(new RvLevelBoardAdapter(levels[position].getParsedSaveData()));
+            //세이브데이터를 가져온다
+            rv_board.setAdapter(new RvLevelBoardAdapter(StringParser.getParsedSaveData(levels[position].getSaveData(), levels[position].getWidth(), levels[position].getHeight())));
         }
         else if(levels[position].getProgress() == 2)
         {
             //완료한 게임이면
-            Log.d("levelAdapter", "완료된 게임 어댑터");
-            rv_board.setAdapter(new RvLevelBoardAdapter(levels[position].getParsedDataSet()));
+            //컬러셋을 가져온다
+            rv_board.setAdapter(new RvLevelBoardAdapter(StringParser.getParsedColorSet(levels[position].getColorSet(), levels[position].getWidth(), levels[position].getHeight())));
         }
 
         final View itemView = holder.itemView;
@@ -90,12 +86,11 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         holder.itemView.findViewById(R.id.cl_touchbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //클릭 시 해당 게임을 플레이하는 GameActivity로 이동
-                Fragment dest = new GameFragment();
+                //클릭 시 해당 게임을 플레이하는 GameActivity 로 이동
+                Fragment dest = new GameFragment(ctx);
                 // Fragment 생성
                 Bundle bundle = new Bundle();
-                bundle.putString("category", levels[position].getCategory());
-                bundle.putString("name", levels[position].getName());
+                bundle.putInt("id", levels[position].getId());
                 dest.setArguments(bundle);
                 ((MainActivity)ctx).fragmentMove(dest);
             }

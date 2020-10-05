@@ -17,9 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
-import com.example.nemologic.data.LevelData;
+import com.example.nemologic.data.LevelThumbnailData;
 import com.example.nemologic.data.SqlManager;
-import com.example.nemologic.game.BoardItemTouchListener;
 
 import java.sql.SQLException;
 
@@ -60,22 +59,24 @@ public class LevelFragment extends Fragment {
 
 
         Cursor levelCursor =  mDbOpenHelper.getLevelCursorByCategory(category);
-        LevelData[] levelData = new LevelData[levelCursor.getCount()];
+        LevelThumbnailData[] levelThumbnailData = new LevelThumbnailData[levelCursor.getCount()];
         int fullCount = 0;
         int clearCount = 0;
 
         while(levelCursor.moveToNext()) {
 
-            String name = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.NAME));
-            int width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.WIDTH));
-            int height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.HEIGHT));
-            int progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.PROGRESS));
-            String dataSet = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.DATASET));
+            int id = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.ID));
+            String name = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.NAME));
+            int width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
+            int height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
+            int progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.PROGRESS));
+            String dataSet = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.DATASET));
+            String colorSet = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.COLORSET));
             String saveData = "";
             if(progress == 1)
-                saveData = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.CreateLevelDB.SAVEDATA));
+                saveData = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.SAVEDATA));
 
-            levelData[fullCount] = new LevelData(category, name, width, height, progress, dataSet, saveData);
+            levelThumbnailData[fullCount] = new LevelThumbnailData(id, category, name, width, height, progress, dataSet, saveData, colorSet);
             fullCount++;
             if(progress == 2)
             {
@@ -89,7 +90,7 @@ public class LevelFragment extends Fragment {
         int rowItemNum = 3;
 
         rv_level.setLayoutManager(new GridLayoutManager(ctx, rowItemNum));
-        rv_level.setAdapter(new RvLevelAdapter(ctx, levelData, rowItemNum));
+        rv_level.setAdapter(new RvLevelAdapter(ctx, levelThumbnailData, rowItemNum));
 
 
         rv_level.addOnItemTouchListener(new LevelItemTouchListener("touchable") {

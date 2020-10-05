@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
@@ -53,7 +55,7 @@ public class CategoryFragment extends Fragment {
 
         while(categoryCursor.moveToNext()) {
 
-            String name = categoryCursor.getString(categoryCursor.getColumnIndex(SqlManager.CreateCategoryDB.NAME));
+            String name = categoryCursor.getString(categoryCursor.getColumnIndex(SqlManager.CategoryDBSql.NAME));
 
             categoryArray.add(name);
         }
@@ -78,7 +80,13 @@ public class CategoryFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putString("category", categoryName);
                     dest.setArguments(bundle);
-                    ((MainActivity)ctx).fragmentMove(dest);
+
+                    FragmentTransaction t = getActivity().getSupportFragmentManager().beginTransaction();
+                    Log.d("CategoryFragment", "FragTran: " + t);
+                    t.setCustomAnimations(R.anim.anim_fade_in, R.anim.anim_fade_out, R.anim.anim_fade_in, R.anim.anim_fade_out);
+                    t.replace(R.id.fl_main, dest);
+                    t.addToBackStack(null);
+                    t.commit();
                 }
             });
 

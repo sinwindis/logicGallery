@@ -13,9 +13,11 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class LevelPlayManager {
 
+    public int id;
     public String category;
     public String name;
     public int[][] dataSet;
+    public int[][] colorSet;
     public int[][] checkedSet;
     public int[][][] checkStack;
     public int height;
@@ -24,6 +26,44 @@ public class LevelPlayManager {
 
     public int stackNum = 0;
     public int stackMaxNum = 0;
+
+    public LevelPlayManager(int id, String category, String name, int progress, int width, int height, String dataSet, String saveData, String colorSet)
+    {
+        this.id = id;
+        this.category = category;
+        this.name = name;
+        this.dataSet = parseDataSet(dataSet, width, height);
+        this.colorSet = parseDataSet(colorSet, width, height);
+        this.height = height;
+        this.width = width;
+        this.progress = progress;
+        if(saveData.isEmpty())
+        {
+            //저장 데이터가 없으면 새로 빈 array 할당
+            this.checkedSet = new int[height][width];
+            for(int y = 0; y < height; y++)
+            {
+                for(int x = 0; x < width; x++)
+                {
+                    this.checkedSet[y][x] = 0;
+                }
+            }
+        }
+        else
+        {
+            //저장 데이터가 있으면 해당 데이터를 파싱해서 저장
+            this.checkedSet = parseDataSet(saveData, width, height);
+        }
+
+        this.checkStack = new int[10][this.height][this.width];
+        for(int y = 0; y < height; y++)
+        {
+            for(int x = 0; x < width; x++)
+            {
+                this.checkStack[0][y][x] = 0;
+            }
+        }
+    }
 
     private int[][] parseDataSet(String dataSet, int width, int height)
     {
@@ -35,7 +75,7 @@ public class LevelPlayManager {
         {
             for(int x = 0; x < width; x++)
             {
-                dataTemp[y][x] = Integer.parseInt(rawTemp[x + y*width]);
+                dataTemp[y][x] = Integer.parseInt(rawTemp[x + y*width], 16);
             }
         }
 
@@ -69,21 +109,19 @@ public class LevelPlayManager {
             if(progress == 1)
             {
                 //저번 플레이 저장
-                mDbOpenHelper.updateLevel(name, category, 1, parseDataSetToString(checkedSet));
+                mDbOpenHelper.updateLevel(id, 1, parseDataSetToString(checkedSet));
                 //가장 최근에 한 게임 데이터 갱신하기
 
-                editor.putString("name", name);
-                editor.putString("category", category);
+                editor.putInt("id", id);
             }
 
             else if(progress == 2)
             {
                 //게임 완료
-                mDbOpenHelper.updateLevel(name, category, 2, "");
+                mDbOpenHelper.updateLevel(id, 2, "");
                 //가장 최근에 한 게임 데이터 없애기
 
-                editor.putString("name", "");
-                editor.putString("category", "");
+                editor.putInt("id", -1);
             }
             editor.apply();
 
@@ -94,42 +132,6 @@ public class LevelPlayManager {
         mDbOpenHelper.close();
 
 
-    }
-
-    public LevelPlayManager(String category, String name, int progress, int width, int height, String dataSet, String saveData)
-    {
-        this.category = category;
-        this.name = name;
-        this.dataSet = parseDataSet(dataSet, width, height);
-        this.height = height;
-        this.width = width;
-        this.progress = progress;
-        if(saveData.isEmpty())
-        {
-            //저장 데이터가 없으면 새로 빈 array 할당
-            this.checkedSet = new int[height][width];
-            for(int y = 0; y < height; y++)
-            {
-                for(int x = 0; x < width; x++)
-                {
-                    this.checkedSet[y][x] = 0;
-                }
-            }
-        }
-        else
-        {
-            //저장 데이터가 있으면 해당 데이터를 파싱해서 저장
-            this.checkedSet = parseDataSet(saveData, width, height);
-        }
-
-        this.checkStack = new int[10][this.height][this.width];
-        for(int y = 0; y < height; y++)
-        {
-            for(int x = 0; x < width; x++)
-            {
-                this.checkStack[0][y][x] = 0;
-            }
-        }
     }
 
     private void expandStackSize()

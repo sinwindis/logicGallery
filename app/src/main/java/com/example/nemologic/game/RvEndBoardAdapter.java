@@ -1,4 +1,4 @@
-package com.example.nemologic.level;
+package com.example.nemologic.game;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -13,18 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 
-import java.nio.channels.ClosedSelectorException;
-import java.util.Arrays;
-
-public class RvLevelBoardAdapter extends RecyclerView.Adapter<RvLevelBoardAdapter.ViewHolder> {
+public class RvEndBoardAdapter extends RecyclerView.Adapter<RvEndBoardAdapter.ViewHolder> {
 
     int height;
     int width;
-    int[][] checkedSet;
-    float offset = 0;
+    int[][] dataSet;
+    private float heightUnder = 0;
+    private int heightOffset = 0;
+    private int widthCount = 0;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ViewHolder(View itemView) {
             super(itemView) ;
@@ -33,41 +32,60 @@ public class RvLevelBoardAdapter extends RecyclerView.Adapter<RvLevelBoardAdapte
         }
     }
 
-    public RvLevelBoardAdapter(int[][] checkedSet) {
+    RvEndBoardAdapter(int[][] dataSet) {
         //생성자
-        this.checkedSet = checkedSet.clone();
-        this.height = checkedSet.length;
-        this.width = checkedSet[0].length;
+        this.dataSet = dataSet.clone();
+        this.height = dataSet.length;
+        this.width = dataSet[0].length;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @NonNull
     @Override
-    public RvLevelBoardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RvEndBoardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext() ;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
-        View view = inflater.inflate(R.layout.item_board, parent, false);
-        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.width + 1, parent.getMeasuredHeight()/this.height));
+        View view = inflater.inflate(R.layout.item_board, parent, false) ;
 
+        if(widthCount % this.width == 0)
+        {
+            //매 줄의 첫 칸일 때
+
+            //height 는 여기서 한 번만 계산
+            heightUnder += parent.getMeasuredHeight()%this.height/((float)this.height);
+
+            if(heightUnder >= 1)
+            {
+                heightOffset = 1;
+                heightUnder--;
+            }
+        }
+
+        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.width + 2, parent.getMeasuredHeight()/this.height + heightOffset));
+
+        heightOffset = 0;
+        widthCount++;
 
         return new ViewHolder(view);
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
-    public void onBindViewHolder(@NonNull RvLevelBoardAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RvEndBoardAdapter.ViewHolder holder, int position) {
 
         ImageView iv = (ImageView) holder.itemView;
 
-        int color = checkedSet[position/width][position% width];
+        int color = dataSet[position/width][position% width];
         String colorStr = Integer.toHexString(color);
         while(colorStr.length() < 6)
         {
             colorStr = "0" + colorStr;
         }
-        //해당 칸의 색깔에 맞게 출력해준다.
+
+
         iv.setBackgroundColor(Color.parseColor("#" + colorStr));
+
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

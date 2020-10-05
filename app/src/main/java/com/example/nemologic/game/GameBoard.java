@@ -1,8 +1,11 @@
 package com.example.nemologic.game;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.LevelPlayManager;
+import com.example.nemologic.mainactivity.MainActivity;
 
 import java.util.Objects;
 
@@ -28,14 +32,13 @@ public class GameBoard {
     boolean oneLineDrag;
     boolean autoX;
 
-    GameFragment parent;
+    Context mainActivityContext;
 
     private View targetView;
 
     private RecyclerView rv_board;
 
     private GridLayoutManager glm;
-    private RvBoardAdapter rba;
     public LevelPlayManager lpm;
 
     ColumnIndexViewMaker civm;
@@ -66,11 +69,11 @@ public class GameBoard {
     //0: 공백 1: 체크 2: X
     int macroMode = 0;
     
-    public GameBoard(GameFragment ctx, View view, LevelPlayManager lpm)
+    public GameBoard(Context ctx, View view, LevelPlayManager lpm)
     {
         targetView = view;
         this.lpm = lpm;
-        this.parent = ctx;
+        mainActivityContext = ctx;
 
         initialize();
     }
@@ -114,14 +117,12 @@ public class GameBoard {
             }
         }
 
-        cl_count.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-        ll_drag.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        cl_count.setLayoutParams(new ConstraintLayout.LayoutParams(0, 0));
+        ll_drag.setLayoutParams(new ConstraintLayout.LayoutParams(0, 0));
     }
 
     private void dragManage()
     {
-        ImageView view;
-
         int dragStartX;
         int dragStartY;
         int dragEndX;
@@ -232,7 +233,7 @@ public class GameBoard {
             cl_count.setX(firstTouchView.getX());
             cl_count.setY(firstTouchView.getY());
 
-            cl_count.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
+            cl_count.setLayoutParams(new ConstraintLayout.LayoutParams(100, 100));
         }
 
 
@@ -248,7 +249,7 @@ public class GameBoard {
         ll_drag.setX(firstDragView.getX() - 10);
         ll_drag.setY(firstDragView.getY() - 10);
 
-        ll_drag.setLayoutParams(new LinearLayout.LayoutParams(dragWidth, dragHeight));
+        ll_drag.setLayoutParams(new ConstraintLayout.LayoutParams(dragWidth, dragHeight));
     }
     
     private void checkAutoX()
@@ -368,11 +369,31 @@ public class GameBoard {
         tv_stack.setText(str_stack);
     }
 
+    private void moveToEndFragment()
+    {
+        //클릭 시 해당 게임을 플레이하는 GameActivity 로 이동
+        EndFragment endFragment = new EndFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", lpm.id);
+
+
+        endFragment.setArguments(bundle);
+
+        ((MainActivity)mainActivityContext).fragmentMoveNoStack(endFragment);
+    }
+
     private void setGameEnd()
     {
         lpm.progress = 2;
-        lpm.savePlayData(parent.getContext());
+        lpm.savePlayData(mainActivityContext);
         //parent.getFragmentManager().popBackStackImmediate();
+    }
+
+
+
+    private void showEndAnimation()
+    {
+        //delayedBoardRemove(0);
     }
 
     private void clickUpAction()
@@ -387,6 +408,8 @@ public class GameBoard {
 
         if(lpm.isGameEnd())
         {
+            //showEndAnimation();
+            moveToEndFragment();
             setGameEnd();
         }
     }
@@ -545,9 +568,10 @@ public class GameBoard {
     public void makeGameBoard()
     {
         //로직 게임판을 만듭니다.
+        //터치가 가능한 보드판 제작
         glm = new GridLayoutManager(targetView.getContext(), lpm.width);
 
-        rba = new RvBoardAdapter(lpm.checkedSet);
+        RvBoardAdapter rba = new RvBoardAdapter(lpm.checkedSet);
 
         rv_board.addItemDecoration(new GameBoardBorder(targetView.getContext(), R.drawable.border_gameboard_normal, R.drawable.border_gameboard_accent, lpm.width));
 
@@ -570,11 +594,11 @@ public class GameBoard {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
                         break;
                 }
 
@@ -609,11 +633,11 @@ public class GameBoard {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
                         break;
                 }
 
@@ -641,11 +665,11 @@ public class GameBoard {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
                         break;
                 }
 
@@ -673,11 +697,11 @@ public class GameBoard {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
                         break;
                 }
 
@@ -701,11 +725,11 @@ public class GameBoard {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(parent.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
                         break;
                 }
 

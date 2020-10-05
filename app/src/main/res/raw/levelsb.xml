@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <version>0</version>
+    <level>
+        <lname>토끼</lname>
+        <cname>동물</cname>
+        <width>5</width>
+        <height>5</height>
+        <data>0 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 1 1 1 0 0 0 0 0 0</data>
+        <color>aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa 404040 aaaaaa 404040 aaaaaa aaaaaa 404040 404040 404040 aaaaaa aaaaaa 404040 404040 404040 aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa aaaaaa</color>
+
+    </level>
+
+    <level>
+        <lname>dummyLevel2</lname>
+        <cname>dummy2</cname>
+        <width>10</width>
+        <height>10</height>
+        <data>0 1 0 1 1 0 1 0 1 1 0 1 0 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 0 1 1 0 0 0 0 1 0 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1 1 0 1 1 1 1 0 0 1 1 0 0 1 1 0 1</data>
+
+    </level>
+
+    <level>
+        <lname>dummyLevel3</lname>
+        <cname>dummy2</cname>
+        <width>10</width>
+        <height>10</height>
+        <data>0 1 0 1 1 0 1 0 1 1 0 1 0 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 0 1 1 0 0 0 0 1 0 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1 1 0 1 1 1 1 0 0 1 1 0 0 1 1 0 1</data>
+
+    </level>
+
+    <version>0.1</version>
+
+    <level>
+        <lname>dummyLevel4</lname>
+        <cname>dummy2</cname>
+        <width>10</width>
+        <height>10</height>
+        <data>0 1 0 1 1 0 1 0 1 1 0 1 0 1 1 1 1 1 0 0 1 1 0 1 0 1 1 1 1 1 0 1 1 0 0 0 0 1 0 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 0 1 0 1 0 1 0 0 1 0 1 0 1 0 1 1 0 1 1 1 1 0 0 1 1 0 0 1 1 0 1</data>
+
+    </level>
+
+    <version>0.2</version>
+
+    <level>
+        <lname>dummyLevel5</lname>
+        <cname>dummy3</cname>
+        <width>7</width>
+        <height>7</height>
+        <data>0 1 0 1 0 1 0 1 1 1 1 0 1 1 0 1 1 1 0 1 1 0 1 1 1 0 0 1 0 1 1 1 1 1 0 0 1 0 1 0 1 1 1 0 1 1 1 0 1</data>
+
+    </level>
+
+    <version>0.3</version>
+</resources>

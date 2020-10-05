@@ -1,17 +1,10 @@
 package com.example.nemologic.data;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.CharArrayBuffer;
-import android.database.ContentObserver;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,13 +25,8 @@ public class DbOpenHelper {
 
         @Override
         public void onCreate(SQLiteDatabase db){
-            //모든 카테고리에 해당하는 레벨 테이블을 만들어야 하는데...
-            ArrayList<String> categories = DataManager.getCategoriesFromXml(ctx);
-            for(int i = 0; i < categories.size(); i++)
-            {
-                db.execSQL(SqlManager.CreateLevelDB.getCreateStr(categories.get(i)));
-            }
-            db.execSQL(SqlManager.CreateCategoryDB._CREATE);
+            db.execSQL(SqlManager.LevelDBSql._CREATE);
+            db.execSQL(SqlManager.CategoryDBSql._CREATE);
         }
 
         @Override
@@ -69,46 +57,49 @@ public class DbOpenHelper {
         mDB.close();
     }
 
-    public long insertLevel(String name, String category, int width, int height, String dataSet){
+    public long insertLevel(String name, String category, int width, int height, String dataSet, String colorSet){
         ContentValues values = new ContentValues();
-        values.put(SqlManager.CreateLevelDB.NAME, name);
-        values.put(SqlManager.CreateLevelDB.WIDTH, width);
-        values.put(SqlManager.CreateLevelDB.HEIGHT, height);
-        values.put(SqlManager.CreateLevelDB.PROGRESS, 0);
-        values.put(SqlManager.CreateLevelDB.DATASET, dataSet);
+        values.put(SqlManager.LevelDBSql.NAME, name);
+        values.put(SqlManager.LevelDBSql.CATEGORY, category);
+        values.put(SqlManager.LevelDBSql.WIDTH, width);
+        values.put(SqlManager.LevelDBSql.HEIGHT, height);
+        values.put(SqlManager.LevelDBSql.PROGRESS, 0);
+        values.put(SqlManager.LevelDBSql.DATASET, dataSet);
+        values.put(SqlManager.LevelDBSql.COLORSET, colorSet);
 
-        return mDB.insert(category, null, values);
+        return mDB.insert("level", null, values);
     }
 
-    public int updateLevel(String name, String category, int progress, String saveData){
+    public int updateLevel(int id, int progress, String saveData){
         ContentValues values = new ContentValues();
 
-        values.put(SqlManager.CreateLevelDB.SAVEDATA, saveData);
-        values.put(SqlManager.CreateLevelDB.PROGRESS, progress);
+        values.put(SqlManager.LevelDBSql.SAVEDATA, saveData);
+        values.put(SqlManager.LevelDBSql.PROGRESS, progress);
 
-        return mDB.update(category, values, SqlManager.CreateLevelDB.NAME + "=?", new String[]{name});
+        return mDB.update("level", values, SqlManager.LevelDBSql.ID + "=?", new String[]{String.valueOf(id)});
     }
 
     public long insertCategory(String name){
         ContentValues values = new ContentValues();
-        values.put(SqlManager.CreateCategoryDB.NAME, name);
+        values.put(SqlManager.CategoryDBSql.NAME, name);
 
-        return mDB.insert(SqlManager.CreateCategoryDB._TABLENAME, null, values);
+        return mDB.insert(SqlManager.CategoryDBSql._TABLENAME, null, values);
     }
 
     public Cursor getCategoryCursor(){
-        return mDB.query(SqlManager.CreateCategoryDB._TABLENAME, null, null, null, null, null, null);
+        return mDB.query(SqlManager.CategoryDBSql._TABLENAME, null, null, null, null, null, null);
     }
 
+
     public Cursor getLevelCursorByCategory(String category){
-        Cursor c = mDB.rawQuery( "SELECT * FROM " + category + ";", null);
+        Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.LevelDBSql._TABLENAME + " WHERE " + SqlManager.LevelDBSql.CATEGORY + "='" + category + "';", null);
 
         return c;
     }
 
-    public Cursor getLevelCursorByCategoryAndName(String category, String name){
+    public Cursor getLevelCursorById(int id){
 
-        Cursor c = mDB.rawQuery( "SELECT * FROM " + category + " WHERE name='" + name + "';", null);
+        Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.LevelDBSql._TABLENAME + " WHERE " + SqlManager.LevelDBSql.ID + "='" + id + "';", null);
 
         return c;
     }

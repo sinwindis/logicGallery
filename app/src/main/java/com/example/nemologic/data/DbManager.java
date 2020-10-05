@@ -22,10 +22,10 @@ import static android.content.Context.MODE_PRIVATE;
 //db는 카테고리의 이름을 저장하는 테이블 하나, 각 카테고리별 레벨을 저장하는 테이블 카테고리 개수만큼, 빅 퍼즐의 이름을 저장하는 테이블 하나, 각 빅 퍼즐의 레벨을 저장하는 테이블 빅퍼즐 개수만큼
 //raw xml 파일은 level을 저장하는 파일 하나, category의 이름들을 저장하는 파일 하나를 사용할 것이다.
 
-public class DataManager {
+public class DbManager {
 
 
-    public DataManager()
+    public DbManager()
     {
     }
 
@@ -167,6 +167,7 @@ public class DataManager {
         int levelWidth = 0;
         int levelHeight = 0;
         String levelData = "";
+        String levelColor = "";
 
         String version = "0";
 
@@ -219,6 +220,9 @@ public class DataManager {
                             case "version":
                                 version = parser.nextText();
                                 break;
+                            case "color":
+                                levelColor = parser.nextText();
+                                break;
                         }
                         break;
                     case XmlPullParser.END_TAG:
@@ -226,7 +230,7 @@ public class DataManager {
                         if(endTag.equals("level"))
                         {
                             //해당 레벨의 데이터를 db에 추가한다.
-                            mDbOpenHelper.insertLevel(levelName, categoryName, levelWidth, levelHeight, levelData);
+                            mDbOpenHelper.insertLevel(levelName, categoryName, levelWidth, levelHeight, levelData, levelColor);
                         }
                         break;
                 }

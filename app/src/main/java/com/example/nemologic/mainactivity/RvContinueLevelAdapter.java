@@ -55,18 +55,15 @@ public class RvContinueLevelAdapter extends RecyclerView.Adapter<RvContinueLevel
 
         ImageView iv = (ImageView) holder.itemView;
 
-        int asyncTemp = checkedSet[position/width][position% width];
-        switch(asyncTemp)
+        int color = checkedSet[position/width][position% width];
+        String colorStr = Integer.toHexString(color);
+        while(colorStr.length() < 6)
         {
-            case 0:
-            case 2:
-                iv.setBackgroundColor(Color.parseColor("#00000000"));
-                break;
-            case 1:
-                iv.setBackgroundColor(Color.parseColor("#606060"));
-                break;
-
+            colorStr = "0" + colorStr;
         }
+
+
+        iv.setBackgroundColor(Color.parseColor("#80" + colorStr));
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

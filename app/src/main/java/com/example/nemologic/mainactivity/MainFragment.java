@@ -14,15 +14,17 @@ import android.widget.ImageView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.category.CategoryFragment;
-import com.example.nemologic.data.DataManager;
+import com.example.nemologic.data.DbManager;
 import com.example.nemologic.data.DbOpenHelper;
-import com.example.nemologic.data.LevelData;
+import com.example.nemologic.data.LevelThumbnailData;
 import com.example.nemologic.data.SqlManager;
+import com.example.nemologic.data.StringParser;
 import com.example.nemologic.game.GameFragment;
 import com.example.nemologic.levelcreate.LevelCreateFragment;
 import com.example.nemologic.option.OptionDialog;
@@ -35,7 +37,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainFragment extends Fragment {
 
     Context ctx;
-    LevelData lastPlayLevel;
+    LevelThumbnailData lastPlayLevel;
 
     public MainFragment(Context ctx) {
         this.ctx = ctx;
@@ -51,19 +53,14 @@ public class MainFragment extends Fragment {
         final View fragmentView = inflater.inflate(R.layout.fragment_main, container, false);
         final Context ctx = fragmentView.getContext();
 
-
-
         //DB를 갱신해 준다.
-        DataManager.loadLevel(ctx);
-        DataManager.loadCategory(ctx);
+        DbManager.loadLevel(ctx);
+        DbManager.loadCategory(ctx);
 
         SharedPreferences lastPlayPref = ctx.getSharedPreferences("LASTPLAY", MODE_PRIVATE);
 
         //마지막 플레이한 레벨의 이름과 카테고리를 받아온다.
-        final String lastPlayName = lastPlayPref.getString("name", "");
-
-        final String lastPlayCategory = lastPlayPref.getString("category", "");
-
+        final int lastPlayId = lastPlayPref.getInt("id", -1);
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
@@ -75,32 +72,34 @@ public class MainFragment extends Fragment {
 
         Cursor cursor;
 
+
         boolean dataLoad = false;
 
-        assert lastPlayName != null;
-        assert lastPlayCategory != null;
         RecyclerView rv_board = fragmentView.findViewById(R.id.rv_level_board);
         
-        if(!lastPlayName.isEmpty() && !lastPlayCategory.isEmpty())
+        if(lastPlayId != -1)
         {
-            cursor =  mDbOpenHelper.getLevelCursorByCategoryAndName(lastPlayCategory, lastPlayName);
+            cursor =  mDbOpenHelper.getLevelCursorById(lastPlayId);
 
             if(cursor.getCount() > 0)
             {
                 dataLoad = true;
                 cursor.moveToNext();
-                int width = cursor.getInt(cursor.getColumnIndex(SqlManager.CreateLevelDB.WIDTH));
-                int height = cursor.getInt(cursor.getColumnIndex(SqlManager.CreateLevelDB.HEIGHT));
-                int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.CreateLevelDB.PROGRESS));
-                String dataSet = cursor.getString(cursor.getColumnIndex(SqlManager.CreateLevelDB.DATASET));
+                String name = cursor.getString(cursor.getColumnIndex(SqlManager.LevelDBSql.NAME));
+                String category = cursor.getString(cursor.getColumnIndex(SqlManager.LevelDBSql.CATEGORY));
+                int width = cursor.getInt(cursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
+                int height = cursor.getInt(cursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
+                int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.LevelDBSql.PROGRESS));
+                String dataSet = cursor.getString(cursor.getColumnIndex(SqlManager.LevelDBSql.DATASET));
+                String colorSet = cursor.getString(cursor.getColumnIndex(SqlManager.LevelDBSql.COLORSET));
                 String saveData = "";
                 if(progress == 1)
-                    saveData = cursor.getString(cursor.getColumnIndex(SqlManager.CreateLevelDB.SAVEDATA));
+                    saveData = cursor.getString(cursor.getColumnIndex(SqlManager.LevelDBSql.SAVEDATA));
 
-                lastPlayLevel = new LevelData(lastPlayCategory, lastPlayName, width, height, progress, dataSet, saveData);
+                lastPlayLevel = new LevelThumbnailData(lastPlayId, category, name, width, height, progress, dataSet, saveData, colorSet);
 
                 rv_board.setLayoutManager(new GridLayoutManager(ctx, lastPlayLevel.getWidth()));
-                rv_board.setAdapter(new RvContinueLevelAdapter(lastPlayLevel.getParsedSaveData()));
+                rv_board.setAdapter(new RvContinueLevelAdapter(StringParser.getParsedSaveData(lastPlayLevel.getSaveData(), lastPlayLevel.getWidth(), lastPlayLevel.getHeight())));
             }
         }
         mDbOpenHelper.close();
@@ -186,14 +185,17 @@ public class MainFragment extends Fragment {
             public void onClick(View view) {
                 if(isContinue)
                 {
-                    GameFragment gameFragment = new GameFragment();
+                    GameFragment gameFragment = new GameFragment(mainActivityCtx);
 
                     Bundle bundle = new Bundle();
-                    bundle.putString("category", lastPlayCategory);
-                    bundle.putString("name", lastPlayName);
+                    bundle.putInt("id", lastPlayId);
                     gameFragment.setArguments(bundle);
 
-                    ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(gameFragment);
+                    FragmentTransaction t = getActivity().getSupportFragmentManager().beginTransaction();
+                    t.setCustomAnimations(R.anim.anim_fade_in, R.anim.anim_fade_out, R.anim.anim_fade_in, R.anim.anim_fade_out);
+                    t.replace(R.id.fl_main, gameFragment);
+                    t.addToBackStack(null);
+                    t.commit();
                 }
             }
         });
