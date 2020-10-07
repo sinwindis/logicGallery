@@ -27,8 +27,10 @@ public class MainActivity extends AppCompatActivity {
     public void fragmentMoveNoStack(Fragment dest)
     {
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-        t.setCustomAnimations(R.anim.anim_fade_in, R.anim.anim_fade_out);
-        t.add(R.id.fl_main, dest);
+        getSupportFragmentManager().popBackStack();
+        t.addToBackStack(null);
+        t.setCustomAnimations(R.anim.anim_fade_in, R.anim.anim_fade_out, R.anim.anim_fade_in, R.anim.anim_fade_out);
+        t.replace(R.id.fl_main, dest);
         t.commit();
     }
 

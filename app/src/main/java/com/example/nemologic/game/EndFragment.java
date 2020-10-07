@@ -62,18 +62,18 @@ public class EndFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-//        mainHandler = new Handler();
-//        animationRun = new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                count = 0;
-//                showGameEndAnimation();
-//            }
-//        };
-//
-//
-//        mainHandler.postDelayed(animationRun, 300);
+        mainHandler = new Handler();
+        animationRun = new Runnable() {
+            @Override
+            public void run() {
+
+                count = 0;
+                showGameEndAnimation();
+            }
+        };
+
+
+        mainHandler.postDelayed(animationRun, 300);
 
     }
 
@@ -91,6 +91,7 @@ public class EndFragment extends Fragment {
         btn_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                assert getFragmentManager() != null;
                 getFragmentManager().popBackStack();
             }
         });
@@ -131,24 +132,6 @@ public class EndFragment extends Fragment {
         timeDelay = 1000 / (width + height - 1);
 
         return fragmentView;
-    }
-
-    private void showFrameSlowly()
-    {
-        if(count == 50)
-        {
-            //애니메이션 종료시
-            return;
-        }
-        count++;
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                cl_frame.setAlpha(1.0F/(50-count));
-                count++;
-                showFrameSlowly();
-            }
-        }, 20);
     }
 
     private void showTileSlowly(final int pos, final int count)
@@ -205,6 +188,5 @@ public class EndFragment extends Fragment {
     private void showGameEndAnimation()
     {
         delayedSetBackgroundColor(0);
-        showFrameSlowly();
     }
 }

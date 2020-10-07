@@ -81,12 +81,7 @@ public class CategoryFragment extends Fragment {
                     bundle.putString("category", categoryName);
                     dest.setArguments(bundle);
 
-                    FragmentTransaction t = getActivity().getSupportFragmentManager().beginTransaction();
-                    Log.d("CategoryFragment", "FragTran: " + t);
-                    t.setCustomAnimations(R.anim.anim_fade_in, R.anim.anim_fade_out, R.anim.anim_fade_in, R.anim.anim_fade_out);
-                    t.replace(R.id.fl_main, dest);
-                    t.addToBackStack(null);
-                    t.commit();
+                    ((MainActivity)ctx).fragmentMove(dest);
                 }
             });
 

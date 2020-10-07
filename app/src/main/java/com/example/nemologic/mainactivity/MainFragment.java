@@ -168,7 +168,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new LevelCreateFragment(mainActivityCtx));
+                ((MainActivity)getActivity()).fragmentMove(new LevelCreateFragment(mainActivityCtx));
             }
         });
 
@@ -191,11 +191,7 @@ public class MainFragment extends Fragment {
                     bundle.putInt("id", lastPlayId);
                     gameFragment.setArguments(bundle);
 
-                    FragmentTransaction t = getActivity().getSupportFragmentManager().beginTransaction();
-                    t.setCustomAnimations(R.anim.anim_fade_in, R.anim.anim_fade_out, R.anim.anim_fade_in, R.anim.anim_fade_out);
-                    t.replace(R.id.fl_main, gameFragment);
-                    t.addToBackStack(null);
-                    t.commit();
+                    ((MainActivity)ctx).fragmentMove(gameFragment);
                 }
             }
         });
@@ -206,7 +202,9 @@ public class MainFragment extends Fragment {
         btn_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(new CategoryFragment(mainActivityCtx));
+                CategoryFragment dest = new CategoryFragment(mainActivityCtx);
+
+                ((MainActivity)ctx).fragmentMove(dest);
             }
         });
 
