@@ -4,19 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
-
 import com.example.nemologic.data.StringParser;
 
-import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class LevelCreator {
@@ -85,6 +75,11 @@ public class LevelCreator {
                 resultPixels[y][x] = pixels[x + y*width];
             }
         }
+
+    }
+
+    public void saveLevel()
+    {
 
     }
 

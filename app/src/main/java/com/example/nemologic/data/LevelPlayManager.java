@@ -82,20 +82,7 @@ public class LevelPlayManager {
         return dataTemp;
     }
 
-    private String parseDataSetToString(int[][] dataSet)
-    {
-        StringBuilder saveData = new StringBuilder();
 
-        for(int y = 0; y < height; y++)
-        {
-            for(int x = 0; x < width; x++)
-            {
-                saveData.append(dataSet[y][x]).append(" ");
-            }
-        }
-
-        return saveData.toString();
-    }
 
     public void savePlayData(Context ctx)
     {
@@ -109,7 +96,7 @@ public class LevelPlayManager {
             if(progress == 1)
             {
                 //저번 플레이 저장
-                mDbOpenHelper.updateLevel(id, 1, parseDataSetToString(checkedSet));
+                mDbOpenHelper.updateLevel(id, 1, StringParser.parseDataSetToString(checkedSet, height, width));
                 //가장 최근에 한 게임 데이터 갱신하기
 
                 editor.putInt("id", id);
