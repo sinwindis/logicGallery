@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,6 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
             idxNumSet[i] = 0;
         }
         endRow = new boolean[dataSet.length];
-
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -113,6 +113,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
             //모든 칸을 채웠다고 반환한다
             checkTemp = new boolean[1];
             checkTemp[0] = true;
+            endRow[rowNum] = true;
             return checkTemp;
         }
 
@@ -276,6 +277,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
                 {
                     if(checkedSet[rowNum][j] == 1)
                     {
+                        //한 칸이라도 더 체크되어 있으면
                         Arrays.fill(checkTemp, false);
                         return checkTemp;
                     }
