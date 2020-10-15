@@ -111,6 +111,7 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
         {
             checkTemp = new boolean[1];
             checkTemp[0] = true;
+            endColumn[columnNum] = true;
             return checkTemp;
         }
 

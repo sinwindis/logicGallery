@@ -17,27 +17,26 @@
 
         <ImageView
             android:id="@+id/img_back"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:padding="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:layout_margin="15dp"
             android:src="@drawable/ic_prev"
-            android:background="@drawable/background_btn_shadow_bright"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
 
         <TextView
+            style="@style/StyleFontLarge"
+
             android:id="@+id/tv_category_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textColor="@color/colorBlack"
-            android:fontFamily="@font/paybooc_bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/img_back"
             app:layout_constraintBottom_toBottomOf="@id/img_back"
-            android:text="카테고리"/>
+            android:text="@string/str_category"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -16,12 +16,11 @@
         >
 
         <TextView
-            android:id="@+id/tv_name"
+            style="@style/StyleFontLarge"
+
+            android:id="@+id/tv_remain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textColor="@color/colorBlack"
-            android:fontFamily="@font/paybooc_bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/img_back"
@@ -30,22 +29,22 @@
 
         <ImageView
             android:id="@+id/img_back"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:padding="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:layout_margin="15dp"
             android:src="@drawable/ic_prev"
-            android:background="@drawable/background_btn_shadow_bright"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
 
         <ImageView
             android:id="@+id/img_option"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:padding="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:layout_margin="15dp"
             android:src="@drawable/ic_option"
-            android:background="@drawable/background_btn_shadow_bright"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -81,6 +80,7 @@
             android:id="@+id/rv_column"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:paddingBottom="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHeight_default="percent"
@@ -95,6 +95,8 @@
             android:id="@+id/rv_row"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:paddingEnd="3dp"
+            android:paddingStart="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHeight_default="percent"
@@ -133,8 +135,6 @@
             android:layout_height="0dp"
             android:background="@drawable/border_drag"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:orientation="horizontal">
 
@@ -144,22 +144,20 @@
                 android:id="@+id/cl_count"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="#ffffff"
+                android:background="@drawable/background_btn"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    style="@style/StyleFontMedium"
+
                     android:id="@+id/tv_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="20sp">
+                    app:layout_constraintBottom_toBottomOf="parent">
 
                 </TextView>
 
@@ -183,11 +181,12 @@
 
         <ImageView
             android:id="@+id/img_toggle"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:padding="20dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
             android:src="@drawable/background_btn_o"
-            android:background="@drawable/background_btn_shadow_bright"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -195,11 +194,11 @@
 
         <ImageView
             android:id="@+id/img_nextstack"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:padding="20dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
             android:src="@drawable/ic_next"
-            android:background="@drawable/background_btn_shadow_bright"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_prevstack"
             app:layout_constraintTop_toTopOf="@id/img_toggle"
@@ -208,10 +207,10 @@
 
         <ImageView
             android:id="@+id/img_prevstack"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:padding="20dp"
-            android:background="@drawable/background_btn_shadow_bright"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
             android:src="@drawable/ic_prev"
             app:layout_constraintEnd_toStartOf="@id/img_nextstack"
             app:layout_constraintStart_toEndOf="@id/img_toggle"
@@ -221,10 +220,10 @@
 
         <ImageView
             android:id="@+id/img_tutorial"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:padding="20dp"
-            android:background="@drawable/background_btn_shadow_bright"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
             android:src="@drawable/ic_tutorial"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/img_hint"
@@ -234,10 +233,10 @@
 
         <ImageView
             android:id="@+id/img_hint"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:padding="20dp"
-            android:background="@drawable/background_btn_shadow_bright"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
             android:src="@drawable/ic_hint"
             app:layout_constraintEnd_toStartOf="@id/img_toggle"
             app:layout_constraintStart_toEndOf="@id/img_tutorial"
@@ -246,14 +245,12 @@
             />
 
         <TextView
+            style="@style/StyleFontLarge"
+
             android:id="@+id/tv_stack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textColor="@color/colorBlack"
-            android:fontFamily="@font/paybooc_bold"
             android:paddingBottom="10dp"
-            android:text="0/0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_toggle"
             app:layout_constraintBottom_toTopOf="@id/img_prevstack"/>

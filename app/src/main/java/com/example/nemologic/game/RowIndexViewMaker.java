@@ -34,7 +34,8 @@ public class RowIndexViewMaker {
 
     private void makeIdxDataSet()
     {
-        idxDataSet = new int[dataSet.length][dataSet[0].length];
+        int maxIdxNum = dataSet[0].length/2 + 1;
+        idxDataSet = new int[dataSet.length][maxIdxNum];
         int sumTemp;
         int idx;
 

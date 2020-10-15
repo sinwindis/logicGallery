@@ -6,10 +6,10 @@
 
         <shape android:shape="rectangle">
 
-            <solid android:color="@android:color/transparent" />
+            <solid android:color="@color/colorBackground" />
             <stroke
-                android:width="8px"
-                android:color="@color/colorBlueAccent" />
+                android:width="2dp"
+                android:color="@color/colorGray" />
 
         </shape>
 
