@@ -25,5 +25,7 @@
     <string name="str_width">Width</string>
     <string name="str_makepuzzle">Make Puzzle</string>
     <string name="str_savepuzzle">Save Puzzle</string>
+    <string name="str_reqname">Please input the name</string>
+    <string name="str_levelsaved">" level has saved"</string>
 
 </resources>

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -31,7 +32,7 @@ public class LevelCreateFragment extends Fragment {
     Context ctx;
     ImageView iv;
     LevelCreator levelCreator;
-    ImageView v_result;
+    ImageView iv_result;
     int actionType;
 
     EditText et_name;
@@ -50,20 +51,12 @@ public class LevelCreateFragment extends Fragment {
         this.ctx = ctx;
     }
 
-    private void loadFile()
-    {
-
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint({"ClickableViewAccessibility"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        final Context mainActivityCtx = ctx;
-
-        final View fragmentView = inflater.inflate(R.layout.fragment_levelcreate_canvas, container, false);
+        final View fragmentView = inflater.inflate(R.layout.fragment_levelcreate, container, false);
 
         et_name = fragmentView.findViewById(R.id.et_name);
         et_height = fragmentView.findViewById(R.id.et_height);
@@ -71,7 +64,7 @@ public class LevelCreateFragment extends Fragment {
 
         levelCreator = new LevelCreator();
 
-        v_result = fragmentView.findViewById(R.id.v_result);
+        iv_result = fragmentView.findViewById(R.id.iv_result);
 
         iv = fragmentView.findViewById(R.id.iv_input);
 
@@ -100,7 +93,7 @@ public class LevelCreateFragment extends Fragment {
         actionType = 0;
         btn_make.setText(getResources().getString(R.string.str_loadimage));
         iv.setImageDrawable(null);
-        v_result.setImageDrawable(null);
+        iv_result.setImageDrawable(null);
 
         //recyclerView 내부 아이템 비우기
 
@@ -109,13 +102,14 @@ public class LevelCreateFragment extends Fragment {
         et_height.setText("");
     }
 
+    @SuppressLint("SetTextI18n")
     private void buttonAction()
     {
         switch (actionType)
         {
             case 0:
                 //load image
-                openFile(null);
+                openFile();
                 break;
             case 1:
                 //make bitmap puzzle
@@ -123,6 +117,7 @@ public class LevelCreateFragment extends Fragment {
                 if(et_height.getText().toString().length() == 0)
                 {
                     height = 10;
+                    et_height.setText("10");
                 }
                 else
                 {
@@ -132,6 +127,7 @@ public class LevelCreateFragment extends Fragment {
                 if(et_width.getText().toString().length() == 0)
                 {
                     width = 10;
+                    et_width.setText("10");
                 }
                 else
                 {
@@ -145,13 +141,24 @@ public class LevelCreateFragment extends Fragment {
                 break;
             case 2:
                 //save bitmap
-                saveLevel();
-                removePrevData();
+                if(et_name.length() > 0)
+                {
+                    String alert = getResources().getString(R.string.str_levelsaved);
+                    Toast.makeText(ctx, et_name.getText() + alert, Toast.LENGTH_SHORT).show();
+                    saveLevel();
+                    removePrevData();
+                }
+                else
+                {
+                    String alert = getResources().getString(R.string.str_reqname);
+                    Toast.makeText(ctx, alert, Toast.LENGTH_SHORT).show();
+                }
+
                 break;
         }
     }
 
-    private void openFile(Uri pickerInitialUri) {
+    private void openFile() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
@@ -159,7 +166,7 @@ public class LevelCreateFragment extends Fragment {
         // Optionally, specify a URI for the file that should appear in the
         // system file picker when it loads.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, (Uri) null);
         }
 
         startActivityForResult(intent, REQ_LOAD_IMAGE);
@@ -167,14 +174,11 @@ public class LevelCreateFragment extends Fragment {
 
     private void makeLevel(int height, int width)
     {
-
-
         levelCreator.makeDataSet(height, width);
         Bitmap resultImage = Bitmap.createBitmap(levelCreator.getResultPixels(), width, height, Bitmap.Config.ARGB_8888);
-        resultImage = Bitmap.createScaledBitmap(resultImage, v_result.getMeasuredWidth(), v_result.getMeasuredHeight(), false);
+        resultImage = Bitmap.createScaledBitmap(resultImage, iv_result.getMeasuredWidth(), iv_result.getMeasuredHeight(), false);
 
-        v_result.setImageBitmap(resultImage);
-
+        iv_result.setImageBitmap(resultImage);
     }
 
     private void saveLevel()

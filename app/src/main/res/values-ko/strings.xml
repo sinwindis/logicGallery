@@ -22,5 +22,7 @@
     <string name="str_width">너비</string>
     <string name="str_makepuzzle">퍼즐 생성하기</string>
     <string name="str_savepuzzle">퍼즐 저장하기</string>
+    <string name="str_reqname">레벨 이름을 입력해 주세요</string>
+    <string name="str_levelsaved">" 레벨이 저장되었습니다"</string>
 
 </resources>
