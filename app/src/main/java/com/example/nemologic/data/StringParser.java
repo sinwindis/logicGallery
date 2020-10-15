@@ -26,6 +26,31 @@ public class StringParser {
         return saveData.toString();
     }
 
+    public static String parseColorSetToString(int[][] dataSet, int height, int width)
+    {
+        StringBuilder saveData = new StringBuilder();
+
+        for(int y = 0; y < height; y++)
+        {
+            for(int x = 0; x < width; x++)
+            {
+                String colorStr = Integer.toHexString(dataSet[y][x]);
+                while(colorStr.length() < 6)
+                {
+                    colorStr = "0" + colorStr;
+                }
+                if(colorStr.length() > 6)
+                {
+                    colorStr = colorStr.substring(colorStr.length() - 6);
+                }
+
+                saveData.append(colorStr).append(" ");
+            }
+        }
+
+        return saveData.toString();
+    }
+
     public static String[] getRGBAFromString(String strData)
     {
         String[] ret = new String[4];

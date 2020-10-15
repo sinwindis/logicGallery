@@ -173,11 +173,15 @@ public class EndFragment extends Fragment {
                     ImageView iv = (ImageView) rv_board.getChildAt(pos - i + (width * i));
                     if(pos - i < width && i < height)
                     {
+                        String colorStr = Integer.toHexString(colorSet[i][pos - i]);
+
                         iv.setAlpha(0F);
-                        iv.setBackgroundColor(Color.parseColor("#" + Integer.toHexString(colorSet[i][pos - i])));
+                        iv.setBackgroundColor(Color.parseColor("#" + colorStr));
                         iv.setImageResource(R.drawable.background_transparent);
                         showTileSlowly(pos, 0);
                     }
+
+
                 }
 
                 delayedSetBackgroundColor(pos+1);

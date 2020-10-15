@@ -171,7 +171,7 @@ public class LevelCreateFragment extends Fragment {
         rv_board.setLayoutManager(new GridLayoutManager(ctx, width));
         levelCreator.reduceImageSize(width, height);
         levelCreator.makeDataSet();
-        rv_board.setAdapter(new RvLevelCreateBoardAdapter(levelCreator.getResultDataSet()));
+        rv_board.setAdapter(new RvLevelCreateBoardAdapter(levelCreator.getResultPixels()));
     }
 
     private void saveLevel()
@@ -184,7 +184,7 @@ public class LevelCreateFragment extends Fragment {
         }
         String name = et_name.getText().toString();
         String dataSet = StringParser.parseDataSetToString(levelCreator.getResultDataSet(), height, width);
-        String colorSet = StringParser.parseDataSetToString(levelCreator.getResultPixels(), height, width);
+        String colorSet = StringParser.parseColorSetToString(levelCreator.getResultPixels(), height, width);
         mDbOpenHelper.insertLevel(name, "custom", width, height, dataSet, colorSet);
         mDbOpenHelper.close();
     }

@@ -44,7 +44,7 @@ public class RvLevelBoardAdapter extends RecyclerView.Adapter<RvLevelBoardAdapte
     @NonNull
     @Override
     public RvLevelBoardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext() ;
+        Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
         View view = inflater.inflate(R.layout.item_board, parent, false);

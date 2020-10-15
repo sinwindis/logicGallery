@@ -73,37 +73,37 @@ public class RvLevelCreateBoardAdapter extends RecyclerView.Adapter<RvLevelCreat
     @Override
     public void onBindViewHolder(@NonNull RvLevelCreateBoardAdapter.ViewHolder holder, int position) {
 
-        ImageView iv = (ImageView) holder.itemView;
-
-        int asyncTemp = dataSet[position/width][position% width];
-        switch(asyncTemp)
-        {
-            case 0:
-                iv.setImageResource(R.drawable.background_transparent);
-                iv.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                break;
-            case 1:
-                iv.setImageResource(R.drawable.background_transparent);
-                iv.setBackgroundColor(Color.parseColor("#000000"));
-                break;
-            case 2:
-                iv.setImageResource(R.drawable.background_x);
-                iv.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                break;
-
-        }
-
 //        ImageView iv = (ImageView) holder.itemView;
 //
-//        int color = dataSet[position/width][position% width];
-//        String colorStr = Integer.toHexString(color);
-//        while(colorStr.length() < 6)
+//        int asyncTemp = dataSet[position/width][position% width];
+//        switch(asyncTemp)
 //        {
-//            colorStr = "0" + colorStr;
+//            case 0:
+//                iv.setImageResource(R.drawable.background_transparent);
+//                iv.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                break;
+//            case 1:
+//                iv.setImageResource(R.drawable.background_transparent);
+//                iv.setBackgroundColor(Color.parseColor("#000000"));
+//                break;
+//            case 2:
+//                iv.setImageResource(R.drawable.background_x);
+//                iv.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                break;
+//
 //        }
-//
-//
-//        iv.setBackgroundColor(Color.parseColor("#" + colorStr));
+
+        ImageView iv = (ImageView) holder.itemView;
+
+        int color = dataSet[position/width][position% width];
+        String colorStr = Integer.toHexString(color);
+        while(colorStr.length() < 6)
+        {
+            colorStr = "0" + colorStr;
+        }
+
+
+        iv.setBackgroundColor(Color.parseColor("#" + colorStr));
 
     }
 
