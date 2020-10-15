@@ -80,11 +80,11 @@ public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHold
         switch(asyncTemp)
         {
             case 0:
-            iv.setImageResource(R.drawable.background_transparent);
-            iv.setBackgroundColor(Color.parseColor("#FFFFFF"));
-            break;
+                iv.setImageDrawable(null);
+                iv.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                break;
             case 1:
-                iv.setImageResource(R.drawable.background_transparent);
+                iv.setImageDrawable(null);
                 iv.setBackgroundColor(Color.parseColor("#000000"));
                 break;
             case 2:

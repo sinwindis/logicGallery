@@ -482,11 +482,11 @@ public class GameBoard {
                 switch(lpm.checkedSet[y][x])
                 {
                     case 0:
-                        view.setImageResource(R.drawable.background_transparent);
+                        view.setImageDrawable(null);
                         view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                         break;
                     case 1:
-                        view.setImageResource(R.drawable.background_transparent);
+                        view.setImageDrawable(null);
                         view.setBackgroundColor(Color.parseColor("#000000"));
                         break;
                     case 2:
@@ -519,12 +519,12 @@ public class GameBoard {
                     {
                         case 0:
                             //공백
-                            view.setImageResource(R.drawable.background_transparent);
+                            view.setImageDrawable(null);
                             view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                             break;
                         case 1:
                             //체크
-                            view.setImageResource(R.drawable.background_transparent);
+                            view.setImageDrawable(null);
                             view.setBackgroundColor(Color.parseColor("#000000"));
                             break;
                         case 2:
@@ -539,11 +539,11 @@ public class GameBoard {
                     switch(lpm.checkedSet[y][x])
                     {
                         case 0:
-                            view.setImageResource(R.drawable.background_transparent);
+                            view.setImageDrawable(null);
                             view.setBackgroundColor(Color.parseColor("#82C3FF"));
                             break;
                         case 1:
-                            view.setImageResource(R.drawable.background_transparent);
+                            view.setImageDrawable(null);
                             view.setBackgroundColor(Color.parseColor("#406F9A"));
                             break;
                         case 2:
