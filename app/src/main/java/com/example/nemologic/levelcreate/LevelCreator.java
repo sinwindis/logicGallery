@@ -12,9 +12,8 @@ import java.io.FileNotFoundException;
 public class LevelCreator {
 
     private Bitmap bitmap;
-    private int[] pixels;
-    private int[][] resultPixels;
-    private int[][] resultDataSet;
+    private int[] resultPixels;
+    private int[] resultDataSet;
 
     public LevelCreator()
     {
@@ -59,23 +58,12 @@ public class LevelCreator {
         return avgColor;
     }
 
-    public void reduceImageSize(int width, int height)
+    public void reduceImageSize(int height, int width)
     {
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
 
-        pixels = new int[resizedBitmap.getWidth()*resizedBitmap.getHeight()];
-        resizedBitmap.getPixels(pixels, 0, resizedBitmap.getWidth(), 0, 0, resizedBitmap.getWidth(), resizedBitmap.getHeight());
-        resultPixels = new int[height][width];
-
-
-        for(int y = 0; y < height; y++)
-        {
-            for(int x = 0; x < width; x++)
-            {
-                resultPixels[y][x] = pixels[x + y*width];
-            }
-        }
-
+        resultPixels = new int[resizedBitmap.getWidth()*resizedBitmap.getHeight()];
+        resizedBitmap.getPixels(resultPixels, 0, resizedBitmap.getWidth(), 0, 0, resizedBitmap.getWidth(), resizedBitmap.getHeight());
     }
 
     public void saveLevel()
@@ -83,34 +71,28 @@ public class LevelCreator {
 
     }
 
-    public void makeDataSet()
+    public void makeDataSet(int height, int width)
     {
         float colorSumAvg = 0;
-        int height = resultPixels.length;
-        int width = resultPixels[0].length;
 
-        resultDataSet = new int[height][width];
+        reduceImageSize(height, width);
 
-        for(int i = 0; i < height; i++)
+        resultDataSet = new int[height*width];
+
+        for(int i = 0; i < height*width; i++)
         {
-            for(int j = 0; j < width; j++)
-            {
-                colorSumAvg += getColorAverageNum(resultPixels[i][j]) / (height*width);
-            }
+            colorSumAvg += getColorAverageNum(resultPixels[i]) / (height*width);
         }
 
-        for(int y = 0; y < height; y++)
+        for(int i = 0; i < height*width; i++)
         {
-            for(int x = 0; x < width; x++)
+            if(colorSumAvg > getColorAverageNum(resultPixels[i]))
             {
-                if(colorSumAvg > getColorAverageNum(resultPixels[y][x]))
-                {
-                    resultDataSet[y][x] = 1;
-                }
-                else
-                {
-                    resultDataSet[y][x] = 0;
-                }
+                resultDataSet[i] = 1;
+            }
+            else
+            {
+                resultDataSet[i] = 0;
             }
         }
     }
@@ -120,12 +102,12 @@ public class LevelCreator {
         return bitmap;
     }
 
-    public int[][] getResultPixels()
+    public int[] getResultPixels()
     {
         return resultPixels;
     }
 
-    public int[][] getResultDataSet()
+    public int[] getResultDataSet()
     {
         return resultDataSet;
     }

@@ -26,6 +26,17 @@ public class StringParser {
         return saveData.toString();
     }
 
+    public static String parseDataArrayToString(int[] dataSet)
+    {
+        StringBuilder saveData = new StringBuilder();
+
+        for (int value : dataSet) {
+            saveData.append(value).append(" ");
+        }
+
+        return saveData.toString();
+    }
+
     public static String parseColorSetToString(int[][] dataSet, int height, int width)
     {
         StringBuilder saveData = new StringBuilder();
@@ -46,6 +57,25 @@ public class StringParser {
 
                 saveData.append(colorStr).append(" ");
             }
+        }
+
+        return saveData.toString();
+    }
+
+    public static String parseColorArrayToString(int[] dataSet)
+    {
+        StringBuilder saveData = new StringBuilder();
+
+        for (int value : dataSet) {
+            String colorStr = Integer.toHexString(value);
+            while (colorStr.length() < 6) {
+                colorStr = "0" + colorStr;
+            }
+            if (colorStr.length() > 6) {
+                colorStr = colorStr.substring(colorStr.length() - 6);
+            }
+
+            saveData.append(colorStr).append(" ");
         }
 
         return saveData.toString();

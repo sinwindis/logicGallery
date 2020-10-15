@@ -3,11 +3,11 @@ package com.example.nemologic.levelcreate;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +17,6 @@ import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
@@ -33,7 +31,7 @@ public class LevelCreateFragment extends Fragment {
     Context ctx;
     ImageView iv;
     LevelCreator levelCreator;
-    RecyclerView rv_board;
+    ImageView v_result;
     int actionType;
 
     EditText et_name;
@@ -65,7 +63,7 @@ public class LevelCreateFragment extends Fragment {
 
         final Context mainActivityCtx = ctx;
 
-        final View fragmentView = inflater.inflate(R.layout.fragment_levelcreate, container, false);
+        final View fragmentView = inflater.inflate(R.layout.fragment_levelcreate_canvas, container, false);
 
         et_name = fragmentView.findViewById(R.id.et_name);
         et_height = fragmentView.findViewById(R.id.et_height);
@@ -73,9 +71,9 @@ public class LevelCreateFragment extends Fragment {
 
         levelCreator = new LevelCreator();
 
-        rv_board = fragmentView.findViewById(R.id.rv_levelcreate);
+        v_result = fragmentView.findViewById(R.id.v_result);
 
-        iv = fragmentView.findViewById(R.id.iv_levelcreate);
+        iv = fragmentView.findViewById(R.id.iv_input);
 
         btn_make = fragmentView.findViewById(R.id.btn_make);
         btn_make.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +100,7 @@ public class LevelCreateFragment extends Fragment {
         actionType = 0;
         btn_make.setText(getResources().getString(R.string.str_loadimage));
         iv.setImageDrawable(null);
+        v_result.setImageDrawable(null);
 
         //recyclerView 내부 아이템 비우기
 
@@ -168,10 +167,14 @@ public class LevelCreateFragment extends Fragment {
 
     private void makeLevel(int height, int width)
     {
-        rv_board.setLayoutManager(new GridLayoutManager(ctx, width));
-        levelCreator.reduceImageSize(width, height);
-        levelCreator.makeDataSet();
-        rv_board.setAdapter(new RvLevelCreateBoardAdapter(levelCreator.getResultPixels()));
+
+
+        levelCreator.makeDataSet(height, width);
+        Bitmap resultImage = Bitmap.createBitmap(levelCreator.getResultPixels(), width, height, Bitmap.Config.ARGB_8888);
+        resultImage = Bitmap.createScaledBitmap(resultImage, v_result.getMeasuredWidth(), v_result.getMeasuredHeight(), false);
+
+        v_result.setImageBitmap(resultImage);
+
     }
 
     private void saveLevel()
@@ -183,8 +186,8 @@ public class LevelCreateFragment extends Fragment {
             e.printStackTrace();
         }
         String name = et_name.getText().toString();
-        String dataSet = StringParser.parseDataSetToString(levelCreator.getResultDataSet(), height, width);
-        String colorSet = StringParser.parseColorSetToString(levelCreator.getResultPixels(), height, width);
+        String dataSet = StringParser.parseDataArrayToString(levelCreator.getResultDataSet());
+        String colorSet = StringParser.parseColorArrayToString(levelCreator.getResultPixels());
         mDbOpenHelper.insertLevel(name, "custom", width, height, dataSet, colorSet);
         mDbOpenHelper.close();
     }
