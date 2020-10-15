@@ -122,11 +122,11 @@ public class LevelFragment extends Fragment {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(null);
                         break;
                 }
 

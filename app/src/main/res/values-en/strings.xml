@@ -1,17 +1,14 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name" translatable="false">Nemo Logic</string>
+    <string name="admob_app_id">ca-app-pub-9444386713531243~4932680796</string>
+    <string name="banner_ad_unit_id">ca-app-pub-9444386713531243/8680354114</string>
+    <string name="popup_ad_unit_id">ca-app-pub-9444386713531243/6098809845</string>
+    <string name="banner_ad_unit_id_for_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="app_logo">NemoLogic</string>
     <string name="app_logo_upper">plus+</string>
-
     <string name="str_continue">continue</string>
-    <string name="str_category" >category</string>
-    <string name="str_big_puzzle" >big puzzle</string>
-
-
-    <string name="admob_app_id" translatable="false">ca-app-pub-9444386713531243~4932680796</string>
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-9444386713531243/8680354114</string>
-    <string name="popup_ad_unit_id" translatable="false">ca-app-pub-9444386713531243/6098809845</string>
-    <string name="banner_ad_unit_id_for_test" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="str_category">category</string>
+    <string name="str_big_puzzle">big puzzle</string>
     <string name="str_level">level</string>
     <string name="str_accept">accept</string>
     <string name="str_cancel">cancel</string>

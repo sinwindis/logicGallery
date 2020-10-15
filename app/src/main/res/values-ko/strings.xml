@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name" translatable="false">Nemo Logic</string>
+    <string name="admob_app_id">ca-app-pub-9444386713531243~4932680796</string>
+    <string name="banner_ad_unit_id">ca-app-pub-9444386713531243/8680354114</string>
+    <string name="popup_ad_unit_id">ca-app-pub-9444386713531243/6098809845</string>
+    <string name="banner_ad_unit_id_for_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="app_logo">네모 로직</string>
+    <string name="app_logo_upper">플러스+</string>
+    <string name="str_continue">이어하기</string>
+    <string name="str_category">카테고리</string>
+    <string name="str_big_puzzle">대형 퍼즐</string>
+    <string name="str_level">레벨</string>
+    <string name="str_accept">확인</string>
+    <string name="str_cancel">취소</string>
+    <string name="str_smartdrag">똑똑한 드래그</string>
+    <string name="str_oneline">한 줄만 드래그</string>
+    <string name="str_autox">완료된 줄은 자동으로 X 채우기</string>
+    <string name="str_complete">완료</string>
+    <string name="str_loadimage">이미지 불러오기</string>
+    <string name="str_levelname">레벨 이름</string>
+    <string name="str_height">높이</string>
+    <string name="str_width">너비</string>
+    <string name="str_makepuzzle">퍼즐 생성하기</string>
+    <string name="str_savepuzzle">퍼즐 저장하기</string>
+
+</resources>
