@@ -84,9 +84,6 @@ public class GameFragment extends Fragment {
 
         gameBoard.makeGameBoard();
 
-        TextView tv_name = fragmentView.findViewById(R.id.tv_name);
-        tv_name.setText(name);
-
         ImageView img_option = fragmentView.findViewById(R.id.img_option);
 
         img_option.setOnTouchListener(new View.OnTouchListener() {
@@ -97,11 +94,11 @@ public class GameFragment extends Fragment {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(null);
                         break;
                 }
 
@@ -137,11 +134,11 @@ public class GameFragment extends Fragment {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(null);
                         break;
                 }
                 return false;

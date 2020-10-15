@@ -14,7 +14,6 @@ import android.widget.ImageView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +29,6 @@ import com.example.nemologic.levelcreate.LevelCreateFragment;
 import com.example.nemologic.option.OptionDialog;
 
 import java.sql.SQLException;
-import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -119,11 +117,11 @@ public class MainFragment extends Fragment {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(null);
                         break;
                 }
 
@@ -146,17 +144,18 @@ public class MainFragment extends Fragment {
         ImageView img_plus = fragmentView.findViewById(R.id.img_plus);
         img_plus.setOnTouchListener(new View.OnTouchListener() {
 
+            @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(null);
                         break;
                 }
 

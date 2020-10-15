@@ -8,9 +8,10 @@
 
     <ImageView
         android:id="@+id/img_option"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_margin="20dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="5dp"
+        android:layout_margin="15dp"
         android:src="@drawable/ic_option"
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,9 +19,10 @@
 
     <ImageView
         android:id="@+id/img_plus"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_margin="20dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="5dp"
+        android:layout_margin="15dp"
         android:src="@drawable/ic_plus"
 
         app:layout_constraintEnd_toStartOf="@id/img_option"
@@ -30,15 +32,26 @@
         android:id="@+id/tv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textSize="40sp"
         android:textColor="@color/colorBlack"
         android:fontFamily="@font/paybooc_bold"
-        android:text="NemoLogic"
+        android:text="@string/app_logo"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/rv_level_board"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <TextView
+        style="@style/StyleFontSmall"
+        android:id="@+id/tv_logosmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_logo_upper"
+
+        app:layout_constraintBottom_toTopOf="@id/tv_logo"
+        app:layout_constraintEnd_toEndOf="@id/tv_logo"
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -56,6 +69,8 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <Button
+        style="@style/StyleFontSmall"
+
         android:id="@+id/btn_continue"
         android:layout_width="200dp"
         android:layout_height="40dp"
@@ -68,14 +83,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_category"
-        android:textColor="@color/colorBlack"
-        android:fontFamily="@font/paybooc_bold"
-        android:textSize="12sp"
-        android:text="Continue">
+        android:text="@string/str_continue">
 
     </Button>
 
     <Button
+        style="@style/StyleFontSmall"
+
         android:id="@+id/btn_category"
         android:layout_width="200dp"
         android:layout_height="40dp"
@@ -88,23 +102,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_bigpuzzle"
-        android:textColor="@color/colorBlack"
-        android:fontFamily="@font/paybooc_bold"
-        android:textSize="12sp"
-        android:text="Category">
+        android:text="@string/str_category">
 
     </Button>
 
     <Button
+        style="@style/StyleFontSmall"
+
         android:id="@+id/btn_bigpuzzle"
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:background="@drawable/background_btn"
         android:layout_marginBottom="40dp"
-        android:textColor="@color/colorBlack"
-        android:fontFamily="@font/paybooc_bold"
-        android:textSize="12sp"
-        android:text="Big Puzzles"
+        android:text="@string/str_big_puzzle"
 
         app:layout_constraintHeight_default="percent"
         app:layout_constraintHeight_percent="0.5"

@@ -2,8 +2,8 @@
 <resources>
     <version>0</version>
     <level>
-        <lname>Rabbit</lname>
-        <cname>Animal</cname>
+        <lname>토끼</lname>
+        <cname>동물</cname>
         <width>5</width>
         <height>5</height>
         <data>0 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 1 1 1 0 0 0 0 0 0</data>
@@ -12,8 +12,8 @@
     </level>
 
     <level>
-        <lname>Rabbit2</lname>
-        <cname>Animal</cname>
+        <lname>토끼2</lname>
+        <cname>동물</cname>
         <width>5</width>
         <height>5</height>
         <data>0 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 1 1 1 0 0 0 0 0 0</data>

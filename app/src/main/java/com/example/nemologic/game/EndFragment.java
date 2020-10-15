@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -50,32 +51,12 @@ public class EndFragment extends Fragment {
     Button btn_continue;
 
     private RecyclerView rv_board;
-    private ConstraintLayout cl_frame;
 
 
     public EndFragment() {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        mainHandler = new Handler();
-        animationRun = new Runnable() {
-            @Override
-            public void run() {
-
-                count = 0;
-                showGameEndAnimation();
-            }
-        };
-
-
-        mainHandler.postDelayed(animationRun, 300);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,8 +66,8 @@ public class EndFragment extends Fragment {
         ctx = fragmentView.getContext();
 
         rv_board = fragmentView.findViewById(R.id.rv_board);
-        cl_frame = fragmentView.findViewById(R.id.cl_frame);
         btn_continue = fragmentView.findViewById(R.id.btn_continue);
+        TextView tv_name = fragmentView.findViewById(R.id.tv_name);
 
         btn_continue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +103,8 @@ public class EndFragment extends Fragment {
 
         mDbOpenHelper.close();
 
+        tv_name.setText(name);
+
         //받아온 컬러 스트링을 컬러셋에 파싱한다.
         colorSet = StringParser.getParsedColorSet(colorStr, width, height);
 
@@ -130,6 +113,19 @@ public class EndFragment extends Fragment {
 
         maxLength = Math.max(width, height);
         timeDelay = 1000 / (width + height - 1);
+
+        mainHandler = new Handler();
+        animationRun = new Runnable() {
+            @Override
+            public void run() {
+
+                count = 0;
+                showGameEndAnimation();
+            }
+        };
+
+
+        mainHandler.postDelayed(animationRun, 300);
 
         return fragmentView;
     }

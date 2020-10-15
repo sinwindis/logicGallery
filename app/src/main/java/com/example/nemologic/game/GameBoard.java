@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -243,11 +243,11 @@ public class GameBoard {
         assert firstDragView != null;
         assert lastDragView != null;
 
-        int dragWidth = (int) (lastDragView.getX() - firstDragView.getX() + lastDragView.getWidth()) + 20;
-        int dragHeight = (int) (lastDragView.getY() - firstDragView.getY() + lastDragView.getHeight()) + 20;
+        int dragWidth = (int) (lastDragView.getX() - firstDragView.getX() + lastDragView.getWidth()) + 16;
+        int dragHeight = (int) (lastDragView.getY() - firstDragView.getY() + lastDragView.getHeight()) + 16;
 
-        ll_drag.setX(firstDragView.getX() - 10);
-        ll_drag.setY(firstDragView.getY() - 10);
+        ll_drag.setX(firstDragView.getX() - 8);
+        ll_drag.setY(firstDragView.getY() - 8);
 
         ll_drag.setLayoutParams(new ConstraintLayout.LayoutParams(dragWidth, dragHeight));
     }
@@ -263,9 +263,10 @@ public class GameBoard {
         //row 의 경우
         for(int row = 0; row < lpm.height; row++)
         {
+            Log.d("endRow", row+ "'th row: "  + rivm.rvRowAdapter.endRow[row]);
             if(rivm.rvRowAdapter.endRow[row])
             {
-                //해당 row가 완성됐다면
+                //해당 row 가 완성됐다면
                 for(int x = 0; x < lpm.width; x++)
                 {
                     if(lpm.checkedSet[row][x] == 0)
@@ -282,7 +283,7 @@ public class GameBoard {
         {
             if(civm.rvColumnAdapter.endColumn[column])
             {
-                //해당 column가 완성됐다면
+                //해당 column 가 완성됐다면
                 for(int x = 0; x < lpm.height; x++)
                 {
                     if(lpm.checkedSet[x][column] == 0)
@@ -386,15 +387,8 @@ public class GameBoard {
     {
         lpm.progress = 2;
         lpm.savePlayData(mainActivityContext);
-        //parent.getFragmentManager().popBackStackImmediate();
     }
 
-
-
-    private void showEndAnimation()
-    {
-        //delayedBoardRemove(0);
-    }
 
     private void clickUpAction()
     {
@@ -408,9 +402,8 @@ public class GameBoard {
 
         if(lpm.isGameEnd())
         {
-            //showEndAnimation();
-            moveToEndFragment();
             setGameEnd();
+            moveToEndFragment();
         }
     }
 
@@ -594,11 +587,11 @@ public class GameBoard {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(null);
                         break;
                 }
 
@@ -633,11 +626,11 @@ public class GameBoard {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(null);
                         break;
                 }
 
@@ -665,11 +658,11 @@ public class GameBoard {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(null);
                         break;
                 }
 
@@ -697,11 +690,11 @@ public class GameBoard {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(null);
                         break;
                 }
 
@@ -725,11 +718,11 @@ public class GameBoard {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(null);
                         break;
                 }
 

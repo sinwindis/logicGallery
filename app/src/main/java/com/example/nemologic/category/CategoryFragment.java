@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
@@ -101,11 +99,11 @@ public class CategoryFragment extends Fragment {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_dark));
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow_bright));
+                        view.setBackground(null);
                         break;
                 }
                 return false;

@@ -100,9 +100,11 @@ public class LevelCreateFragment extends Fragment {
     private void removePrevData()
     {
         actionType = 0;
-        btn_make.setText("load image");
+        btn_make.setText(getResources().getString(R.string.str_loadimage));
         iv.setImageDrawable(null);
-        rv_board.removeAllViews();
+
+        //recyclerView 내부 아이템 비우기
+
         et_name.setText("");
         et_width.setText("");
         et_height.setText("");
@@ -115,8 +117,6 @@ public class LevelCreateFragment extends Fragment {
             case 0:
                 //load image
                 openFile(null);
-                actionType = 1;
-                btn_make.setText("make puzzle");
                 break;
             case 1:
                 //make bitmap puzzle
@@ -141,7 +141,7 @@ public class LevelCreateFragment extends Fragment {
 
                 makeLevel(height, width);
 
-                btn_make.setText("save puzzle");
+                btn_make.setText(getResources().getString(R.string.str_savepuzzle));
                 actionType = 2;
                 break;
             case 2:
@@ -201,6 +201,8 @@ public class LevelCreateFragment extends Fragment {
                     uri = data.getData();
                     iv.setImageURI(uri);
                     levelCreator.loadFile(ctx, uri);
+                    actionType = 1;
+                    btn_make.setText(getResources().getString(R.string.str_makepuzzle));
                 }
 
             } else {   // RESULT_CANCEL
