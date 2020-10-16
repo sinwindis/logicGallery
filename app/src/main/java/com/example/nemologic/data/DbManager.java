@@ -170,6 +170,8 @@ public class DbManager {
         String levelColor = "";
 
         String version = "0";
+        //.split("(?<=\\G.{4})")
+        //4칸 단위로 string split
 
         try {
             levelInputStream = ctx.getResources().openRawResource(R.raw.levels);
