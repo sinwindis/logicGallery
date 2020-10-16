@@ -6,17 +6,17 @@
     <string name="banner_ad_unit_id_for_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="app_logo">NemoLogic</string>
     <string name="app_logo_upper">plus+</string>
-    <string name="str_continue">continue</string>
-    <string name="str_category">category</string>
+    <string name="str_continue">Continue</string>
+    <string name="str_category">Category</string>
     <string name="str_big_puzzle">big puzzle</string>
-    <string name="str_level">level</string>
-    <string name="str_accept">accept</string>
-    <string name="str_cancel">cancel</string>
+    <string name="str_level">Level</string>
+    <string name="str_accept">Accept</string>
+    <string name="str_cancel">Cancel</string>
     <string name="str_smartdrag">Smart drag</string>
     <string name="str_oneline">Drag only one line</string>
     <string name="str_autox">Fill remaining item with X for completed line</string>
-    <string name="str_complete">complete</string>
-    <string name="str_loadimage">load image</string>
+    <string name="str_complete">Complete</string>
+    <string name="str_loadimage">Load image</string>
     <string name="str_levelname">Level name</string>
     <string name="str_height">Height</string>
     <string name="str_width">Width</string>
@@ -24,5 +24,6 @@
     <string name="str_savepuzzle">Save Puzzle</string>
     <string name="str_reqname">Please input the name</string>
     <string name="str_levelsaved">" level has saved"</string>
+    <string name="str_levelcreate">Level Create</string>
 
 </resources>
