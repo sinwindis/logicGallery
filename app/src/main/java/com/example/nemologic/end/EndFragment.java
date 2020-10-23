@@ -1,9 +1,12 @@
-package com.example.nemologic.game;
+package com.example.nemologic.end;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,39 +17,33 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
+import com.example.nemologic.data.CustomParser;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.data.SqlManager;
-import com.example.nemologic.data.StringParser;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class EndFragment extends Fragment {
 
     private Context ctx;
-    LevelPlayManager lpm;
 
-    private String category;
     private String name;
     private int id;
+    private int type;
     private int width;
     private int height;
     private int maxLength;
     private int timeDelay;
-    private String colorStr;
-    private String dataSet;
-    private int[][] colorSet;
 
-    private int count;
-
-    private Handler mainHandler;
-    private Runnable animationRun;
+    private Bitmap bitmap;
+    private Bitmap colorBitmap;
 
     Button btn_continue;
 
@@ -87,39 +84,68 @@ public class EndFragment extends Fragment {
 
         //bundle 로 받은 category 와 level 의 이름을 String 으로 저장한다.
         if(getArguments() != null){
+            type = getArguments().getInt("type");
             id = getArguments().getInt("id");
         }
 
         //게임레벨과 카테고리의 이름을 이용해 db 에서 데이터를 받아오고 이를 lpm 인스턴스에 대입한다.
-        Cursor levelCursor =  mDbOpenHelper.getLevelCursorById(id);
-        levelCursor.moveToNext();
+        byte[] dataSet;
+        byte[] colorSet;
+        if(type == 0)
+        {
+            //일반 레벨
+            Cursor levelCursor =  mDbOpenHelper.getLevelCursorById(id);
+            levelCursor.moveToNext();
 
-        name = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.NAME));
-        category = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.CATEGORY));
-        width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
-        height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
-        colorStr = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.COLORSET));
-        dataSet = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.DATASET));
+            width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
+            height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
+            colorSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.LevelDBSql.COLORSET));
+            dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.LevelDBSql.DATASET));
+
+            colorBitmap = BitmapFactory.decodeByteArray(colorSet, 0, colorSet.length);
+            bitmap = CustomParser.parseDataSetByteArrayToBitmap(dataSet, width, height);
+        }
+        else if(type == 1)
+        {
+            //빅 레벨
+            Cursor bigLevelCursor =  mDbOpenHelper.getBigLevelsCursorById(id);
+            bigLevelCursor.moveToNext();
+
+            int p_id = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
+
+            Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
+
+            bigPuzzleCursor.moveToNext();
+
+
+
+            name = bigPuzzleCursor.getString(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.NAME));
+            width = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
+            height = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
+            colorSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
+            dataSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
+
+            colorBitmap = BitmapFactory.decodeByteArray(colorSet, 0, colorSet.length);
+            bitmap = CustomParser.parseDataSetByteArrayToBitmap(dataSet, width, height);
+        }
+        
+
 
         mDbOpenHelper.close();
 
         tv_name.setText(name);
 
-        //받아온 컬러 스트링을 컬러셋에 파싱한다.
-        colorSet = StringParser.getParsedColorSet(colorStr, width, height);
-
         rv_board.setLayoutManager(new GridLayoutManager(this.getContext(), width));
-        rv_board.setAdapter(new RvEndBoardAdapter(StringParser.getParsedSaveData(dataSet, width, height)));
+        rv_board.setAdapter(new RvEndBoardAdapter(bitmap));
 
         maxLength = Math.max(width, height);
         timeDelay = 1000 / (width + height - 1);
 
-        mainHandler = new Handler();
-        animationRun = new Runnable() {
+        Handler mainHandler = new Handler();
+        Runnable animationRun = new Runnable() {
             @Override
             public void run() {
 
-                count = 0;
                 showGameEndAnimation();
             }
         };
@@ -169,21 +195,12 @@ public class EndFragment extends Fragment {
                     ImageView iv = (ImageView) rv_board.getChildAt(pos - i + (width * i));
                     if(pos - i < width && i < height)
                     {
-                        int color = colorSet[i][pos - i];
-                        String colorStr = Integer.toHexString(color);
-
-                        while(colorStr.length() < 6)
-                        {
-                            colorStr = "0" + colorStr;
-                        }
+                        int color = colorBitmap.getPixel(pos-i, i);
 
                         iv.setAlpha(0F);
-                        iv.setBackgroundColor(Color.parseColor("#" + colorStr));
-                        //iv.setImageDrawable(null);
+                        iv.setBackgroundColor(color);
                         showTileSlowly(pos, 0);
                     }
-
-
                 }
 
                 delayedSetBackgroundColor(pos+1);

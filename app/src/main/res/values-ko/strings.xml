@@ -25,5 +25,6 @@
     <string name="str_reqname">레벨 이름을 입력해 주세요</string>
     <string name="str_levelsaved">" 레벨이 저장되었습니다"</string>
     <string name="str_levelcreate">레벨 제작</string>
+    <string name="str_custom">사용자 지정 레벨</string>
 
 </resources>

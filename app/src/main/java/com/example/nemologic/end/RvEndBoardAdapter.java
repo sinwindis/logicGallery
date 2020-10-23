@@ -1,8 +1,9 @@
-package com.example.nemologic.game;
+package com.example.nemologic.end;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ public class RvEndBoardAdapter extends RecyclerView.Adapter<RvEndBoardAdapter.Vi
 
     int height;
     int width;
-    int[][] dataSet;
+    Bitmap bitmap;
     private float heightUnder = 0;
     private int heightOffset = 0;
     private int widthCount = 0;
@@ -32,11 +33,11 @@ public class RvEndBoardAdapter extends RecyclerView.Adapter<RvEndBoardAdapter.Vi
         }
     }
 
-    RvEndBoardAdapter(int[][] dataSet) {
+    RvEndBoardAdapter(Bitmap bitmap) {
         //생성자
-        this.dataSet = dataSet.clone();
-        this.height = dataSet.length;
-        this.width = dataSet[0].length;
+        this.bitmap = bitmap;
+        this.height = bitmap.getHeight();
+        this.width = bitmap.getWidth();
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -76,15 +77,9 @@ public class RvEndBoardAdapter extends RecyclerView.Adapter<RvEndBoardAdapter.Vi
 
         ImageView iv = (ImageView) holder.itemView;
 
-        int color = dataSet[position/width][position% width];
-        String colorStr = Integer.toHexString(color);
-        while(colorStr.length() < 6)
-        {
-            colorStr = "0" + colorStr;
-        }
+        int color = bitmap.getPixel(position%width, position/width);
 
-
-        iv.setBackgroundColor(Color.parseColor("#" + colorStr));
+        iv.setBackgroundColor(color);
 
     }
 

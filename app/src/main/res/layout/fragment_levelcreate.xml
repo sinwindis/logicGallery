@@ -45,7 +45,7 @@
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cl_buttons"
+        app:layout_constraintBottom_toTopOf="@id/cl_input_name"
         app:layout_constraintTop_toBottomOf="@id/cl_top"
         >
 
@@ -55,10 +55,10 @@
             android:layout_height="0dp"
             android:layout_margin="20dp"
             android:background="@drawable/border_image"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_result"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/iv_result"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"/>
 
         <ImageView
@@ -68,7 +68,8 @@
             android:layout_margin="20dp"
             android:background="@drawable/border_image"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_input"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             />
@@ -76,6 +77,170 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_input_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cl_input_size"
+        >
+
+        <TextView
+            style="@style/StyleFontSmall"
+
+            android:id="@+id/tv_input_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="레벨 이름 입력: "
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <EditText
+            style="@style/StyleEditText"
+
+            android:id="@+id/et_name"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="@string/str_levelname"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_input_size"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cl_input_bigsize"
+        >
+
+        <TextView
+            style="@style/StyleFontSmall"
+            android:id="@+id/tv_input_size"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="레벨 크기 입력: "
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <EditText
+            style="@style/StyleEditText"
+
+            android:id="@+id/et_height"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="@string/str_height"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/et_width"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <EditText
+            style="@style/StyleEditText"
+
+            android:id="@+id/et_width"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/str_width"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:inputType="number"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_input_bigsize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="30dp"
+        android:paddingBottom="10dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cl_buttons"
+        >
+
+        <CheckBox
+            style="@style/StyleEditText"
+
+            android:id="@+id/cb_bigpuzzle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorGray"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            style="@style/StyleFontSmall"
+            android:id="@+id/tv_input_bigpuzzle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/colorGray"
+            android:text="대형 퍼즐 크기 입력: "
+
+            app:layout_constraintStart_toEndOf="@id/cb_bigpuzzle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
+
+        <EditText
+            style="@style/StyleEditText"
+
+            android:id="@+id/et_row"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:focusable="false"
+            android:clickable="false"
+            android:layout_marginEnd="10dp"
+            android:hint="@string/str_height"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/et_column"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <EditText
+            style="@style/StyleEditText"
+
+            android:id="@+id/et_column"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/str_width"
+            android:inputType="number"
+            android:focusable="false"
+            android:clickable="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -84,65 +249,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_board"
         app:layout_constraintBottom_toBottomOf="parent">
-
-        <EditText
-            style="@style/StyleEditText"
-
-            android:id="@+id/et_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="@string/str_levelname"
-
-            android:layout_marginBottom="10dp"
-
-            app:layout_constraintEnd_toEndOf="@id/btn_make"
-            app:layout_constraintStart_toStartOf="@id/btn_make"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btn_make"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_size"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-
-            android:layout_marginBottom="10dp"
-
-            app:layout_constraintEnd_toEndOf="@id/btn_cancel"
-            app:layout_constraintStart_toStartOf="@id/btn_cancel"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btn_make">
-
-            <EditText
-                style="@style/StyleEditText"
-
-                android:id="@+id/et_height"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="@string/str_height"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/et_width"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <EditText
-                style="@style/StyleEditText"
-
-                android:id="@+id/et_width"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/str_width"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/et_height"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:inputType="number"/>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

@@ -12,15 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
+import com.example.nemologic.data.LevelPlayManager;
 
 public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHolder> {
 
     int height;
     int width;
-    int[][] checkedSet;
+    byte[] checkedSet;
     float heightUnder = 0;
     int heightOffset = 0;
     int widthCount = 0;
+
+    boolean autoX;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -32,11 +35,12 @@ public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHold
         }
     }
 
-    RvBoardAdapter(int[][] checkedSet) {
+    RvBoardAdapter(LevelPlayManager lpm, boolean autoX) {
         //생성자
-        this.checkedSet = checkedSet.clone();
-        this.height = checkedSet.length;
-        this.width = checkedSet[0].length;
+        this.checkedSet = lpm.checkedSet;
+        this.height = lpm.height;
+        this.width = lpm.width;
+        this.autoX = autoX;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -76,7 +80,7 @@ public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHold
         
         ImageView iv = (ImageView) holder.itemView;
 
-        int asyncTemp = checkedSet[position/width][position% width];
+        int asyncTemp = checkedSet[position];
         switch(asyncTemp)
         {
             case 0:
@@ -100,4 +104,5 @@ public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHold
     public int getItemCount() {
         return height * width;
     }
+
 }

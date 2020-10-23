@@ -8,7 +8,7 @@
     <string name="app_logo_upper">plus+</string>
     <string name="str_continue">Continue</string>
     <string name="str_category">Category</string>
-    <string name="str_big_puzzle">big puzzle</string>
+    <string name="str_big_puzzle">Big Puzzle</string>
     <string name="str_level">Level</string>
     <string name="str_accept">Accept</string>
     <string name="str_cancel">Cancel</string>
@@ -25,5 +25,6 @@
     <string name="str_reqname">Please input the name</string>
     <string name="str_levelsaved">" level has saved"</string>
     <string name="str_levelcreate">Level Create</string>
+    <string name="str_custom">Custom</string>
 
 </resources>

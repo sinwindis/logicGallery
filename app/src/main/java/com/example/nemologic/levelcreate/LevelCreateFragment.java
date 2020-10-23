@@ -4,16 +4,22 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -21,7 +27,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.DbOpenHelper;
-import com.example.nemologic.data.StringParser;
 
 import java.sql.SQLException;
 
@@ -30,7 +35,7 @@ import static android.app.Activity.RESULT_OK;
 public class LevelCreateFragment extends Fragment {
 
     Context ctx;
-    ImageView iv;
+    ImageView iv_input;
     LevelCreator levelCreator;
     ImageView iv_result;
     int actionType;
@@ -38,11 +43,21 @@ public class LevelCreateFragment extends Fragment {
     EditText et_name;
     EditText et_height;
     EditText et_width;
+    EditText et_puzzle_height;
+    EditText et_puzzle_width;
+
+    TextView tv_bigpuzzle;
+
+    Bitmap dataBitmap;
+    Bitmap colorBitmap;
 
     int width;
     int height;
+    int puzzle_width;
+    int puzzle_height;
 
     Button btn_make;
+    CheckBox cb_big;
 
     private final int REQ_LOAD_IMAGE = 2;
 
@@ -61,12 +76,17 @@ public class LevelCreateFragment extends Fragment {
         et_name = fragmentView.findViewById(R.id.et_name);
         et_height = fragmentView.findViewById(R.id.et_height);
         et_width = fragmentView.findViewById(R.id.et_width);
+        et_puzzle_height = fragmentView.findViewById(R.id.et_row);
+        et_puzzle_width = fragmentView.findViewById(R.id.et_column);
+        cb_big = fragmentView.findViewById(R.id.cb_bigpuzzle);
+        tv_bigpuzzle = fragmentView.findViewById(R.id.tv_input_bigpuzzle);
+        ImageView img_back = fragmentView.findViewById(R.id.img_back);
 
         levelCreator = new LevelCreator();
 
         iv_result = fragmentView.findViewById(R.id.iv_result);
 
-        iv = fragmentView.findViewById(R.id.iv_input);
+        iv_input = fragmentView.findViewById(R.id.iv_input);
 
         btn_make = fragmentView.findViewById(R.id.btn_make);
         btn_make.setOnClickListener(new View.OnClickListener() {
@@ -85,14 +105,91 @@ public class LevelCreateFragment extends Fragment {
             }
         });
 
+        cb_big.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                {
+                    //체크되었으면
+                    tv_bigpuzzle.setTextColor(Color.parseColor("#404040"));
+                    et_puzzle_height.setFocusable(true);
+                    et_puzzle_height.setFocusableInTouchMode(true);
+                    et_puzzle_height.setClickable(true);
+                    et_puzzle_width.setFocusable(true);
+                    et_puzzle_width.setFocusableInTouchMode(true);
+                    et_puzzle_width.setClickable(true);
+                }
+                else
+                {
+                    tv_bigpuzzle.setTextColor(Color.parseColor("#a0a0a0"));
+                    et_puzzle_height.setFocusable(false);
+                    et_puzzle_height.setFocusableInTouchMode(false);
+                    et_puzzle_height.setClickable(false);
+                    et_puzzle_width.setFocusable(false);
+                    et_puzzle_width.setFocusableInTouchMode(false);
+                    et_puzzle_width.setClickable(false);
+                }
+            }
+        });
+
+
+
+        img_back.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getActionMasked())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        view.setBackground(null);
+                        break;
+                }
+                return false;
+            }
+        });
+
+        img_back.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                getFragmentManager().popBackStackImmediate();
+
+            }
+        });
+
         return fragmentView;
+    }
+    
+    private void setEditable(boolean b)
+    {
+        et_height.setClickable(b);
+        et_height.setFocusable(b);
+        et_height.setFocusableInTouchMode(b);
+        et_width.setClickable(b);
+        et_width.setFocusable(b);
+        et_width.setFocusableInTouchMode(b);
+        et_puzzle_height.setFocusable(b);
+        et_puzzle_height.setFocusableInTouchMode(b);
+        et_puzzle_height.setClickable(b);
+        et_puzzle_width.setFocusable(b);
+        et_puzzle_width.setFocusableInTouchMode(b);
+        et_puzzle_width.setClickable(b);
+        cb_big.setFocusable(b);
+        cb_big.setFocusableInTouchMode(b);
+        cb_big.setClickable(b);
     }
 
     private void removePrevData()
     {
         actionType = 0;
         btn_make.setText(getResources().getString(R.string.str_loadimage));
-        iv.setImageDrawable(null);
+        iv_input.setImageDrawable(null);
         iv_result.setImageDrawable(null);
 
         //recyclerView 내부 아이템 비우기
@@ -100,6 +197,12 @@ public class LevelCreateFragment extends Fragment {
         et_name.setText("");
         et_width.setText("");
         et_height.setText("");
+        et_puzzle_width.setText("");
+        et_puzzle_height.setText("");
+
+        setEditable(true);
+
+        cb_big.setChecked(false);
     }
 
     @SuppressLint("SetTextI18n")
@@ -113,6 +216,8 @@ public class LevelCreateFragment extends Fragment {
                 break;
             case 1:
                 //make bitmap puzzle
+
+                setEditable(false);
 
                 if(et_height.getText().toString().length() == 0)
                 {
@@ -134,7 +239,32 @@ public class LevelCreateFragment extends Fragment {
                     width = Integer.parseInt(et_width.getText().toString());
                 }
 
-                makeLevel(height, width);
+                if(cb_big.isChecked())
+                {
+                    //big level 일 경우 big level 크기도 기본값을 설정해 준다.
+                    if(et_puzzle_height.getText().toString().length() == 0)
+                    {
+                        puzzle_height = 5;
+                        et_puzzle_height.setText("5");
+                    }
+                    else
+                    {
+                        puzzle_height = Integer.parseInt(et_height.getText().toString());
+                    }
+
+                    if(et_puzzle_width.getText().toString().length() == 0)
+                    {
+                        puzzle_width = 5;
+                        et_puzzle_width.setText("5");
+                    }
+                    else
+                    {
+                        puzzle_width = Integer.parseInt(et_width.getText().toString());
+                    }
+
+                }
+
+                makeLevel();
 
                 btn_make.setText(getResources().getString(R.string.str_savepuzzle));
                 actionType = 2;
@@ -145,7 +275,16 @@ public class LevelCreateFragment extends Fragment {
                 {
                     String alert = getResources().getString(R.string.str_levelsaved);
                     Toast.makeText(ctx, et_name.getText() + alert, Toast.LENGTH_SHORT).show();
-                    saveLevel();
+
+                    if(cb_big.isChecked())
+                    {
+                        saveBigLevel();
+                    }
+                    else
+                    {
+                        saveLevel();
+                    }
+
                     removePrevData();
                 }
                 else
@@ -172,11 +311,22 @@ public class LevelCreateFragment extends Fragment {
         startActivityForResult(intent, REQ_LOAD_IMAGE);
     }
 
-    private void makeLevel(int height, int width)
+    private void makeLevel()
     {
-        levelCreator.makeDataSet(height, width);
-        Bitmap resultImage = Bitmap.createBitmap(levelCreator.getResultPixels(), width, height, Bitmap.Config.ARGB_8888);
-        resultImage = Bitmap.createScaledBitmap(resultImage, iv_result.getMeasuredWidth(), iv_result.getMeasuredHeight(), false);
+        if(cb_big.isChecked())
+        {
+            //빅 레벨 만들기
+            levelCreator.makeBigLevelDataSet(puzzle_height, puzzle_width, height, width);
+        }
+        else
+        {
+            //싱글 레벨 만들기
+            levelCreator.makeSingleDataSet(height, width);
+        }
+
+
+        //Bitmap resultImage = CustomParser.parseDataSetByteArrayToBitmap(levelCreator.getDataBlob(), width, height);
+        Bitmap resultImage = levelCreator.getScaledBitmap();
 
         iv_result.setImageBitmap(resultImage);
     }
@@ -190,9 +340,35 @@ public class LevelCreateFragment extends Fragment {
             e.printStackTrace();
         }
         String name = et_name.getText().toString();
-        String dataSet = StringParser.parseDataArrayToString(levelCreator.getResultDataSet());
-        String colorSet = StringParser.parseColorArrayToString(levelCreator.getResultPixels());
-        mDbOpenHelper.insertLevel(name, "custom", width, height, dataSet, colorSet);
+        byte[] dataBlob = levelCreator.getDataBlob();
+        byte[] colorBlob = levelCreator.getColorBlob();
+        mDbOpenHelper.insertLevel(name, getResources().getString(R.string.str_custom), width, height, dataBlob, colorBlob, 1);
+        mDbOpenHelper.close();
+    }
+
+    private void saveBigLevel()
+    {
+        DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
+        try {
+            mDbOpenHelper.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String name = et_name.getText().toString();
+        byte[] colorBlob = levelCreator.getColorBlob();
+        int p_id = (int) mDbOpenHelper.insertBigPuzzle(name, puzzle_width, puzzle_height, colorBlob, 1);
+
+        Log.d("saveBigLevel", String.valueOf(p_id));
+
+        byte[][] dataBlobs = levelCreator.getDataBlobs();
+        byte[][] colorBlobs = levelCreator.getColorBlobs();
+
+        for(int i = 0; i < puzzle_width*puzzle_height; i++)
+        {
+            mDbOpenHelper.insertBigLevel(p_id, i, width, height, dataBlobs[i], colorBlobs[i]);
+        }
+
         mDbOpenHelper.close();
     }
 
@@ -206,7 +382,7 @@ public class LevelCreateFragment extends Fragment {
                 Uri uri;
                 if (data != null) {
                     uri = data.getData();
-                    iv.setImageURI(uri);
+                    iv_input.setImageURI(uri);
                     levelCreator.loadFile(ctx, uri);
                     actionType = 1;
                     btn_make.setText(getResources().getString(R.string.str_makepuzzle));

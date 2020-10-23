@@ -6,7 +6,7 @@
             <corners android:radius="10dp"/>
             <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
             <solid
-                android:color="@color/colorBlack"/>  <!-- background color -->
+                android:color="@color/colorGray"/>  <!-- background color -->
         </shape>
     </item>
 

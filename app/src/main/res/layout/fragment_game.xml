@@ -18,7 +18,7 @@
         <TextView
             style="@style/StyleFontLarge"
 
-            android:id="@+id/tv_remain"
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"

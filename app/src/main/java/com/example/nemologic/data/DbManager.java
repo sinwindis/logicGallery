@@ -1,6 +1,5 @@
 package com.example.nemologic.data;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -139,14 +138,14 @@ public class DbManager {
 
         mDbOpenHelper.close();
 
-        //카테고리 버전을 sharedPreferences에 업데이트 해준다.
+        //카테고리 버전을 sharedPreferences 에 업데이트 해준다.
         SharedPreferences.Editor editor = versionSavePref.edit();
         editor.putString("categoryVersion", version);
 
         editor.apply();
     }
 
-    public static void loadLevel(Context ctx)
+    public static void loadLevelFromXmlToDb(Context ctx)
     {
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
@@ -170,8 +169,6 @@ public class DbManager {
         String levelColor = "";
 
         String version = "0";
-        //.split("(?<=\\G.{4})")
-        //4칸 단위로 string split
 
         try {
             levelInputStream = ctx.getResources().openRawResource(R.raw.levels);
@@ -232,7 +229,10 @@ public class DbManager {
                         if(endTag.equals("level"))
                         {
                             //해당 레벨의 데이터를 db에 추가한다.
-                            mDbOpenHelper.insertLevel(levelName, categoryName, levelWidth, levelHeight, levelData, levelColor);
+
+                            byte[] dataSetBytes = CustomParser.parseDataSetStringToByteArray(levelData);
+                            byte[] colorSetBytes = CustomParser.parseColorSetStringToByteArray(levelColor, levelWidth, levelHeight);
+                            mDbOpenHelper.insertLevel(levelName, categoryName, levelWidth, levelHeight, dataSetBytes, colorSetBytes, 0);
                         }
                         break;
                 }

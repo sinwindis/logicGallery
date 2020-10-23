@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,8 +31,11 @@ public class GameFragment extends Fragment {
     LevelPlayManager lpm;
 
     GameBoard gameBoard;
+    
+    private TextView tv_title;
 
     private int id;
+    private int type;
 
     public GameFragment(Context ctx) {
         mainActivityContext = ctx;
@@ -55,31 +60,82 @@ public class GameFragment extends Fragment {
         //bundle 로 받은 id 를 저장한다.
         if(getArguments() != null){
             id = getArguments().getInt("id");
+            type = getArguments().getInt("type");
         }
 
-        //게임레벨과 카테고리의 이름을 이용해 db에서 데이터를 받아오고 이를 lpm 인스턴스에 대입한다.
-        Cursor levelCursor =  mDbOpenHelper.getLevelCursorById(id);
-        levelCursor.moveToNext();
+        //게임 타입에 따라 빅레벨 DB 에서 가져올지, 일반 레벨 DB 에서 가져올지 판단한다.
 
-        String category = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.CATEGORY));
-        String name = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.NAME));
-        int width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
-        int height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
-        int progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.PROGRESS));
-        String dataSet = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.DATASET));
-        String colorSet = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.COLORSET));
-        String saveData = "";
-        if(progress == 1)
-            saveData = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.SAVEDATA));
+        String category;
+        String name;
+        int width;
+        int height;
+        int progress;
+        int custom;
+        byte[] dataSet;
+        byte[] saveData;
+        
+        Cursor levelCursor;
+        if(type == 1)
+        {
+            levelCursor = mDbOpenHelper.getBigLevelsCursorById(id);
+            levelCursor.moveToNext();
 
-        if(progress != 2)
-            progress = 1;
+            category = "Big Puzzle";
 
-        lpm = new LevelPlayManager(id, category, name, progress, width, height, dataSet, saveData, colorSet);
+            int p_id = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
+
+            Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
+
+            bigPuzzleCursor.moveToNext();
+
+            name = bigPuzzleCursor.getString(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.NAME));
+            width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
+            height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
+            progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
+            custom = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.CUSTOM));
+            dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
+            saveData = new byte[0];
+            if(progress == 1)
+                saveData = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
+
+            if(progress != 2)
+                progress = 1;
+        }
+        else
+        {
+            levelCursor = mDbOpenHelper.getLevelCursorById(id);
+            levelCursor.moveToNext();
+
+            category = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.CATEGORY));
+            name = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.NAME));
+            width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
+            height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
+            progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.PROGRESS));
+            custom = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.CUSTOM));
+            dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.LevelDBSql.DATASET));
+            saveData = new byte[0];
+            if(progress == 1)
+                saveData = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.LevelDBSql.SAVEDATA));
+
+            if(progress != 2)
+                progress = 1;
+        }
+
+        lpm = new LevelPlayManager(id, category, name, progress, width, height, dataSet, saveData, type);
 
         mDbOpenHelper.close();
 
-        //gameBoard를 제작한다.
+        tv_title = fragmentView.findViewById(R.id.tv_title);
+        if(progress == 2 || custom == 1)
+        {
+            tv_title.setText(name);
+        }
+        else
+        {
+            tv_title.setText("???");
+        }
+
+        //gameBoard 를 제작한다.
         gameBoard = new GameBoard(mainActivityContext, fragmentView, lpm);
 
         gameBoard.makeGameBoard();

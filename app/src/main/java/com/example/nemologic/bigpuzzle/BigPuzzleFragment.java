@@ -3,7 +3,10 @@ package com.example.nemologic.bigpuzzle;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,19 +19,18 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
+import com.example.nemologic.data.BigPuzzleData;
 import com.example.nemologic.data.DbOpenHelper;
-import com.example.nemologic.data.LevelThumbnailData;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.level.LevelItemTouchListener;
-import com.example.nemologic.level.RvLevelAdapter;
 
 import java.sql.SQLException;
 
-public class BigFragment extends Fragment {
+public class BigPuzzleFragment extends Fragment {
 
     private Context ctx;
 
-    public BigFragment(Context ctx) {
+    public BigPuzzleFragment(Context ctx) {
         // Required empty public constructor
         this.ctx = ctx;
     }
@@ -38,19 +40,12 @@ public class BigFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View fragmentView = inflater.inflate(R.layout.fragment_level, container, false);
+        View fragmentView = inflater.inflate(R.layout.fragment_big, container, false);
 
-        final RecyclerView rv_level = fragmentView.findViewById(R.id.rv_level);
+        final RecyclerView rv_level = fragmentView.findViewById(R.id.rv_bigpuzzle);
 
-        String category = "";
-
-        if(getArguments() != null){
-            category = getArguments().getString("category"); // 전달한 key 값
-        }
-
-        TextView tv_categoryName = fragmentView.findViewById(R.id.tv_category_title);
-
-        tv_categoryName.setText(category);
+        TextView tv_title = fragmentView.findViewById(R.id.tv_category_title);
+        tv_title.setText(getResources().getString(R.string.str_big_puzzle));
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
@@ -59,31 +54,34 @@ public class BigFragment extends Fragment {
             e.printStackTrace();
         }
 
-
-        Cursor levelCursor =  mDbOpenHelper.getLevelCursorByCategory(category);
-        LevelThumbnailData[] levelThumbnailData = new LevelThumbnailData[levelCursor.getCount()];
+        Cursor bigPuzzleCursor =  mDbOpenHelper.getBigPuzzleCursor();
         int fullCount = 0;
         int clearCount = 0;
 
-        while(levelCursor.moveToNext()) {
+        BigPuzzleData[] bigPuzzleData = new BigPuzzleData[bigPuzzleCursor.getCount()];
 
-            int id = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.ID));
-            String name = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.NAME));
-            int width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
-            int height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
-            int progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.PROGRESS));
-            String dataSet = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.DATASET));
-            String colorSet = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.COLORSET));
-            String saveData = "";
-            if(progress == 1)
-                saveData = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.SAVEDATA));
+        while(bigPuzzleCursor.moveToNext()) {
 
-            levelThumbnailData[fullCount] = new LevelThumbnailData(id, category, name, width, height, progress, dataSet, saveData, colorSet);
+            int id = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.ID));
+            String name = bigPuzzleCursor.getString(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.NAME));
+            int width = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.WIDTH));
+            int height = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.HEIGHT));
+            int progress = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.PROGRESS));
+            byte[] colorSet = bigPuzzleCursor.getBlob(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.COLORSET));
+
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray( colorSet, 0, colorSet.length );
+
+            Log.d("BigPuzzleFrag", name);
+
+            bigPuzzleData[fullCount] = new BigPuzzleData(id, name, bitmap, width, height, progress);
+
             fullCount++;
             if(progress == 2)
             {
                 clearCount++;
             }
+
         }
         mDbOpenHelper.close();
 
@@ -92,7 +90,7 @@ public class BigFragment extends Fragment {
         int rowItemNum = 3;
 
         rv_level.setLayoutManager(new GridLayoutManager(ctx, rowItemNum));
-        rv_level.setAdapter(new RvBigPuzzleAdapter(ctx, levelThumbnailData, rowItemNum));
+        rv_level.setAdapter(new RvBigPuzzleAdapter(ctx, bigPuzzleData, rowItemNum));
 
 
         rv_level.addOnItemTouchListener(new LevelItemTouchListener("touchable") {
@@ -140,8 +138,6 @@ public class BigFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-
-
                 getFragmentManager().popBackStackImmediate();
             }
         });

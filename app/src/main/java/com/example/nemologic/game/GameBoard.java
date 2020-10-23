@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +14,12 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.data.LevelPlayManager;
+import com.example.nemologic.end.EndFragment;
 import com.example.nemologic.mainactivity.MainActivity;
 
 import java.util.Objects;
@@ -37,12 +38,19 @@ public class GameBoard {
     private View targetView;
 
     private RecyclerView rv_board;
+    private RecyclerView rv_column;
+    private RecyclerView rv_row;
 
     private GridLayoutManager glm;
+    private LinearLayoutManager columnLayoutManager;
+    private LinearLayoutManager rowLayoutManager;
     public LevelPlayManager lpm;
 
-    ColumnIndexViewMaker civm;
-    RowIndexViewMaker rivm;
+    private ColumnIndexDataManager columnIndexDataManager;
+    private RowIndexDataManager rowIndexDataManager;
+
+    private RvColumnAdapter rvColumnAdapter;
+    private RvRowAdapter rvRowAdapter;
 
     private TextView tv_stack;
     private TextView tv_count;
@@ -90,6 +98,8 @@ public class GameBoard {
     {
         dragTemp = new int[lpm.height][lpm.width];
         rv_board = targetView.findViewById(R.id.rv_board);
+        rv_row = targetView.findViewById(R.id.rv_row);
+        rv_column = targetView.findViewById(R.id.rv_column);
 
         cl_count = targetView.findViewById(R.id.cl_count);
         ll_drag = targetView.findViewById(R.id.ll_drag);
@@ -211,7 +221,7 @@ public class GameBoard {
         {
             for(int x = dragStartX; x <= dragEndX; x++)
             {
-                if(lpm.checkedSet[y][x] == lpm.checkedSet[touchStartY][touchStartX] && smartDrag)
+                if(lpm.checkedSet[y*lpm.width + x] == lpm.checkedSet[touchStartY * lpm.width + touchStartX] && smartDrag)
                 {
                     //본인이 처음 선택한 것이랑 현재 드래그된 칸이 똑같은 유형이라면
                     //dragTemp 에 해당 칸을 저장해 둔다.
@@ -252,7 +262,7 @@ public class GameBoard {
         ll_drag.setLayoutParams(new ConstraintLayout.LayoutParams(dragWidth, dragHeight));
     }
     
-    private void checkAutoX()
+    public void checkAutoX()
     {
         if(!autoX)
         {
@@ -263,16 +273,15 @@ public class GameBoard {
         //row 의 경우
         for(int row = 0; row < lpm.height; row++)
         {
-            Log.d("endRow", row+ "'th row: "  + rivm.rvRowAdapter.endRow[row]);
-            if(rivm.rvRowAdapter.endRow[row])
+            if(rowIndexDataManager.isIdxComplete[row])
             {
                 //해당 row 가 완성됐다면
-                for(int x = 0; x < lpm.width; x++)
+                for(int i = 0; i < lpm.width; i++)
                 {
-                    if(lpm.checkedSet[row][x] == 0)
+                    if(lpm.checkedSet[row * lpm.width + i] == 0)
                     {
                         //해당 칸이 공백이면 x로 채워준다.
-                        lpm.checkedSet[row][x] = 2;
+                        lpm.checkedSet[row * lpm.width + i] = 2;
                     }
                 }
             }
@@ -281,15 +290,15 @@ public class GameBoard {
         //column 의 경우
         for(int column = 0; column < lpm.width; column++)
         {
-            if(civm.rvColumnAdapter.endColumn[column])
+            if(columnIndexDataManager.isIdxComplete[column])
             {
                 //해당 column 가 완성됐다면
-                for(int x = 0; x < lpm.height; x++)
+                for(int i = 0; i < lpm.height; i++)
                 {
-                    if(lpm.checkedSet[x][column] == 0)
+                    if(lpm.checkedSet[i * lpm.width + column] == 0)
                     {
                         //해당 칸이 공백이면 x로 채워준다.
-                        lpm.checkedSet[x][column] = 2;
+                        lpm.checkedSet[i * lpm.width + column] = 2;
                     }
                 }
             }
@@ -310,15 +319,15 @@ public class GameBoard {
                 {
                     case 0:
                         //공백
-                        lpm.checkedSet[y][x] = 0;
+                        lpm.checkedSet[y * lpm.width + x] = 0;
                         break;
                     case 1:
                         //체크
-                        lpm.checkedSet[y][x] = 1;
+                        lpm.checkedSet[y * lpm.width + x] = 1;
                         break;
                     case 2:
                         //X
-                        lpm.checkedSet[y][x] = 2;
+                        lpm.checkedSet[y * lpm.width + x] = 2;
                         break;
                 }
             }
@@ -336,7 +345,7 @@ public class GameBoard {
         if(touchMode == 0)
         {
             //체크모드
-            if(lpm.checkedSet[y][x] == 1)
+            if(lpm.checkedSet[y * lpm.width + x] == 1)
             {
                 //체크 -> 공백
                 macroMode = 0;
@@ -350,7 +359,7 @@ public class GameBoard {
         else
         {
             //X모드
-            if(lpm.checkedSet[y][x] == 2)
+            if(lpm.checkedSet[y * lpm.width + x] == 2)
             {
                 //X -> 공백
                 macroMode = 0;
@@ -376,6 +385,7 @@ public class GameBoard {
         EndFragment endFragment = new EndFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("id", lpm.id);
+        bundle.putInt("type", lpm.type);
 
 
         endFragment.setArguments(bundle);
@@ -458,11 +468,11 @@ public class GameBoard {
     {
         for(int i = 0; i < lpm.width; i++)
         {
-            civm.rvColumnAdapter.updateNumColor(i, lpm.checkedSet);
+            rvColumnAdapter.refreshView(i);
         }
         for(int i = 0; i < lpm.height; i++)
         {
-            rivm.rvRowAdapter.updateNumColor(i, lpm.checkedSet);
+            rvRowAdapter.refreshView(i);
         }
     }
 
@@ -479,7 +489,7 @@ public class GameBoard {
                     continue;
                 }
 
-                switch(lpm.checkedSet[y][x])
+                switch(lpm.checkedSet[y * lpm.width + x])
                 {
                     case 0:
                         view.setImageDrawable(null);
@@ -536,7 +546,7 @@ public class GameBoard {
                 }
                 else if(dragTemp[y][x] == 2)
                 {
-                    switch(lpm.checkedSet[y][x])
+                    switch(lpm.checkedSet[y * lpm.width + x])
                     {
                         case 0:
                             view.setImageDrawable(null);
@@ -563,8 +573,10 @@ public class GameBoard {
         //로직 게임판을 만듭니다.
         //터치가 가능한 보드판 제작
         glm = new GridLayoutManager(targetView.getContext(), lpm.width);
+        columnLayoutManager = new LinearLayoutManager(targetView.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        rowLayoutManager = new LinearLayoutManager(targetView.getContext());
 
-        RvBoardAdapter rba = new RvBoardAdapter(lpm.checkedSet);
+        RvBoardAdapter rba = new RvBoardAdapter(lpm, autoX);
 
         rv_board.addItemDecoration(new GameBoardBorder(targetView.getContext(), R.drawable.border_gameboard_normal, R.drawable.border_gameboard_accent, lpm.width));
 
@@ -572,13 +584,20 @@ public class GameBoard {
         rv_board.addOnItemTouchListener(boardTouchListener);
         rv_board.setAdapter(rba);
 
-        civm = new ColumnIndexViewMaker(lpm.dataSet);
-        rivm = new RowIndexViewMaker(lpm.dataSet);
+        columnIndexDataManager = new ColumnIndexDataManager(lpm);
+        rowIndexDataManager = new RowIndexDataManager(lpm);
+        columnIndexDataManager.makeIdxDataSet();
+        rowIndexDataManager.makeIdxDataSet();
 
-        civm.setView(targetView);
-        rivm.setView(targetView);
+        rvColumnAdapter = new RvColumnAdapter(columnIndexDataManager);
+        rvRowAdapter = new RvRowAdapter(rowIndexDataManager);
 
+        rv_column.setLayoutManager(columnLayoutManager);
+        rv_row.setLayoutManager(rowLayoutManager);
+        rv_column.setAdapter(rvColumnAdapter);
+        rv_row.setAdapter(rvRowAdapter);
 
+        //버튼 클릭 리스너들
         img_toggle.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
             @Override
@@ -615,8 +634,6 @@ public class GameBoard {
 
             }
         });
-
-
 
         img_next.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("UseCompatLoadingForDrawables")

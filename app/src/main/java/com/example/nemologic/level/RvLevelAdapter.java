@@ -1,10 +1,12 @@
 package com.example.nemologic.level;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,7 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-import com.example.nemologic.data.StringParser;
+import com.example.nemologic.data.CustomParser;
 import com.example.nemologic.mainactivity.MainActivity;
 import com.example.nemologic.data.LevelThumbnailData;
 import com.example.nemologic.game.GameFragment;
@@ -57,8 +59,7 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
     @Override
     public void onBindViewHolder(RvLevelAdapter.ViewHolder holder, final int position) {
 
-        //레벨 아이템 이름 표시
-        ((TextView) holder.itemView.findViewById(R.id.tv_item_level_name)).setText(this.levels[position].getName());
+
 
         //레벨 아이템 사이즈 표시
         String temp = levels[position].getWidth() + "X" + levels[position].getHeight();
@@ -66,22 +67,37 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
         ((TextView)holder.itemView.findViewById(R.id.tv_item_level_size)).setText(temp);
 
         //레벨 아이템 진행 상황 표시
-        RecyclerView rv_board = holder.itemView.findViewById(R.id.rv_level_board);
-        rv_board.setLayoutManager(new GridLayoutManager(ctx, levels[position].getWidth()));
-        if(levels[position].getProgress() == 1)
+        ImageView iv_thumbnail = holder.itemView.findViewById(R.id.iv_thumbnail);
+
+        Bitmap scaledBitmap;
+
+        switch (levels[position].getProgress())
         {
-            //저장된 게임이면
-            //세이브데이터를 가져온다
-            rv_board.setAdapter(new RvLevelBoardAdapter(StringParser.getParsedSaveData(levels[position].getSaveData(), levels[position].getWidth(), levels[position].getHeight())));
-        }
-        else if(levels[position].getProgress() == 2)
-        {
-            //완료한 게임이면
-            //컬러셋을 가져온다
-            rv_board.setAdapter(new RvLevelBoardAdapter(StringParser.getParsedColorSet(levels[position].getColorSet(), levels[position].getWidth(), levels[position].getHeight())));
+            case 0:
+                //한번도 안한 게임이면
+                //물음표 이미지를 띄운다.
+                iv_thumbnail.setImageBitmap(null);
+
+                ((TextView) holder.itemView.findViewById(R.id.tv_item_level_name)).setText("???");
+                break;
+            case 1:
+                //저장된 게임이면
+                //세이브데이터를 가져온다
+                scaledBitmap = Bitmap.createScaledBitmap(levels[position].getSaveBitmap(), 100, 100, false);
+                iv_thumbnail.setImageBitmap(scaledBitmap);
+
+                ((TextView) holder.itemView.findViewById(R.id.tv_item_level_name)).setText("???");
+                break;
+            case 2:
+                //완료한 게임이면
+                //컬러셋을 가져온다
+                scaledBitmap = Bitmap.createScaledBitmap(levels[position].getColorBitmap(), 100, 100, false);
+                iv_thumbnail.setImageBitmap(scaledBitmap);
+
+                //레벨 아이템 이름 표시
+                ((TextView) holder.itemView.findViewById(R.id.tv_item_level_name)).setText(this.levels[position].getName());
         }
 
-        final View itemView = holder.itemView;
 
         holder.itemView.findViewById(R.id.cl_touchbox).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +107,7 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
                 // Fragment 생성
                 Bundle bundle = new Bundle();
                 bundle.putInt("id", levels[position].getId());
+                bundle.putInt("type", levels[position].getType());
                 dest.setArguments(bundle);
                 ((MainActivity)ctx).fragmentMove(dest);
             }

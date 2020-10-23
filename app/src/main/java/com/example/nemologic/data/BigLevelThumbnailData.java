@@ -2,15 +2,11 @@ package com.example.nemologic.data;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
-import java.util.Arrays;
-
-public class LevelThumbnailData {
+public class BigLevelThumbnailData {
 
     private int id;
     private String name;
-    private String category;
     private int width;
     private int height;
     private int progress;
@@ -18,21 +14,16 @@ public class LevelThumbnailData {
     private byte[] saveData;
     private Bitmap colorBitmap;
     private Bitmap saveBitmap;
-    private int type;
-    private int custom;
 
 
-    public LevelThumbnailData(int id, String category, String name, int width, int height, int progress, byte[] dataSet, byte[] saveData, byte[] colorSet, int type, int custom)
+    public BigLevelThumbnailData(int id, String name, int width, int height, int progress, byte[] dataSet, byte[] saveData, byte[] colorSet)
     {
         this.id = id;
-        this.category = category;
         this.name = name;
         this.width = width;
         this.height = height;
         this.dataSet = dataSet;
         this.progress = progress;
-        this.type = type;
-        this.custom = custom;
         if(progress == 1)
         {
             //예전에 플레이하던 레벨의 경우에만 세이브데이터를 파싱해서 저장한다.
@@ -60,25 +51,10 @@ public class LevelThumbnailData {
             saveBitmap = Bitmap.createBitmap(intColorData, width, height, Bitmap.Config.RGB_565);
         }
 
-        colorBitmap = BitmapFactory.decodeByteArray( colorSet, 0, colorSet.length);
-    }
-
-    public void showDataLog()
-    {
-        Log.d("LevelThumbnailData", "id: " + id);
-        Log.d("LevelThumbnailData", "name: " + name);
-        Log.d("LevelThumbnailData", "category: " + category);
-        Log.d("LevelThumbnailData", "width: " + width);
-        Log.d("LevelThumbnailData", "height: " + height);
-        Log.d("LevelThumbnailData", "progress: " + progress);
-        Log.d("LevelThumbnailData", "dataSet: " + Arrays.toString(dataSet));
-        Log.d("LevelThumbnailData", "saveData: " + Arrays.toString(saveData));
-        Log.d("LevelThumbnailData", "colorBitmap: " + colorBitmap);
-        Log.d("LevelThumbnailData", "saveBitmap: " + saveBitmap);
+        colorBitmap = BitmapFactory.decodeByteArray( colorSet, 0, colorSet.length );
     }
 
     public int getId() {return this.id;}
-    public String getCategory() {return this.category;}
 
     public String getName()
     {
@@ -88,8 +64,6 @@ public class LevelThumbnailData {
     public int getProgress() {return this.progress;}
     public int getWidth() {return this.width;}
     public int getHeight() {return this.height;}
-    public int getType() { return this.type; }
-    public int getCustom() {return this.custom;}
     public byte[] getSaveData() {return this.saveData;}
     public Bitmap getSaveBitmap() {
         if(progress == 1)

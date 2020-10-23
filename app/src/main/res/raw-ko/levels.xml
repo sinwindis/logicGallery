@@ -6,20 +6,10 @@
         <cname>동물</cname>
         <width>5</width>
         <height>5</height>
-        <data>0 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 1 1 1 0 0 0 0 0 0</data>
-        <color>ffffff ffffff ffffff ffffff ffffff ffffff 804040 ffffff 804040 ffffff ffffff 804040 804040 804040 ffffff ffffff 804040 804040 804040 ffffff ffffff ffffff ffffff ffffff ffffff</color>
-
+        <data>0000001010011100111000000</data>
+        <color>ffffffffffffffffffffffffffffffffffff804040ffffff804040ffffffffffff804040804040804040ffffffffffff804040804040804040ffffffffffffffffffffffffffffffffffff</color>
     </level>
 
-    <level>
-        <lname>토끼2</lname>
-        <cname>동물</cname>
-        <width>5</width>
-        <height>5</height>
-        <data>0 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0 1 1 1 0 0 0 0 0 0</data>
-        <color>ffffff ffffff ffffff ffffff ffffff ffffff 804040 ffffff 804040 ffffff ffffff 804040 804040 804040 ffffff ffffff 804040 804040 804040 ffffff ffffff ffffff ffffff ffffff ffffff</color>
-
-    </level>
 
     <version>0.1</version>
 </resources>
