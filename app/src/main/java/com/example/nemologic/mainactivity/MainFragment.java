@@ -15,8 +15,6 @@ import android.widget.ImageView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.bigpuzzle.BigPuzzleFragment;
@@ -26,7 +24,6 @@ import com.example.nemologic.data.DbManager;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelThumbnailData;
 import com.example.nemologic.data.SqlManager;
-import com.example.nemologic.data.CustomParser;
 import com.example.nemologic.game.GameFragment;
 import com.example.nemologic.levelcreate.LevelCreateFragment;
 import com.example.nemologic.option.OptionDialog;
@@ -173,7 +170,7 @@ public class MainFragment extends Fragment {
             public void onClick(View view) {
                 OptionDialog optionDialog = new OptionDialog();
 
-                optionDialog.makeOptionDialog(getActivity());
+                optionDialog.makeDialog(getActivity());
                 optionDialog.dialog.show();
             }
         });
@@ -226,6 +223,7 @@ public class MainFragment extends Fragment {
 
                     Bundle bundle = new Bundle();
                     bundle.putInt("id", lastPlayId);
+                    bundle.putInt("type", type);
                     gameFragment.setArguments(bundle);
 
                     ((MainActivity)ctx).fragmentMove(gameFragment);

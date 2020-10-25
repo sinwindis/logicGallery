@@ -5,9 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nemologic.R;
 import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.end.EndFragment;
+import com.example.nemologic.listener.BoardItemTouchListener;
 import com.example.nemologic.mainactivity.MainActivity;
 
 import java.util.Objects;
@@ -28,12 +28,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class GameBoard {
 
-    SharedPreferences optionPref;
+
     boolean smartDrag;
     boolean oneLineDrag;
     boolean autoX;
 
-    Context mainActivityContext;
+    Context ctx;
 
     private View targetView;
 
@@ -53,66 +53,79 @@ public class GameBoard {
     private RvRowAdapter rvRowAdapter;
 
     private TextView tv_stack;
+    private TextView tv_hint;
     private TextView tv_count;
 
     private ConstraintLayout cl_count;
     private LinearLayout ll_drag;
-
-    private ImageView img_toggle;
-    private ImageView img_prev;
-    private ImageView img_next;
-    private ImageView img_hint;
-    private ImageView img_tutorial;
 
     int touchStartX;
     int touchStartY;
     int touchEndX;
     int touchEndY;
 
-    int[][] dragTemp;
+    int hintCount;
 
+    float viewSize;
 
-    //0: 체크, 1: X
+    boolean[][] dragTemp;
+    boolean[][] dragIndexTemp;
+    boolean[][] hint;
+
+    //0: 체크, 1: X, 2: 힌트
     int touchMode = 0;
-    //0: 공백 1: 체크 2: X
+    //0: 공백 1: 체크 2: X 3: 힌트(정답)
     int macroMode = 0;
     
     public GameBoard(Context ctx, View view, LevelPlayManager lpm)
     {
         targetView = view;
         this.lpm = lpm;
-        mainActivityContext = ctx;
+        this.ctx = ctx;
 
         initialize();
     }
 
-    public void loadOption()
+    public void saveGame()
     {
-        optionPref = targetView.getContext().getSharedPreferences("OPTION", MODE_PRIVATE);
-        smartDrag = optionPref.getBoolean("smartDrag", true);
-        oneLineDrag = optionPref.getBoolean("oneLineDrag", true);
-        autoX = optionPref.getBoolean("autoX", false);
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
+        lpm.savePlayData(ctx);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt("hint", hintCount);
+        editor.apply();
+    }
+
+    public void loadPref()
+    {
+        //option preferences
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences("OPTION", MODE_PRIVATE);
+        smartDrag = sharedPreferences.getBoolean("smartDrag", true);
+        oneLineDrag = sharedPreferences.getBoolean("oneLineDrag", true);
+        autoX = sharedPreferences.getBoolean("autoX", false);
+
+        //hint properties
+        sharedPreferences = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
+        hintCount = sharedPreferences.getInt("hint", 3);
     }
 
     private void initialize()
     {
-        dragTemp = new int[lpm.height][lpm.width];
+        dragTemp = new boolean[lpm.height][lpm.width];
+        dragIndexTemp = new boolean[lpm.height][lpm.width];
+        hint = new boolean[lpm.height][lpm.width];
         rv_board = targetView.findViewById(R.id.rv_board);
         rv_row = targetView.findViewById(R.id.rv_row);
         rv_column = targetView.findViewById(R.id.rv_column);
 
         cl_count = targetView.findViewById(R.id.cl_count);
         ll_drag = targetView.findViewById(R.id.ll_drag);
-        img_toggle = targetView.findViewById(R.id.img_toggle);
-        img_prev = targetView.findViewById(R.id.img_prevstack);
-        img_next = targetView.findViewById(R.id.img_nextstack);
-        img_hint = targetView.findViewById(R.id.img_hint);
-        img_tutorial = targetView.findViewById(R.id.img_tutorial);
 
         tv_count = targetView.findViewById(R.id.tv_count);
         tv_stack = targetView.findViewById(R.id.tv_stack);
+        tv_hint = targetView.findViewById(R.id.tv_hint);
 
-        loadOption();
+        loadPref();
     }
 
 
@@ -123,7 +136,8 @@ public class GameBoard {
         {
             for(int x = 0; x < lpm.width; x++)
             {
-                dragTemp[y][x] = 0;
+                dragTemp[y][x] = false;
+                dragIndexTemp[y][x] = false;
             }
         }
 
@@ -209,11 +223,11 @@ public class GameBoard {
         //마지막 드래그한 칸의 가로줄과 세로줄에 하이라이트를 해 준다.
         for(int y = 0; y < lpm.height; y++)
         {
-            dragTemp[y][lastX] = 2;
+            dragIndexTemp[y][lastX] = true;
         }
         for(int x = 0; x < lpm.width; x++)
         {
-            dragTemp[lastY][x] = 2;
+            dragIndexTemp[lastY][x] = true;
         }
 
 
@@ -221,16 +235,16 @@ public class GameBoard {
         {
             for(int x = dragStartX; x <= dragEndX; x++)
             {
-                if(lpm.checkedSet[y*lpm.width + x] == lpm.checkedSet[touchStartY * lpm.width + touchStartX] && smartDrag)
+                if(!smartDrag)
+                {
+                    //스마트드래그가 꺼져 있다면 드래그한 모든 칸을 dragTemp 에 저장한다.
+                    dragTemp[y][x] = true;
+                }
+                else if(lpm.checkedSet[y*lpm.width + x] == lpm.checkedSet[touchStartY * lpm.width + touchStartX])
                 {
                     //본인이 처음 선택한 것이랑 현재 드래그된 칸이 똑같은 유형이라면
                     //dragTemp 에 해당 칸을 저장해 둔다.
-                    dragTemp[y][x] = 1;
-                }
-                else if(!smartDrag)
-                {
-                    //스마트드래그가 꺼져 있다면 드래그한 모든 칸을 dragTemp 에 저장한다.
-                    dragTemp[y][x] = 1;
+                    dragTemp[y][x] = true;
                 }
             }
         }
@@ -238,12 +252,13 @@ public class GameBoard {
         {
             tv_count.setText(String.valueOf(dragCount));
             View firstTouchView = glm.findViewByPosition(touchStartY * lpm.width + touchStartX);
+
             assert firstTouchView != null;
 
-            cl_count.setX(firstTouchView.getX());
-            cl_count.setY(firstTouchView.getY());
+            cl_count.setX((float) (firstTouchView.getX() + viewSize*0.1));
+            cl_count.setY((float) (firstTouchView.getY() + viewSize*0.1));
 
-            cl_count.setLayoutParams(new ConstraintLayout.LayoutParams(100, 100));
+            cl_count.setLayoutParams(new ConstraintLayout.LayoutParams((int)viewSize, (int)viewSize));
         }
 
 
@@ -305,30 +320,42 @@ public class GameBoard {
         }
     }
 
-    private void setDragChecked()
+    private void setData()
     {
-        //dragTemp의 데이터를 checkedSet에 저장해 줌
+        //드래그한 내용을 dataSet 에 저장해 줌
 
         for(int y = 0; y < lpm.height; y++)
         {
             for(int x = 0; x < lpm.width; x++)
             {
-                if(dragTemp[y][x] != 1)
-                    continue;
-                switch(macroMode)
+                if(dragTemp[y][x] && !hint[y][x])
                 {
-                    case 0:
-                        //공백
-                        lpm.checkedSet[y * lpm.width + x] = 0;
-                        break;
-                    case 1:
-                        //체크
-                        lpm.checkedSet[y * lpm.width + x] = 1;
-                        break;
-                    case 2:
-                        //X
-                        lpm.checkedSet[y * lpm.width + x] = 2;
-                        break;
+                    switch(macroMode)
+                    {
+                        case 0:
+                            //공백
+                            lpm.checkedSet[y * lpm.width + x] = 0;
+                            break;
+                        case 1:
+                            //체크
+                            lpm.checkedSet[y * lpm.width + x] = 1;
+                            break;
+                        case 2:
+                            //X
+                            lpm.checkedSet[y * lpm.width + x] = 2;
+                            break;
+                        case 3:
+                            //힌트
+                            if(hintCount > 0)
+                            {
+                                hint[y][x] = true;
+                                lpm.checkedSet[y * lpm.width + x] = lpm.dataSet[y * lpm.width + x];
+                                hintCount--;
+                            }
+
+                            break;
+
+                    }
                 }
             }
         }
@@ -356,7 +383,7 @@ public class GameBoard {
                 macroMode = 1;
             }
         }
-        else
+        else if(touchMode == 1)
         {
             //X모드
             if(lpm.checkedSet[y * lpm.width + x] == 2)
@@ -370,13 +397,19 @@ public class GameBoard {
                 macroMode = 2;
             }
         }
+        else if(touchMode == 2)
+        {
+            //hint 모드
+            macroMode = 3;
+        }
     }
 
-    private void showStackNum()
+    private void setText()
     {
         String str_stack = lpm.getStackNum() + "/" + lpm.getStackMaxNum();
 
         tv_stack.setText(str_stack);
+        tv_hint.setText(String.valueOf(hintCount));
     }
 
     private void moveToEndFragment()
@@ -390,24 +423,24 @@ public class GameBoard {
 
         endFragment.setArguments(bundle);
 
-        ((MainActivity)mainActivityContext).fragmentMoveNoStack(endFragment);
+        ((MainActivity) ctx).fragmentMoveNoStack(endFragment);
     }
 
     private void setGameEnd()
     {
         lpm.progress = 2;
-        lpm.savePlayData(mainActivityContext);
+        saveGame();
     }
 
 
     private void clickUpAction()
     {
-        setDragChecked();
+        setData();
         removeDragTemp();
-        lpm.pushCheckStack();
         updateNumColor();
         checkAutoX();
-        showStackNum();
+        lpm.pushCheckStack();
+        setText();
         refreshBoard();
 
         if(lpm.isGameEnd())
@@ -421,6 +454,13 @@ public class GameBoard {
     {
         touchEndX = pos % lpm.width;
         touchEndY = pos / lpm.width;
+
+        View firstTouchView = glm.findViewByPosition(pos);
+
+        assert firstTouchView != null;
+        viewSize = Math.min(firstTouchView.getMeasuredHeight(), firstTouchView.getMeasuredHeight());
+
+        viewSize *= 0.8;
 
         dragManage();
         refreshBoard();
@@ -489,21 +529,41 @@ public class GameBoard {
                     continue;
                 }
 
-                switch(lpm.checkedSet[y * lpm.width + x])
+                if(hint[y][x])
                 {
-                    case 0:
-                        view.setImageDrawable(null);
-                        view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                        break;
-                    case 1:
-                        view.setImageDrawable(null);
-                        view.setBackgroundColor(Color.parseColor("#000000"));
-                        break;
-                    case 2:
-                        view.setImageResource(R.drawable.background_x);
-                        view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                        break;
+                    switch(lpm.checkedSet[y * lpm.width + x])
+                    {
+                        case 0:
+                        case 2:
+                            view.setImageResource(R.drawable.background_x);
+                            view.setBackgroundColor(Color.parseColor("#c0c0c0"));
+                            break;
+                        case 1:
+                            view.setImageDrawable(null);
+                            view.setBackgroundColor(Color.parseColor("#404040"));
+                            break;
+                    }
                 }
+                else
+                {
+                    switch(lpm.checkedSet[y * lpm.width + x])
+                    {
+                        case 0:
+                            view.setImageDrawable(null);
+                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            break;
+                        case 1:
+                            view.setImageDrawable(null);
+                            view.setBackgroundColor(Color.parseColor("#000000"));
+                            break;
+                        case 2:
+                            view.setImageResource(R.drawable.background_x);
+                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                            break;
+                    }
+                }
+
+
 
             }
         }
@@ -521,30 +581,52 @@ public class GameBoard {
                     continue;
                 }
 
-
-                if(dragTemp[y][x] == 1)
+                if(dragTemp[y][x])
                 {
-                    //dragTemp가 1인 경우 드래그된 칸은 macroMode에 맞게 그래픽을 갱신해 준다.
-                    switch(macroMode)
+                    //dragTemp 가 true 인 경우 드래그된 칸은 macroMode 에 맞게 그래픽을 갱신해 준다.
+                    //만약 dragIndexTemp 또한 true 일 경우 드래그인덱스 그래픽을 표시, 이외에는 일반 그래픽 표시
+                    if(dragIndexTemp[y][x])
                     {
-                        case 0:
-                            //공백
-                            view.setImageDrawable(null);
-                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            break;
-                        case 1:
-                            //체크
-                            view.setImageDrawable(null);
-                            view.setBackgroundColor(Color.parseColor("#000000"));
-                            break;
-                        case 2:
-                            //X
-                            view.setImageResource(R.drawable.background_x);
-                            view.setBackgroundColor(Color.parseColor("#ffffff"));
-                            break;
+                        switch(macroMode)
+                        {
+                            case 0:
+                                view.setImageDrawable(null);
+                                view.setBackgroundColor(Color.parseColor("#82C3FF"));
+                                break;
+                            case 1:
+                                view.setImageDrawable(null);
+                                view.setBackgroundColor(Color.parseColor("#406F9A"));
+                                break;
+                            case 2:
+                                view.setImageResource(R.drawable.background_x);
+                                view.setBackgroundColor(Color.parseColor("#82C3FF"));
+                                break;
+                        }
                     }
+                    else
+                    {
+                        switch(macroMode)
+                        {
+                            case 0:
+                                //공백
+                                view.setImageDrawable(null);
+                                view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                break;
+                            case 1:
+                                //체크
+                                view.setImageDrawable(null);
+                                view.setBackgroundColor(Color.parseColor("#000000"));
+                                break;
+                            case 2:
+                                //X
+                                view.setImageResource(R.drawable.background_x);
+                                view.setBackgroundColor(Color.parseColor("#ffffff"));
+                                break;
+                        }
+                    }
+
                 }
-                else if(dragTemp[y][x] == 2)
+                else if(dragIndexTemp[y][x])
                 {
                     switch(lpm.checkedSet[y * lpm.width + x])
                     {
@@ -576,7 +658,7 @@ public class GameBoard {
         columnLayoutManager = new LinearLayoutManager(targetView.getContext(), LinearLayoutManager.HORIZONTAL, false);
         rowLayoutManager = new LinearLayoutManager(targetView.getContext());
 
-        RvBoardAdapter rba = new RvBoardAdapter(lpm, autoX);
+        RvBoardAdapter rba = new RvBoardAdapter(lpm.width, lpm.height);
 
         rv_board.addItemDecoration(new GameBoardBorder(targetView.getContext(), R.drawable.border_gameboard_normal, R.drawable.border_gameboard_accent, lpm.width));
 
@@ -597,160 +679,70 @@ public class GameBoard {
         rv_column.setAdapter(rvColumnAdapter);
         rv_row.setAdapter(rvRowAdapter);
 
-        //버튼 클릭 리스너들
-        img_toggle.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
+        rv_board.post(new Runnable() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                switch (motionEvent.getActionMasked())
-                {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow));
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        view.setBackground(null);
-                        break;
-                }
-
-                return false;
-            }
-        });
-
-        img_toggle.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(touchMode == 0)
-                {
-                    touchMode = 1;
-                    img_toggle.setImageResource(R.drawable.background_btn_x);
-                }
-                else
-                {
-                    touchMode = 0;
-                    img_toggle.setImageResource(R.drawable.background_btn_o);
-                }
-
-            }
-        });
-
-        img_next.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                switch (motionEvent.getActionMasked())
-                {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow));
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        view.setBackground(null);
-                        break;
-                }
-
-                return false;
-            }
-        });
-
-        img_next.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                lpm.nextCheckStack();
-
+            public void run() {
+                checkAutoX();
                 refreshBoard();
-                updateNumColor();
-                showStackNum();
             }
         });
-
-        img_prev.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("UseCompatLoadingForDrawables")
+        rv_column.post(new Runnable() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                switch (motionEvent.getActionMasked())
+            public void run() {
+                for(int i = 0; i < lpm.width; i++)
                 {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow));
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        view.setBackground(null);
-                        break;
+                    rvColumnAdapter.refreshView(i);
                 }
-
-                return false;
             }
         });
 
-        img_prev.setOnClickListener(new Button.OnClickListener() {
+        rv_row.post(new Runnable() {
             @Override
-            public void onClick(View view) {
-                lpm.prevCheckStack();
-
-                refreshBoard();
-                updateNumColor();
-                showStackNum();
-            }
-        });
-
-        //힌트 버튼
-        img_hint.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                switch (motionEvent.getActionMasked())
+            public void run() {
+                for(int i = 0; i < lpm.height; i++)
                 {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow));
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        view.setBackground(null);
-                        break;
+                    rvRowAdapter.refreshView(i);
                 }
-
-                return false;
             }
         });
 
-        img_hint.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
+        setText();
+    }
 
-        //튜토리얼 버튼
+    public int func_toggle()
+    {
+        if(touchMode == 0)
+        {
+            touchMode = 1;
+        }
+        else
+        {
+            touchMode = 0;
+        }
 
-        img_tutorial.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+        return touchMode;
+    }
 
-                switch (motionEvent.getActionMasked())
-                {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setBackground(mainActivityContext.getResources().getDrawable(R.drawable.background_btn_shadow));
-                        break;
+    public void func_hint()
+    {
+        touchMode = 2;
+    }
 
-                    case MotionEvent.ACTION_UP:
-                        view.setBackground(null);
-                        break;
-                }
+    public void func_nextStack()
+    {
+        lpm.nextCheckStack();
 
-                return false;
-            }
-        });
+        refreshBoard();
+        updateNumColor();
+        setText();
+    }
 
-        img_tutorial.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
+    public void func_prevStack()
+    {
+        lpm.prevCheckStack();
+
+        refreshBoard();
+        updateNumColor();
+        setText();
     }
 }

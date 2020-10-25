@@ -61,27 +61,28 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
         ImageView iv = holder.itemView.findViewById(R.id.iv_item_level);
-        Bitmap bitmap = null;
+        Bitmap bitmap;
 
         switch (data[position].getProgress())
         {
             case 0:
                 //한번도 안했으면
                 //물음표 이미지 띄우기
+                iv.setImageResource(R.drawable.ic_unknown);
                 break;
             case 1:
                 //저장된 게임일 경우
-                bitmap = data[position].getSaveBitmap();
-                bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
+                bitmap = Bitmap.createScaledBitmap(data[position].getSaveBitmap(), 100, 100, false);
+                iv.setImageBitmap(bitmap);
                 break;
             case 2:
                 //완료한 게임일 경우
-                bitmap = data[position].getColorBitmap();
-                bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
+                bitmap = Bitmap.createScaledBitmap(data[position].getColorBitmap(), 100, 100, false);
+                iv.setImageBitmap(bitmap);
                 break;
         }
 
-        iv.setImageBitmap(bitmap);
+
 
 
         iv.setOnClickListener(new View.OnClickListener() {

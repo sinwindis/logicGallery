@@ -1,30 +1,26 @@
-package com.example.nemologic.option;
+package com.example.nemologic.tutorial;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nemologic.R;
-import com.example.nemologic.mainactivity.MainActivity;
-
-import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class OptionDialog {
+public class TutorialDialog {
 
     public AlertDialog dialog;
 
-    public OptionDialog()
+    private TextView tv_tutorial;
+
+    public TutorialDialog()
     {
 
     }
@@ -34,7 +30,7 @@ public class OptionDialog {
         final Activity finalActivity = activity;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = activity.getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_option, null);
+        View view = inflater.inflate(R.layout.dialog_tutorial, null);
         builder.setView(view);
 
         final CheckBox cb_smartDrag = view.findViewById(R.id.cb_smartdrag);

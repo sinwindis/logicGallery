@@ -1,8 +1,7 @@
-package com.example.nemologic.game;
+package com.example.nemologic.tutorial;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-import com.example.nemologic.data.LevelPlayManager;
 
-public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHolder> {
+public class RvTutorialBoardAdapter extends RecyclerView.Adapter<RvTutorialBoardAdapter.ViewHolder> {
 
     int height;
     int width;
-    byte[] checkedSet;
-    float heightUnder = 0;
-    int heightOffset = 0;
-    int widthCount = 0;
+    private float heightUnder = 0;
+    private int heightOffset = 0;
+    private int widthCount = 0;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ViewHolder(View itemView) {
             super(itemView) ;
@@ -33,7 +30,7 @@ public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHold
         }
     }
 
-    RvBoardAdapter(int width, int height) {
+    RvTutorialBoardAdapter(int width, int height) {
         //생성자
         this.height = height;
         this.width = width;
@@ -42,7 +39,7 @@ public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHold
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @NonNull
     @Override
-    public RvBoardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RvTutorialBoardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext() ;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
@@ -62,7 +59,7 @@ public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHold
             }
         }
 
-        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.width + 1, parent.getMeasuredHeight()/this.height + heightOffset));
+        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.width + 2, parent.getMeasuredHeight()/this.height + heightOffset));
 
         heightOffset = 0;
         widthCount++;
@@ -72,8 +69,11 @@ public class RvBoardAdapter extends RecyclerView.Adapter<RvBoardAdapter.ViewHold
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
-    public void onBindViewHolder(@NonNull RvBoardAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RvTutorialBoardAdapter.ViewHolder holder, int position) {
 
+        ImageView iv = (ImageView) holder.itemView;
+
+        iv.setBackgroundColor(Integer.parseInt("FFFFFF", 16));
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.

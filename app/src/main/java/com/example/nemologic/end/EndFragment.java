@@ -97,6 +97,7 @@ public class EndFragment extends Fragment {
             Cursor levelCursor =  mDbOpenHelper.getLevelCursorById(id);
             levelCursor.moveToNext();
 
+            name = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.NAME));
             width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
             height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
             colorSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.LevelDBSql.COLORSET));

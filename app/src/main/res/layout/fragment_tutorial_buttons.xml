@@ -10,7 +10,6 @@
         android:id="@+id/cl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_topboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -49,17 +48,6 @@
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageView
-            android:id="@+id/img_tutorial"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:padding="5dp"
-            android:layout_margin="15dp"
-            android:src="@drawable/ic_tutorial"
-            app:layout_constraintEnd_toStartOf="@id/img_option"
-            app:layout_constraintTop_toTopOf="parent"
-            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -156,12 +144,12 @@
                 android:id="@+id/cl_count"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@drawable/background_cl_count"
+                android:background="@drawable/background_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    style="@style/StyleFontSmall"
+                    style="@style/StyleFontMedium"
 
                     android:id="@+id/tv_count"
                     android:layout_width="wrap_content"
@@ -184,122 +172,88 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="160dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/background_touchboard"
         >
-        
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_stack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-
-            android:background="@drawable/background_cl_stack"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/img_toggle"
-            app:layout_constraintBottom_toBottomOf="@id/img_toggle">
-
-            <TextView
-                style="@style/StyleFontMedium"
-
-                android:id="@+id/tv_stack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/img_prevstack"/>
-
-            <ImageView
-                android:id="@+id/img_nextstack"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="15dp"
-                android:layout_margin="2dp"
-                android:src="@drawable/ic_next"
-                android:background="@drawable/background_btn_normal"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/img_prevstack"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
-
-            <ImageView
-                android:id="@+id/img_prevstack"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="15dp"
-                android:layout_margin="2dp"
-                android:src="@drawable/ic_prev"
-                android:background="@drawable/background_btn_normal"
-                app:layout_constraintEnd_toStartOf="@id/img_nextstack"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
             android:id="@+id/img_toggle"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:padding="15dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="20dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
             android:src="@drawable/background_btn_o"
-            android:background="@drawable/background_btn_normal"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ImageView
+            android:id="@+id/img_nextstack"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_next"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img_prevstack"
+            app:layout_constraintTop_toTopOf="@id/img_toggle"
+            app:layout_constraintBottom_toBottomOf="@id/img_toggle"
+            />
+
+        <ImageView
+            android:id="@+id/img_prevstack"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_prev"
+            app:layout_constraintEnd_toStartOf="@id/img_nextstack"
+            app:layout_constraintStart_toEndOf="@id/img_toggle"
+            app:layout_constraintTop_toTopOf="@id/img_toggle"
+            app:layout_constraintBottom_toBottomOf="@id/img_toggle"
+            />
+
+        <ImageView
+            android:id="@+id/img_tutorial"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_tutorial"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/img_hint"
+            app:layout_constraintTop_toTopOf="@id/img_toggle"
+            app:layout_constraintBottom_toBottomOf="@id/img_toggle"
+            />
+
+        <ImageView
+            android:id="@+id/img_hint"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_hint"
+            app:layout_constraintEnd_toStartOf="@id/img_toggle"
+            app:layout_constraintStart_toEndOf="@id/img_tutorial"
+            app:layout_constraintTop_toTopOf="@id/img_toggle"
+            app:layout_constraintBottom_toBottomOf="@id/img_toggle"
+            />
+
+        <TextView
+            style="@style/StyleFontLarge"
+
+            android:id="@+id/tv_stack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:background="@drawable/background_cl_hint"
+            android:paddingBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_toggle"
-            app:layout_constraintBottom_toBottomOf="@id/img_toggle"
-            >
-
-            <TextView
-                style="@style/StyleFontMedium"
-
-                android:id="@+id/tv_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <ImageView
-                android:id="@+id/img_hint"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:padding="15dp"
-                android:layout_margin="2dp"
-                android:src="@drawable/ic_hint"
-                android:background="@drawable/background_btn_normal"
-
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_hint"
-
-                />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
+            app:layout_constraintBottom_toTopOf="@id/img_prevstack"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

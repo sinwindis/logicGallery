@@ -77,13 +77,14 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
                 //한번도 안한 게임이면
                 //물음표 이미지를 띄운다.
                 iv_thumbnail.setImageBitmap(null);
+                iv_thumbnail.setImageResource(R.drawable.ic_unknown);
 
                 ((TextView) holder.itemView.findViewById(R.id.tv_item_level_name)).setText("???");
                 break;
             case 1:
                 //저장된 게임이면
                 //세이브데이터를 가져온다
-                scaledBitmap = Bitmap.createScaledBitmap(levels[position].getSaveBitmap(), 100, 100, false);
+                scaledBitmap = Bitmap.createScaledBitmap(levels[position].getSaveBitmap(), 200, 200, false);
                 iv_thumbnail.setImageBitmap(scaledBitmap);
 
                 ((TextView) holder.itemView.findViewById(R.id.tv_item_level_name)).setText("???");
@@ -91,7 +92,7 @@ public class RvLevelAdapter extends RecyclerView.Adapter<RvLevelAdapter.ViewHold
             case 2:
                 //완료한 게임이면
                 //컬러셋을 가져온다
-                scaledBitmap = Bitmap.createScaledBitmap(levels[position].getColorBitmap(), 100, 100, false);
+                scaledBitmap = Bitmap.createScaledBitmap(levels[position].getColorBitmap(), 200, 200, false);
                 iv_thumbnail.setImageBitmap(scaledBitmap);
 
                 //레벨 아이템 이름 표시

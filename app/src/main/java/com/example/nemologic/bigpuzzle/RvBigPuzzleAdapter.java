@@ -80,6 +80,7 @@ public class RvBigPuzzleAdapter extends RecyclerView.Adapter<RvBigPuzzleAdapter.
        {
            //완료되지 않은 게임이면
            //물음표 이미지를 띄워준다.
+           iv_thumbnail.setImageResource(R.drawable.ic_unknown);
        }
 
         holder.itemView.findViewById(R.id.cl_touchbox).setOnClickListener(new View.OnClickListener() {

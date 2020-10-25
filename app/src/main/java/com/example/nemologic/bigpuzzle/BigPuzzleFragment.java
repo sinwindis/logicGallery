@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,10 +18,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
+import com.example.nemologic.animation.ButtonAnimation;
 import com.example.nemologic.data.BigPuzzleData;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.SqlManager;
-import com.example.nemologic.level.LevelItemTouchListener;
+import com.example.nemologic.listener.LevelItemTouchListener;
 
 import java.sql.SQLException;
 
@@ -92,47 +92,12 @@ public class BigPuzzleFragment extends Fragment {
         rv_level.setLayoutManager(new GridLayoutManager(ctx, rowItemNum));
         rv_level.setAdapter(new RvBigPuzzleAdapter(ctx, bigPuzzleData, rowItemNum));
 
-
-        rv_level.addOnItemTouchListener(new LevelItemTouchListener("touchable") {
-
-            @Override
-            public void onDownTouchableView(int pos) {
-
-                rv_level.getChildAt(pos).setAlpha(0.5F);
-            }
-
-            @Override
-            public void onClickUp(int pos)
-            {
-                rv_level.getChildAt(pos).setAlpha(1.0F);
-            }
-
-
-        });
+        rv_level.addOnItemTouchListener(new LevelItemTouchListener(ctx));
 
 
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
 
-        img_back.setOnTouchListener(new View.OnTouchListener() {
-
-            @SuppressLint("UseCompatLoadingForDrawables")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                switch (motionEvent.getActionMasked())
-                {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        view.setBackground(null);
-                        break;
-                }
-
-                return false;
-            }
-        });
+        ButtonAnimation.setButtonAnimationNormal(img_back);
 
         img_back.setOnClickListener(new View.OnClickListener() {
 

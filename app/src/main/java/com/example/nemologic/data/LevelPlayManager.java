@@ -153,6 +153,9 @@ public class LevelPlayManager {
 
     public void pushCheckStack()
     {
+        if(Arrays.equals(checkStack[stackNum], checkedSet))
+            return;
+
         stackNum++;
         stackMaxNum = stackNum;
 

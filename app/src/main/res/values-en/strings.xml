@@ -26,5 +26,7 @@
     <string name="str_levelsaved">" level has saved"</string>
     <string name="str_levelcreate">Level Create</string>
     <string name="str_custom">Custom</string>
+    <string name="str_next">Next</string>
+    <string name="str_prev">Prev</string>
 
 </resources>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp" />
+            <solid
+                android:color="#00404040"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            
+            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid
+                android:color="#04404040"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            
+            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid
+                android:color="#08404040"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            
+            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid
+                android:color="#0C404040"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            
+            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid
+                android:color="#10404040"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            
+            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid
+                android:color="#14404040"/>
+        </shape>
+    </item>
+
+    <item>   <!-- adjust borders width here -->
+        <shape android:shape="rectangle">
+            
+            <solid
+                android:color="@color/colorWhite"/>  <!-- background color -->
+        </shape>
+    </item>
+</layer-list>

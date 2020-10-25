@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.nemologic.R;
+import com.example.nemologic.animation.ButtonAnimation;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.level.LevelFragment;
@@ -92,24 +93,7 @@ public class CategoryFragment extends Fragment {
         //////////////////fragment button events
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
 
-        img_back.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint({"ClickableViewAccessibility", "UseCompatLoadingForDrawables"})
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                switch (motionEvent.getActionMasked())
-                {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        view.setBackground(null);
-                        break;
-                }
-                return false;
-            }
-        });
+        ButtonAnimation.setButtonAnimationNormal(img_back);
 
         img_back.setOnClickListener(new View.OnClickListener() {
 
