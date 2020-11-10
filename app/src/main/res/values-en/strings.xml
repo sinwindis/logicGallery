@@ -1,14 +1,14 @@
 <resources>
-    <string name="app_name" translatable="false">Nemo Logic</string>
+    <string name="app_name" translatable="false">Logic Gallery</string>
     <string name="admob_app_id">ca-app-pub-9444386713531243~4932680796</string>
     <string name="banner_ad_unit_id">ca-app-pub-9444386713531243/8680354114</string>
     <string name="popup_ad_unit_id">ca-app-pub-9444386713531243/6098809845</string>
     <string name="banner_ad_unit_id_for_test">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="app_logo">NemoLogic</string>
+    <string name="app_logo">LogicGallery</string>
     <string name="app_logo_upper">plus+</string>
     <string name="str_continue">Continue</string>
     <string name="str_category">Category</string>
-    <string name="str_big_puzzle">Big Puzzle</string>
+    <string name="str_gallery">Gallery</string>
     <string name="str_level">Level</string>
     <string name="str_accept">Accept</string>
     <string name="str_cancel">Cancel</string>
@@ -28,5 +28,13 @@
     <string name="str_custom">Custom</string>
     <string name="str_next">Next</string>
     <string name="str_prev">Prev</string>
+    <string name="str_option">Option</string>
+    <string name="str_tutorial0">This tutorial will show you how to play this game.\nPress Next button to go to next page.</string>
+    <string name="str_puzzlesize">Input Puzzle Size:</string>
+    <string name="str_inputname">Input Puzzle Name:</string>
+    <string name="str_puzzlenum">Input Puzzle Count:</string>
+    <string name="str_loading">"      Loading..."</string>
+    <string name="str_tutorial1">The number 3 at right upper side of the board shows you that the right column contains three continuous check.\\nFortunately there are only three cells in the column so every cell should be checked to satisfy three continuous chekced cell.</string>
+    <string name="str_tutorial2">3개의 칸을 모두 클릭하여 체크해 보았습니다.\\n오른쪽 위의 3이라는 숫자가 회색으로 바뀐 것을 확인할 수 있습니다. 이는 해당 숫자가 완성되었다는 뜻입니다.</string>
 
 </resources>

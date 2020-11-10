@@ -2,22 +2,383 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="10dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_dialog">
 
-    <FrameLayout
-        android:id="@+id/fl_tutorial"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/board"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <TextView
+            style="@style/StyleFontSmall"
+            android:id="@+id/column_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="5dp"
+            android:gravity="bottom|center_horizontal"
+
+            app:layout_constraintStart_toStartOf="@id/rv_board"
+            app:layout_constraintEnd_toStartOf="@id/column_1"
+            app:layout_constraintBottom_toTopOf="@id/rv_board"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.2"
+
+            android:text="0"
+            android:background="@drawable/background_index_column"
+            />
+
+        <ImageView
+            android:id="@+id/border_column0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/border_tutorial_rect"
+
+            app:layout_constraintStart_toStartOf="@id/column_0"
+            app:layout_constraintEnd_toEndOf="@id/column_0"
+            app:layout_constraintBottom_toBottomOf="@id/column_0"
+            app:layout_constraintTop_toTopOf="@id/column_0" />
+
+        <TextView
+
+            style="@style/StyleFontSmall"
+            android:id="@+id/column_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="5dp"
+            android:gravity="bottom|center_horizontal"
+
+            app:layout_constraintStart_toEndOf="@id/column_0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/column_2"
+            app:layout_constraintBottom_toTopOf="@id/rv_board"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.2"
+
+            android:text="1\n1"
+            android:background="@drawable/background_index_column"/>
+
+        <ImageView
+            android:id="@+id/border_column1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/border_tutorial_rect"
+
+            app:layout_constraintStart_toStartOf="@id/column_1"
+            app:layout_constraintEnd_toEndOf="@id/column_1"
+            app:layout_constraintBottom_toBottomOf="@id/column_1"
+            app:layout_constraintTop_toTopOf="@id/column_1" />
+
+        <TextView
+            style="@style/StyleFontSmall"
+            android:id="@+id/column_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="5dp"
+            android:gravity="bottom|center_horizontal"
+
+            app:layout_constraintStart_toEndOf="@id/column_1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/rv_board"
+            app:layout_constraintBottom_toTopOf="@id/rv_board"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.2"
+
+            android:text="3"
+            android:background="@drawable/background_index_column"
+
+            />
+
+        <ImageView
+            android:id="@+id/border_column2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/border_tutorial_rect"
+
+            app:layout_constraintStart_toStartOf="@id/column_2"
+            app:layout_constraintEnd_toEndOf="@id/column_2"
+            app:layout_constraintBottom_toBottomOf="@id/column_2"
+            app:layout_constraintTop_toTopOf="@id/column_2" />
+
+        <TextView
+            style="@style/StyleFontSmall"
+            android:id="@+id/row_0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="5dp"
+            android:gravity="center_vertical|end"
+
+            app:layout_constraintTop_toTopOf="@id/rv_board"
+            app:layout_constraintEnd_toStartOf="@id/rv_board"
+            app:layout_constraintBottom_toTopOf="@id/row_1"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.2"
+
+            android:text="2"
+            android:background="@drawable/background_index_row"
+            />
+
+        <ImageView
+            android:id="@+id/border_row0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/border_tutorial_rect"
+
+            app:layout_constraintStart_toStartOf="@id/row_0"
+            app:layout_constraintEnd_toEndOf="@id/row_0"
+            app:layout_constraintBottom_toBottomOf="@id/row_0"
+            app:layout_constraintTop_toTopOf="@id/row_0" />
+
+        <TextView
+
+            style="@style/StyleFontSmall"
+            android:id="@+id/row_1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="5dp"
+            android:gravity="center_vertical|end"
 
 
-    </FrameLayout>
+            app:layout_constraintTop_toBottomOf="@id/row_0"
+            app:layout_constraintEnd_toStartOf="@id/rv_board"
+            app:layout_constraintBottom_toTopOf="@id/row_2"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.2"
+
+            android:text="1"
+            android:background="@drawable/background_index_row"/>
+
+        <ImageView
+            android:id="@+id/border_row1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/border_tutorial_rect"
+
+            app:layout_constraintStart_toStartOf="@id/row_1"
+            app:layout_constraintEnd_toEndOf="@id/row_1"
+            app:layout_constraintBottom_toBottomOf="@id/row_1"
+            app:layout_constraintTop_toTopOf="@id/row_1" />
+
+        <TextView
+            style="@style/StyleFontSmall"
+            android:id="@+id/row_2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="5dp"
+            android:gravity="center_vertical|end"
+
+
+            app:layout_constraintTop_toBottomOf="@id/row_1"
+            app:layout_constraintEnd_toStartOf="@id/rv_board"
+            app:layout_constraintBottom_toBottomOf="@id/rv_board"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.2"
+
+            android:text="2"
+            android:background="@drawable/background_index_row"/>
+
+        <ImageView
+            android:id="@+id/border_row2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/border_tutorial_rect"
+
+            app:layout_constraintStart_toStartOf="@id/row_2"
+            app:layout_constraintEnd_toEndOf="@id/row_2"
+            app:layout_constraintBottom_toBottomOf="@id/row_2"
+            app:layout_constraintTop_toTopOf="@id/row_2" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_board"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.8"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.8">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_button_board"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/board"
+        android:background="@drawable/background_touchboard"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_stack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+
+            android:background="@drawable/background_cl_stack"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/img_toggle"
+            app:layout_constraintBottom_toBottomOf="@id/img_toggle">
+
+            <TextView
+                style="@style/StyleFontMedium"
+
+                android:id="@+id/tv_stack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/img_prevstack"/>
+
+            <ImageView
+                android:id="@+id/img_nextstack"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="15dp"
+                android:layout_margin="2dp"
+                android:src="@drawable/ic_next"
+                android:background="@drawable/background_btn_normal"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/img_prevstack"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+            <ImageView
+                android:id="@+id/border_next"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/border_tutorial_oval"
+
+                app:layout_constraintStart_toStartOf="@id/img_nextstack"
+                app:layout_constraintEnd_toEndOf="@id/img_nextstack"
+                app:layout_constraintBottom_toBottomOf="@id/img_nextstack"
+                app:layout_constraintTop_toTopOf="@id/img_nextstack" />
+
+            <ImageView
+                android:id="@+id/img_prevstack"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="15dp"
+                android:layout_margin="2dp"
+                android:src="@drawable/ic_prev"
+                android:background="@drawable/background_btn_normal"
+                app:layout_constraintEnd_toStartOf="@id/img_nextstack"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+            <ImageView
+                android:id="@+id/border_prev"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/border_tutorial_oval"
+
+                app:layout_constraintStart_toStartOf="@id/img_prevstack"
+                app:layout_constraintEnd_toEndOf="@id/img_prevstack"
+                app:layout_constraintBottom_toBottomOf="@id/img_prevstack"
+                app:layout_constraintTop_toTopOf="@id/img_prevstack" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/img_toggle"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:padding="15dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/background_btn_o"
+            android:background="@drawable/background_btn_normal"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
+        <ImageView
+            android:id="@+id/border_toggle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/border_tutorial_oval"
+
+            app:layout_constraintStart_toStartOf="@id/img_toggle"
+            app:layout_constraintEnd_toEndOf="@id/img_toggle"
+            app:layout_constraintBottom_toBottomOf="@id/img_toggle"
+            app:layout_constraintTop_toTopOf="@id/img_toggle" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/background_cl_hint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img_toggle"
+            app:layout_constraintBottom_toBottomOf="@id/img_toggle"
+            >
+
+            <TextView
+                style="@style/StyleFontMedium"
+
+                android:id="@+id/tv_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/img_hint"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="15dp"
+                android:layout_margin="2dp"
+                android:src="@drawable/ic_hint"
+                android:background="@drawable/background_btn_normal"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_hint"/>
+
+            <ImageView
+                android:id="@+id/border_hint"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/border_tutorial_oval"
+
+                app:layout_constraintStart_toStartOf="@id/img_hint"
+                app:layout_constraintEnd_toEndOf="@id/img_hint"
+                app:layout_constraintBottom_toBottomOf="@id/img_hint"
+                app:layout_constraintTop_toTopOf="@id/img_hint" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <TextView
         style="@style/StyleFontSmall"
@@ -25,9 +386,11 @@
         android:id="@+id/tv_tutorial"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fl_tutorial"/>
+        app:layout_constraintTop_toBottomOf="@id/cl_button_board"/>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_buttons"

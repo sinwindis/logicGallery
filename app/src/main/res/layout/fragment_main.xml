@@ -35,16 +35,20 @@
         android:textSize="40sp"
         android:textColor="@color/colorBlack"
         android:fontFamily="@font/paybooc_bold"
+        android:layout_marginTop="140dp"
         android:text="@string/app_logo"
 
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/iv_level_board"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
 
     <TextView
-        style="@style/StyleFontSmall"
+        android:textSize="12sp"
+        android:textColor="@color/colorBlack"
+        android:fontFamily="@font/paybooc_bold"
+
+
         android:id="@+id/tv_logosmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,18 +58,38 @@
         app:layout_constraintEnd_toEndOf="@id/tv_logo"
         />
 
-    <ImageView
-        android:id="@+id/iv_level_board"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="100dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_gallery_image"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_category">
+        app:layout_constraintBottom_toTopOf="@id/btn_gallery"
+        app:layout_constraintTop_toBottomOf="@id/tv_logo"
+
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5"
+        >
+
+        <ImageView
+            android:id="@+id/iv_level_board"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
 
 
-    </ImageView>
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <Button
         style="@style/StyleFontSmall"
@@ -81,7 +105,7 @@
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_category"
+        app:layout_constraintBottom_toTopOf="@id/btn_gallery"
         android:text="@string/str_continue">
 
     </Button>
@@ -89,31 +113,12 @@
     <Button
         style="@style/StyleFontSmall"
 
-        android:id="@+id/btn_category"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
-        android:background="@drawable/background_btn"
-        android:layout_margin="20dp"
-
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.5"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_bigpuzzle"
-        android:text="@string/str_category">
-
-    </Button>
-
-    <Button
-        style="@style/StyleFontSmall"
-
-        android:id="@+id/btn_bigpuzzle"
+        android:id="@+id/btn_gallery"
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:background="@drawable/background_btn"
         android:layout_marginBottom="40dp"
-        android:text="@string/str_big_puzzle"
+        android:text="@string/str_gallery"
 
         app:layout_constraintHeight_default="percent"
         app:layout_constraintHeight_percent="0.5"

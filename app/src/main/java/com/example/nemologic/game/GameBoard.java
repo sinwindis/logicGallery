@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,11 +28,11 @@ import static android.content.Context.MODE_PRIVATE;
 public class GameBoard {
 
 
-    boolean smartDrag;
-    boolean oneLineDrag;
-    boolean autoX;
+    private boolean smartDrag;
+    private boolean oneLineDrag;
+    private boolean autoX;
 
-    Context ctx;
+    private Context ctx;
 
     private View targetView;
 
@@ -42,8 +41,6 @@ public class GameBoard {
     private RecyclerView rv_row;
 
     private GridLayoutManager glm;
-    private LinearLayoutManager columnLayoutManager;
-    private LinearLayoutManager rowLayoutManager;
     public LevelPlayManager lpm;
 
     private ColumnIndexDataManager columnIndexDataManager;
@@ -59,18 +56,18 @@ public class GameBoard {
     private ConstraintLayout cl_count;
     private LinearLayout ll_drag;
 
-    int touchStartX;
-    int touchStartY;
-    int touchEndX;
-    int touchEndY;
+    private int touchStartX;
+    private int touchStartY;
+    private int touchEndX;
+    private int touchEndY;
 
-    int hintCount;
+    private int hintCount;
 
-    float viewSize;
+    private float viewSize;
 
-    boolean[][] dragTemp;
-    boolean[][] dragIndexTemp;
-    boolean[][] hint;
+    private boolean[][] dragTemp;
+    private boolean[][] dragIndexTemp;
+    private boolean[][] hint;
 
     //0: 체크, 1: X, 2: 힌트
     int touchMode = 0;
@@ -89,11 +86,12 @@ public class GameBoard {
     public void saveGame()
     {
         SharedPreferences sharedPreferences = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
-        lpm.savePlayData(ctx);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putInt("hint", hintCount);
         editor.apply();
+
+        lpm.savePlayData(ctx);
     }
 
     public void loadPref()
@@ -107,6 +105,9 @@ public class GameBoard {
         //hint properties
         sharedPreferences = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
         hintCount = sharedPreferences.getInt("hint", 3);
+
+        //for debug
+        hintCount = 5;
     }
 
     private void initialize()
@@ -115,8 +116,8 @@ public class GameBoard {
         dragIndexTemp = new boolean[lpm.height][lpm.width];
         hint = new boolean[lpm.height][lpm.width];
         rv_board = targetView.findViewById(R.id.rv_board);
-        rv_row = targetView.findViewById(R.id.rv_row);
-        rv_column = targetView.findViewById(R.id.rv_column);
+        rv_row = targetView.findViewById(R.id.cl_row);
+        rv_column = targetView.findViewById(R.id.cl_column);
 
         cl_count = targetView.findViewById(R.id.cl_count);
         ll_drag = targetView.findViewById(R.id.ll_drag);
@@ -129,7 +130,6 @@ public class GameBoard {
     }
 
 
-    //DRAG////////////////////////////////
     private void removeDragTemp()
     {
         for(int y = 0; y < lpm.height; y++)
@@ -418,18 +418,22 @@ public class GameBoard {
         EndFragment endFragment = new EndFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("id", lpm.id);
-        bundle.putInt("type", lpm.type);
-
 
         endFragment.setArguments(bundle);
 
         ((MainActivity) ctx).fragmentMoveNoStack(endFragment);
     }
 
-    private void setGameEnd()
+    private void setEndProgress()
     {
-        lpm.progress = 2;
-        saveGame();
+        if(lpm.progress != 2)
+        {
+            lpm.progress = 2;
+        }
+        else
+        {
+            lpm.progress = 3;
+        }
     }
 
 
@@ -445,7 +449,9 @@ public class GameBoard {
 
         if(lpm.isGameEnd())
         {
-            setGameEnd();
+            hintCount++;
+            setEndProgress();
+
             moveToEndFragment();
         }
     }
@@ -655,8 +661,8 @@ public class GameBoard {
         //로직 게임판을 만듭니다.
         //터치가 가능한 보드판 제작
         glm = new GridLayoutManager(targetView.getContext(), lpm.width);
-        columnLayoutManager = new LinearLayoutManager(targetView.getContext(), LinearLayoutManager.HORIZONTAL, false);
-        rowLayoutManager = new LinearLayoutManager(targetView.getContext());
+        LinearLayoutManager columnLayoutManager = new LinearLayoutManager(targetView.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager rowLayoutManager = new LinearLayoutManager(targetView.getContext());
 
         RvBoardAdapter rba = new RvBoardAdapter(lpm.width, lpm.height);
 

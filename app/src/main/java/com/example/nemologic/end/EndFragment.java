@@ -26,6 +26,7 @@ import com.example.nemologic.data.CustomParser;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.data.SqlManager;
+import com.example.nemologic.data.StringGetter;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -36,7 +37,7 @@ public class EndFragment extends Fragment {
 
     private String name;
     private int id;
-    private int type;
+    private int p_id;
     private int width;
     private int height;
     private int maxLength;
@@ -84,53 +85,27 @@ public class EndFragment extends Fragment {
 
         //bundle 로 받은 category 와 level 의 이름을 String 으로 저장한다.
         if(getArguments() != null){
-            type = getArguments().getInt("type");
             id = getArguments().getInt("id");
         }
 
         //게임레벨과 카테고리의 이름을 이용해 db 에서 데이터를 받아오고 이를 lpm 인스턴스에 대입한다.
         byte[] dataSet;
         byte[] colorSet;
-        if(type == 0)
-        {
-            //일반 레벨
-            Cursor levelCursor =  mDbOpenHelper.getLevelCursorById(id);
-            levelCursor.moveToNext();
 
-            name = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.NAME));
-            width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
-            height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
-            colorSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.LevelDBSql.COLORSET));
-            dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.LevelDBSql.DATASET));
+        //빅 레벨
+        Cursor bigLevelCursor =  mDbOpenHelper.getBigLevelsCursorById(id);
+        bigLevelCursor.moveToNext();
 
-            colorBitmap = BitmapFactory.decodeByteArray(colorSet, 0, colorSet.length);
-            bitmap = CustomParser.parseDataSetByteArrayToBitmap(dataSet, width, height);
-        }
-        else if(type == 1)
-        {
-            //빅 레벨
-            Cursor bigLevelCursor =  mDbOpenHelper.getBigLevelsCursorById(id);
-            bigLevelCursor.moveToNext();
+        p_id = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
+        width = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
+        height = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
+        colorSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
+        dataSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
 
-            int p_id = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
+        name = StringGetter.p_name.get(p_id);
 
-            Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
-
-            bigPuzzleCursor.moveToNext();
-
-
-
-            name = bigPuzzleCursor.getString(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.NAME));
-            width = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
-            height = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
-            colorSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
-            dataSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
-
-            colorBitmap = BitmapFactory.decodeByteArray(colorSet, 0, colorSet.length);
-            bitmap = CustomParser.parseDataSetByteArrayToBitmap(dataSet, width, height);
-        }
-        
-
+        colorBitmap = BitmapFactory.decodeByteArray(colorSet, 0, colorSet.length);
+        bitmap = CustomParser.parseDataSetByteArrayToBitmap(dataSet, width, height);
 
         mDbOpenHelper.close();
 

@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name" translatable="false">Nemo Logic</string>
-    <string name="app_logo">NemoLogic</string>
+    <string name="app_name" translatable="false">Logic Gallery</string>
+    <string name="app_logo">LogicGallery</string>
     <string name="app_logo_upper">plus+</string>
 
     <string name="str_continue">Continue</string>
@@ -14,7 +14,7 @@
     <string name="str_level">Level</string>
     <string name="str_accept">Accept</string>
     <string name="str_cancel">Cancel</string>
-    <string name="str_smartdrag" translatable="false">Smart drag</string>
+    <string name="str_smartdrag">Smart drag</string>
     <string name="str_oneline">Drag only one line</string>
     <string name="str_autox">Fill remaining item with X for completed line</string>
     <string name="str_complete">Complete</string>
@@ -27,9 +27,25 @@
     <string name="str_reqname">Please input the name</string>
     <string name="str_levelsaved">" level has saved"</string>
     <string name="str_levelcreate">Level Create</string>
-    <string name="str_big_puzzle">Big Puzzle</string>
+    <string name="str_gallery">Gallery</string>
     <string name="str_custom">Custom</string>
     <string name="str_next">Next</string>
     <string name="str_prev">Prev</string>
+    <string name="str_option">Option</string>
+    <string name="str_tutorial0">This tutorial will show you how to play this game.\nPress Next button to go to next page.</string>
+    <string name="str_puzzlesize">Input Puzzle Size:</string>
+    <string name="str_inputname">Input Puzzle Name:</string>
+    <string name="str_puzzlenum">Input Puzzle Count:</string>
+    <string name="str_loading">"      Loading..."</string>
+    <string name="str_tutorial1">The number 3 at right upper side of the board shows you that the right column contains three continuous check.\\nFortunately there are only three cells in the column so every cell should be checked to satisfy three continuous chekced cell.</string>
+    <string name="str_tutorial2">ㅇ</string>
+    <string name="str_tutorial3">d</string>
+    <string name="str_tutorial4">d</string>
+    <string name="str_tutorial5">d</string>
+    <string name="str_tutorial6">d</string>
+    <string name="str_tutorial7">d</string>
+    <string name="str_tutorial8">d</string>
+    <string name="str_tutorial9">d</string>
+    <string name="str_tutorial10">d</string>
 
 </resources>

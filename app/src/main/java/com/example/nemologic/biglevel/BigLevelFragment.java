@@ -19,6 +19,7 @@ import com.example.nemologic.animation.ButtonAnimation;
 import com.example.nemologic.data.BigLevelThumbnailData;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.SqlManager;
+import com.example.nemologic.data.StringGetter;
 import com.example.nemologic.listener.BigLevelItemTouchListener;
 import com.example.nemologic.listener.LevelItemTouchListener;
 
@@ -63,7 +64,8 @@ public class BigLevelFragment extends Fragment {
 
         bigPuzzleCursor.moveToNext();
 
-        String name = bigPuzzleCursor.getString(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.NAME));
+        //name 다시
+        String name = StringGetter.p_name.get(p_id);
         int puzzleWidth = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.WIDTH));
         int puzzleHeight = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.HEIGHT));
 
@@ -85,12 +87,12 @@ public class BigLevelFragment extends Fragment {
             byte[] dataSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
             byte[] colorSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
             byte[] saveData = new byte[0];
-            if(progress == 1)
+            if(progress == 1 || progress == 3)
                 saveData = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
 
             levelThumbnailData[fullCount] = new BigLevelThumbnailData(id, p_name, width, height, progress, dataSet, saveData, colorSet);
             fullCount++;
-            if(progress == 2)
+            if(progress == 2 || progress == 3)
             {
                 clearCount++;
             }

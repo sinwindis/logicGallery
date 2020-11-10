@@ -26,6 +26,9 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
     int puzzleWidth;
     int puzzleHeight;
 
+    int itemWidthSize;
+    int itemHeightSize;
+
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -51,7 +54,9 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
 
         View view = inflater.inflate(R.layout.item_biglevel, parent, false) ;
-        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/ puzzleWidth, parent.getMeasuredHeight()/puzzleHeight));
+        itemWidthSize = parent.getMeasuredWidth()/ puzzleWidth;
+        itemHeightSize = parent.getMeasuredHeight()/puzzleHeight;
+        view.setLayoutParams(new RecyclerView.LayoutParams(itemWidthSize, itemHeightSize));
 
         return new ViewHolder(view);
     }
@@ -72,18 +77,16 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
                 break;
             case 1:
                 //저장된 게임일 경우
-                bitmap = Bitmap.createScaledBitmap(data[position].getSaveBitmap(), 100, 100, false);
+                bitmap = Bitmap.createScaledBitmap(data[position].getSaveBitmap(), itemWidthSize, itemHeightSize, false);
                 iv.setImageBitmap(bitmap);
                 break;
             case 2:
+            case 3:
                 //완료한 게임일 경우
-                bitmap = Bitmap.createScaledBitmap(data[position].getColorBitmap(), 100, 100, false);
+                bitmap = Bitmap.createScaledBitmap(data[position].getColorBitmap(), itemWidthSize, itemHeightSize, false);
                 iv.setImageBitmap(bitmap);
                 break;
         }
-
-
-
 
         iv.setOnClickListener(new View.OnClickListener() {
             @Override

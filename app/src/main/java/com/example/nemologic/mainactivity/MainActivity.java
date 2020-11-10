@@ -1,6 +1,7 @@
 package com.example.nemologic.mainactivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d("MainActivity", "activity created");
+
         //광고
         MobileAds.initialize(this, getString(R.string.admob_app_id));
         AdView mAdView = findViewById(R.id.adView);
@@ -53,5 +56,7 @@ public class MainActivity extends AppCompatActivity {
 //        mIntersisialAd.setAdUnitId(getString(R.string.popup_ad_unit_id));
 //        mIntersisialAd.loadAd(new AdRequest.Builder().build());
     }
+
+
 
 }

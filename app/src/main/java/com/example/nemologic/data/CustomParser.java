@@ -51,7 +51,7 @@ public class CustomParser {
         for(int i = 0; i < splitNum; i++)
         {
             strSplit[i] = dataSet.substring(i, i+1);
-            Log.d("PARSER", "strSplit[" + i + "]: " + strSplit[i]);
+            //Log.d("PARSER", "strSplit[" + i + "]: " + strSplit[i]);
         }
 
         byte[] bytes = new byte[strSplit.length];

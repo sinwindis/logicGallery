@@ -9,9 +9,10 @@ import java.util.Arrays;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class LevelPlayManager {
+public class LevelPlayManagerOld {
 
     public int id;
+    public String category;
     public String name;
     public byte[] dataSet;
     public byte[] checkedSet;
@@ -19,20 +20,21 @@ public class LevelPlayManager {
     public int height;
     public int width;
     public int progress;
-    public int p_id;
+    public int type;
 
     public int stackNum = 0;
     public int stackMaxNum = 0;
 
-    public LevelPlayManager(int id, int p_id, String name, int progress, int width, int height, byte[] dataSet, byte[] saveData)
+    public LevelPlayManagerOld(int id, String category, String name, int progress, int width, int height, byte[] dataSet, byte[] saveData, int type)
     {
         this.id = id;
-        this.p_id = p_id;
+        this.category = category;
         this.name = name;
         this.dataSet = dataSet;
         this.height = height;
         this.width = width;
         this.progress = progress;
+        this.type = type;
         if(saveData.length == 0)
         {
             //저장 데이터가 없으면 새로 빈 array 할당
@@ -58,6 +60,7 @@ public class LevelPlayManager {
     public void showDataLog()
     {
         Log.d("LPM", "id: " + id);
+        Log.d("LPM", "category: " + category);
         Log.d("LPM", "name: " + name);
         Log.d("LPM", "dataSet: " + Arrays.toString(dataSet));
         Log.d("LPM", "height: " + height);
@@ -74,28 +77,49 @@ public class LevelPlayManager {
         try {
             mDbOpenHelper.open();
 
-            //빅퍼즐 저장하기
-            if(progress != 2)
+            if(type == 0)
             {
-                //이번 플레이 저장
-                mDbOpenHelper.updateBigLevel(id, progress, checkedSet);
-                //가장 최근에 한 게임 데이터 갱신하기
+                //일반 레벨 저장
+                if(progress == 1)
+                {
+                    //저번 플레이 저장
+                    mDbOpenHelper.updateLevel(id, 1, checkedSet);
+                    //가장 최근에 한 게임 데이터 갱신하기
 
-                editor.putInt("id", id);
+                    editor.putInt("id", id);
+                }
+
+                else if(progress == 2)
+                {
+                    //게임 완료
+                    mDbOpenHelper.updateLevel(id, 2, null);
+                    //가장 최근에 한 게임 데이터 없애기
+
+                    editor.putInt("id", -1);
+                }
+            }
+            else if(type == 1)
+            {
+                //빅퍼즐 저장하기
+                if(progress == 1)
+                {
+                    //저번 플레이 저장
+                    mDbOpenHelper.updateBigLevel(id, 1, checkedSet);
+
+                    editor.putInt("id", id);
+                }
+
+                else if(progress == 2)
+                {
+                    //게임 완료
+                    mDbOpenHelper.updateBigLevel(id, 2, null);
+                    //가장 최근에 한 게임 데이터 없애기
+
+                    editor.putInt("id", -1);
+                }
             }
 
-            else
-            {
-                //게임 완료
-                mDbOpenHelper.updateBigLevel(id, progress, null);
-                //해당 레벨의 퍼즐에 해당하는 db 의 progress 값 늘려주기
-                mDbOpenHelper.increaseBigPuzzleProgress(p_id);
-
-                //가장 최근에 한 게임 데이터 없애기
-
-                editor.putInt("id", -1);
-            }
-
+            editor.putInt("type", type);
             editor.apply();
 
 
@@ -104,6 +128,8 @@ public class LevelPlayManager {
         }
 
         mDbOpenHelper.close();
+
+
     }
 
     private void expandStackSize()

@@ -12,7 +12,9 @@ import androidx.annotation.ColorInt;
 import com.example.nemologic.data.CustomParser;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Arrays;
 
 
@@ -199,9 +201,9 @@ public class LevelCreator {
         Log.d("dataBlob", log);
     }
 
-    public Bitmap getSrcBitmap()
+    public Bitmap getSmallBitmap()
     {
-        return srcBitmap;
+        return smallBitmap;
     }
 
     public Bitmap getScaledBitmap()

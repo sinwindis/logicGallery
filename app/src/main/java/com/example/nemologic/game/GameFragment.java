@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,7 +21,9 @@ import com.example.nemologic.animation.ButtonAnimation;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.data.SqlManager;
+import com.example.nemologic.data.StringGetter;
 import com.example.nemologic.option.OptionDialog;
+import com.example.nemologic.tutorial.TutorialDialog;
 
 import java.sql.SQLException;
 
@@ -37,7 +40,6 @@ public class GameFragment extends Fragment {
     private TextView tv_title;
 
     private int id;
-    private int type;
 
     public GameFragment(Context ctx) {
         mainActivityContext = ctx;
@@ -64,80 +66,52 @@ public class GameFragment extends Fragment {
         //bundle 로 받은 id 를 저장한다.
         if(getArguments() != null){
             id = getArguments().getInt("id");
-            type = getArguments().getInt("type");
         }
 
-        //게임 타입에 따라 빅레벨 DB 에서 가져올지, 일반 레벨 DB 에서 가져올지 판단한다.
-
-        String category;
-        String name;
         int width;
         int height;
         int progress;
-        int custom;
         byte[] dataSet;
         byte[] saveData;
         
         Cursor levelCursor;
-        if(type == 1)
+
+        levelCursor = mDbOpenHelper.getBigLevelsCursorById(id);
+        levelCursor.moveToNext();
+
+        int p_id = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
+        String name = StringGetter.p_name.get(p_id);
+
+        Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
+
+        bigPuzzleCursor.moveToNext();
+
+        width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
+        height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
+        progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
+        dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
+        saveData = new byte[0];
+
+        switch (progress)
         {
-            levelCursor = mDbOpenHelper.getBigLevelsCursorById(id);
-            levelCursor.moveToNext();
-
-            category = "Big Puzzle";
-
-            int p_id = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
-
-            Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
-
-            bigPuzzleCursor.moveToNext();
-
-            name = bigPuzzleCursor.getString(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.NAME));
-            width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
-            height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
-            progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
-            custom = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.CUSTOM));
-            dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
-            saveData = new byte[0];
-            if(progress == 1)
+            case 0:
+                progress = 1;
+                break;
+            case 1:
+            case 3:
                 saveData = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
-
-            if(progress != 2)
-                progress = 1;
-        }
-        else
-        {
-            levelCursor = mDbOpenHelper.getLevelCursorById(id);
-            levelCursor.moveToNext();
-
-            category = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.CATEGORY));
-            name = levelCursor.getString(levelCursor.getColumnIndex(SqlManager.LevelDBSql.NAME));
-            width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
-            height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
-            progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.PROGRESS));
-            custom = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.LevelDBSql.CUSTOM));
-            dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.LevelDBSql.DATASET));
-            saveData = new byte[0];
-            if(progress == 1)
-                saveData = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.LevelDBSql.SAVEDATA));
-
-            if(progress != 2)
-                progress = 1;
+                break;
+            case 2:
+                progress = 3;
+                break;
         }
 
-        lpm = new LevelPlayManager(id, category, name, progress, width, height, dataSet, saveData, type);
+        lpm = new LevelPlayManager(id, p_id, name, progress, width, height, dataSet, saveData);
 
         mDbOpenHelper.close();
 
         tv_title = fragmentView.findViewById(R.id.tv_title);
-        if(progress == 2 || custom == 1)
-        {
-            tv_title.setText(name);
-        }
-        else
-        {
-            tv_title.setText("???");
-        }
+        tv_title.setText(name);
 
         //gameBoard 를 제작한다.
         gameBoard = new GameBoard(mainActivityContext, fragmentView, lpm);
@@ -217,6 +191,13 @@ public class GameFragment extends Fragment {
         img_tutorial.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                TutorialDialog tutorialDialog = new TutorialDialog();
+
+                tutorialDialog.makeDialog(getActivity());
+                tutorialDialog.dialog.show();
+                tutorialDialog.dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
             }
         });
 
@@ -239,6 +220,7 @@ public class GameFragment extends Fragment {
                     }
                 });
                 optionDialog.dialog.show();
+                optionDialog.dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             }
         });
 
@@ -268,6 +250,7 @@ public class GameFragment extends Fragment {
     public void onStop()
     {
         super.onStop();
+
         gameBoard.saveGame();
     }
 }

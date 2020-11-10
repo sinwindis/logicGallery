@@ -4,18 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_index">
+    android:background="@drawable/background_index_column">
 
     <TextView
+        style="@style/StyleFontExtraSmall"
+
         android:id="@+id/tv_item_column"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textColor="@color/colorBlack"
-        android:fontFamily="@font/paybooc_bold"
-        android:textSize="10sp"
         android:paddingBottom="3dp"
         />
 

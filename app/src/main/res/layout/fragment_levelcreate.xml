@@ -18,7 +18,7 @@
         <TextView
             style="@style/StyleFontLarge"
 
-            android:id="@+id/tv_category_title"
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/str_levelcreate"
@@ -96,7 +96,7 @@
             android:id="@+id/tv_input_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="레벨 이름 입력: "
+            android:text="@string/str_inputname"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -135,7 +135,7 @@
             android:id="@+id/tv_input_size"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="레벨 크기 입력: "
+            android:text="@string/str_puzzlesize"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -174,7 +174,7 @@
         android:id="@+id/cl_input_bigsize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="20dp"
+        android:paddingStart="30dp"
         android:paddingEnd="30dp"
         android:paddingBottom="10dp"
 
@@ -183,27 +183,26 @@
         app:layout_constraintBottom_toTopOf="@id/cl_buttons"
         >
 
-        <CheckBox
-            style="@style/StyleEditText"
+<!--        <CheckBox-->
+<!--            style="@style/StyleEditText"-->
 
-            android:id="@+id/cb_bigpuzzle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/colorGray"
+<!--            android:id="@+id/cb_bigpuzzle"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:buttonTint="@color/colorGray"-->
 
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
 
         <TextView
             style="@style/StyleFontSmall"
-            android:id="@+id/tv_input_bigpuzzle"
+            android:id="@+id/tv_input_count"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="@color/colorGray"
-            android:text="대형 퍼즐 크기 입력: "
+            android:text="@string/str_puzzlenum"
 
-            app:layout_constraintStart_toEndOf="@id/cb_bigpuzzle"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />

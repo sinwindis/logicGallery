@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,10 +19,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.nemologic.R;
-import com.example.nemologic.bigpuzzle.BigPuzzleFragment;
-import com.example.nemologic.category.CategoryFragment;
+import com.example.nemologic.data.BigLevelData;
+import com.example.nemologic.data.StringGetter;
+import com.example.nemologic.gallery.GalleryFragment;
 import com.example.nemologic.data.BigLevelThumbnailData;
-import com.example.nemologic.data.DbManager;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.LevelThumbnailData;
 import com.example.nemologic.data.SqlManager;
@@ -29,6 +31,8 @@ import com.example.nemologic.levelcreate.LevelCreateFragment;
 import com.example.nemologic.option.OptionDialog;
 
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -51,15 +55,10 @@ public class MainFragment extends Fragment {
         final View fragmentView = inflater.inflate(R.layout.fragment_main, container, false);
         final Context ctx = fragmentView.getContext();
 
-        //DB를 갱신해 준다.
-        DbManager.loadLevelFromXmlToDb(ctx);
-        DbManager.loadCategory(ctx);
-
         SharedPreferences lastPlayPref = ctx.getSharedPreferences("LASTPLAY", MODE_PRIVATE);
 
         //마지막 플레이한 레벨의 이름과 카테고리를 받아온다.
         final int lastPlayId = lastPlayPref.getInt("id", -1);
-        final int type = lastPlayPref.getInt("type", -1);
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
@@ -67,7 +66,6 @@ public class MainFragment extends Fragment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        mDbOpenHelper.create();
 
         Cursor cursor;
 
@@ -78,60 +76,32 @@ public class MainFragment extends Fragment {
         
         if(lastPlayId != -1)
         {
-            if(type == 0)
+            cursor =  mDbOpenHelper.getBigLevelsCursorById(lastPlayId);
+
+            if(cursor.getCount() > 0)
             {
-                cursor =  mDbOpenHelper.getLevelCursorById(lastPlayId);
+                dataLoad = true;
+                cursor.moveToNext();
+                int p_id = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
+                int number = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.NUMBER));
+                int width = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
+                int height = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
+                int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
+                byte[] dataSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
+                byte[] colorSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
+                byte[] saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
 
-                if(cursor.getCount() > 0)
-                {
-                    dataLoad = true;
-                    cursor.moveToNext();
-                    String name = cursor.getString(cursor.getColumnIndex(SqlManager.LevelDBSql.NAME));
-                    String category = cursor.getString(cursor.getColumnIndex(SqlManager.LevelDBSql.CATEGORY));
-                    int width = cursor.getInt(cursor.getColumnIndex(SqlManager.LevelDBSql.WIDTH));
-                    int height = cursor.getInt(cursor.getColumnIndex(SqlManager.LevelDBSql.HEIGHT));
-                    int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.LevelDBSql.PROGRESS));
-                    byte[] dataSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.LevelDBSql.DATASET));
-                    byte[] colorSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.LevelDBSql.COLORSET));
-                    byte[] saveData = new byte[0];
-                    int custom = cursor.getInt(cursor.getColumnIndex(SqlManager.LevelDBSql.CUSTOM));
-                    if(progress == 1)
-                        saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.LevelDBSql.SAVEDATA));
+                Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
 
-                    LevelThumbnailData lastPlayLevel = new LevelThumbnailData(lastPlayId, category, name, width, height, progress, dataSet, saveData, colorSet, 0, custom);
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getSaveBitmap(), 100, 100, false);
-                    iv_board.setImageBitmap(scaledBitmap);
-                }
-            }
-            else if(type == 1)
-            {
-                cursor =  mDbOpenHelper.getBigLevelsCursorById(lastPlayId);
+                bigPuzzleCursor.moveToNext();
 
-                if(cursor.getCount() > 0)
-                {
-                    dataLoad = true;
-                    cursor.moveToNext();
-                    int p_id = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
-                    int width = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
-                    int height = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
-                    int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
-                    byte[] dataSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
-                    byte[] colorSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
-                    byte[] saveData = new byte[0];
-                    if(progress == 1)
-                        saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
+                //나중에 수정
+                String name = StringGetter.p_name.get(p_id);
 
-                    Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
+                BigLevelData lastPlayLevel = new BigLevelData(lastPlayId, p_id, number, width, height, progress, dataSet, saveData, colorSet);
 
-                    bigPuzzleCursor.moveToNext();
-
-                    String name = bigPuzzleCursor.getString(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.NAME));
-
-
-                    BigLevelThumbnailData lastPlayLevel = new BigLevelThumbnailData(lastPlayId, name, width, height, progress, dataSet, saveData, colorSet);
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getSaveBitmap(), 100, 100, false);
-                    iv_board.setImageBitmap(scaledBitmap);
-                }
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getSaveBitmap(), 100, 100, false);
+                iv_board.setImageBitmap(scaledBitmap);
             }
             
         }
@@ -172,6 +142,7 @@ public class MainFragment extends Fragment {
 
                 optionDialog.makeDialog(getActivity());
                 optionDialog.dialog.show();
+                optionDialog.dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             }
         });
 
@@ -202,7 +173,8 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).fragmentMove(new LevelCreateFragment(mainActivityCtx));
+                LevelCreateFragment dest = new LevelCreateFragment(mainActivityCtx);
+                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(dest);
             }
         });
 
@@ -223,7 +195,6 @@ public class MainFragment extends Fragment {
 
                     Bundle bundle = new Bundle();
                     bundle.putInt("id", lastPlayId);
-                    bundle.putInt("type", type);
                     gameFragment.setArguments(bundle);
 
                     ((MainActivity)ctx).fragmentMove(gameFragment);
@@ -231,25 +202,13 @@ public class MainFragment extends Fragment {
             }
         });
 
-        //카테고리 버튼
-        Button btn_category = fragmentView.findViewById(R.id.btn_category);
+        //아티스트를 선택할 수 있는 갤러리 프래그먼트로 이동
+        Button btn_gallery = fragmentView.findViewById(R.id.btn_gallery);
 
-        btn_category.setOnClickListener(new View.OnClickListener() {
+        btn_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CategoryFragment dest = new CategoryFragment(mainActivityCtx);
-
-                ((MainActivity)ctx).fragmentMove(dest);
-            }
-        });
-
-        //빅 퍼즐 버튼
-        Button btn_bigPuzzle = fragmentView.findViewById(R.id.btn_bigpuzzle);
-
-        btn_bigPuzzle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BigPuzzleFragment dest = new BigPuzzleFragment(mainActivityCtx);
+                GalleryFragment dest = new GalleryFragment(mainActivityCtx);
 
                 ((MainActivity)ctx).fragmentMove(dest);
             }
