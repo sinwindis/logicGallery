@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <name>다빈치</name>
+
+    <name>Leonardo da Vinci</name>
+    <name>Vincent van Gogh</name>
+    <name>Edvard Munch</name>
+    <name>Claude Monet</name>
+    <name>Édouard Manet</name>
+    <name>Michelangelo</name>
 
 </resources>

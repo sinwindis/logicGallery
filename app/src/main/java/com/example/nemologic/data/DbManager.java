@@ -2,6 +2,7 @@ package com.example.nemologic.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
 import android.util.Log;
 
 import com.example.nemologic.R;
@@ -84,10 +85,8 @@ public class DbManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
         //puzzle
-        parser.next(); //puzzle text
-        parser.next(); //p_id start tag
+        parser.nextTag();
         
         //p_id
         int p_id = Integer.parseInt(parser.nextText());
@@ -115,8 +114,10 @@ public class DbManager {
         parser.nextTag();
         //level start tag
 
+        byte[] p_colorSetByteArray = Base64.decode(p_colorSet, Base64.DEFAULT);
+
         //해당 퍼즐의 데이터를 db 에 추가한다.
-        int insertId = (int) mDbOpenHelper.insertBigPuzzle(p_id, a_id, p_width, p_height, CustomParser.parseColorSetStringToByteArray(p_colorSet, l_width*p_width, l_height*p_height));
+        int insertId = (int) mDbOpenHelper.insertBigPuzzle(p_id, a_id, p_width, p_height, l_width, l_height, p_colorSetByteArray);
         
         Log.d("loadPuzzle", "insert ID: " + insertId);
 
@@ -155,8 +156,10 @@ public class DbManager {
         Log.d("loadLevel", "level colorSet: " + colorSet);
 
         //모든 데이터를 받아왔으면 해당 레벨을 db 에 insert 해준다.
+
+        byte[] colorSetByteArray = Base64.decode(colorSet, Base64.DEFAULT);
         
-        BigLevelData bigLevelData = new BigLevelData(-1, p_id, number, width, height, 0, CustomParser.parseDataSetStringToByteArray(dataSet), null, CustomParser.parseColorSetStringToByteArray(colorSet, width, height));
+        BigLevelData bigLevelData = new BigLevelData(-1, p_id, number, width, height, 0, CustomParser.parseDataSetStringToByteArray(dataSet), null, colorSetByteArray);
         int insertId = bigLevelData.saveData(ctx);
 
         Log.d("loadLevel", "insert ID: " + insertId);
@@ -294,7 +297,7 @@ public class DbManager {
 
                             //이제 퍼즐이 반복해서 나옴
                             //아티스트 엔드 태그가 나올 때까지 파싱함
-                            while (parser.getEventType() != XmlPullParser.END_TAG && !parser.getName().equals("artist"))
+                            while (parser.getEventType() != XmlPullParser.END_TAG || !parser.getName().equals("artist"))
                             {
                                 //퍼즐을 인서트한 후 해당 인서트 id 를 반환한다.
                                 p_id = loadPuzzle(parser, a_id);
@@ -306,7 +309,11 @@ public class DbManager {
                                     Log.d("DbManager", "getLineNumber(): " + parser.getLineNumber());
                                     loadLevel(parser, p_id);
                                 }
+                                Log.d("DbManager", "퍼즐 엔드 태그 발생, p_id: " + p_id);
+                                parser.nextTag();
                             }
+
+                            Log.d("DbManager", "아티스트 엔드 태그 발생, a_id: " + a_id);
                     }
                 }
                 eventType = parser.next();

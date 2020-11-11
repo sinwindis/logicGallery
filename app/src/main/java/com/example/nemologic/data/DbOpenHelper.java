@@ -89,13 +89,15 @@ public class DbOpenHelper {
         return mDB.insert(SqlManager.BigLevelDBSql._TABLENAME, null, values);
     }
 
-    public long insertBigPuzzle(int id, int a_id, int width, int height, byte[] colorSet){
+    public long insertBigPuzzle(int id, int a_id, int width, int height, int l_width, int l_height, byte[] colorSet){
 
         ContentValues values = new ContentValues();
         values.put(SqlManager.BigPuzzleDBSql.ID, id);
         values.put(SqlManager.BigPuzzleDBSql.A_ID, a_id);
         values.put(SqlManager.BigPuzzleDBSql.WIDTH, width);
         values.put(SqlManager.BigPuzzleDBSql.HEIGHT, height);
+        values.put(SqlManager.BigPuzzleDBSql.L_WIDTH, l_width);
+        values.put(SqlManager.BigPuzzleDBSql.L_HEIGHT, l_height);
         values.put(SqlManager.BigPuzzleDBSql.PROGRESS, 0);
         values.put(SqlManager.BigPuzzleDBSql.COLORSET, colorSet);
 

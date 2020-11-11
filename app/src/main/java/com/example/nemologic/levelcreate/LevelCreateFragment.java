@@ -5,19 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,14 +27,13 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.nemologic.R;
-import com.example.nemologic.data.CustomParser;
 import com.example.nemologic.data.DbOpenHelper;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -103,6 +102,8 @@ public class LevelCreateFragment extends Fragment {
             }
         });
 
+
+        //취소 버튼 액션
         Button btn_cancel = fragmentView.findViewById(R.id.btn_cancel);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +219,6 @@ public class LevelCreateFragment extends Fragment {
         Toast.makeText(ctx, "저장되었습니다.", Toast.LENGTH_LONG).show();
         fileOutputStream.close();
         pfd.close();
-
     }
     
     private void setEditable(boolean b)
@@ -242,6 +242,8 @@ public class LevelCreateFragment extends Fragment {
 
     private void removePrevData()
     {
+        levelCreator.stopMakeBigLevel();
+
         actionType = 0;
         btn_make.setText(getResources().getString(R.string.str_loadimage));
         iv_input.setImageDrawable(null);
@@ -307,7 +309,7 @@ public class LevelCreateFragment extends Fragment {
                 }
                 else
                 {
-                    puzzle_height = Integer.parseInt(et_height.getText().toString());
+                    puzzle_height = Integer.parseInt(et_puzzle_height.getText().toString());
                 }
 
                 if(et_puzzle_width.getText().toString().length() == 0)
@@ -317,7 +319,7 @@ public class LevelCreateFragment extends Fragment {
                 }
                 else
                 {
-                    puzzle_width = Integer.parseInt(et_width.getText().toString());
+                    puzzle_width = Integer.parseInt(et_puzzle_width.getText().toString());
                 }
 
                 makeLevel();
@@ -375,23 +377,29 @@ public class LevelCreateFragment extends Fragment {
 
     private void makeLevel()
     {
-        //빅 레벨 만들기
-        levelCreator.makeBigLevelDataSet(puzzle_height, puzzle_width, height, width);
-//        if(cb_big.isChecked())
-//        {
-//
-//        }
-//        else
-//        {
-//            //싱글 레벨 만들기
-//            levelCreator.makeSingleDataSet(height, width);
-//        }
+        final Handler setImageHandler = new Handler();
 
+        iv_result.setImageResource(R.drawable.ic_unknown);
 
-        //Bitmap resultImage = CustomParser.parseDataSetByteArrayToBitmap(levelCreator.getDataBlob(), width, height);
-        Bitmap resultImage = levelCreator.getScaledBitmap();
+        Thread makeImageThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        iv_result.setImageBitmap(resultImage);
+                levelCreator.makeBigLevelDataSet(puzzle_height, puzzle_width, height, width);
+
+                // UI 작업 수행 X
+                setImageHandler.post(new Runnable(){
+                    @Override
+                    public void run()
+                    {
+                        // UI 작업 수행 O
+                        iv_result.setImageBitmap(levelCreator.getScaledBitmap());
+                    }
+                });
+            }
+        });
+
+        makeImageThread.start();
     }
 
     private void saveLevel()
@@ -460,24 +468,14 @@ public class LevelCreateFragment extends Fragment {
                 putString("\t<l_width>" + width + "</l_width>\n");
                 putString("\t<l_height>" + height + "</l_height>\n");
 
-                String colorStr = "";
+                Bitmap srcBitmap = levelCreator.getSrcBitmap();
 
-                Bitmap smallBitmap = levelCreator.getSmallBitmap();
-                int[] pixels = new int[smallBitmap.getHeight()*smallBitmap.getWidth()];
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                srcBitmap.compress(Bitmap.CompressFormat.PNG, 0 , baos); //bmp is the bitmap object
+                byte[] byteArray = baos.toByteArray();
+                String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-                smallBitmap.getPixels(pixels, 0, smallBitmap.getWidth(), 0, 0, smallBitmap.getWidth(), smallBitmap.getHeight());
-
-                for (int pixel : pixels) {
-                    String temp = Integer.toHexString(pixel);
-                    while (temp.length() < 6)
-                        temp = '0' + temp;
-                    while (temp.length() > 6)
-                        temp = temp.substring(1);
-
-                    colorStr += temp;
-                }
-
-                putString("\t<colorset>" + colorStr + "</colorset>\n");
+                putString("\t<colorset>" + encodedImage + "</colorset>\n");
 
 
                 for(int i = 0; i < puzzle_height*puzzle_width; i++)
@@ -499,24 +497,16 @@ public class LevelCreateFragment extends Fragment {
 
 
                     byte[] colorBlob = levelCreator.getColorBlobs()[i];
-                    colorStr = "";
 
-                    smallBitmap = BitmapFactory.decodeByteArray(colorBlob, 0, colorBlob.length);
-                    pixels = new int[smallBitmap.getHeight()*smallBitmap.getWidth()];
+                    srcBitmap = BitmapFactory.decodeByteArray(colorBlob, 0, colorBlob.length);
 
-                    smallBitmap.getPixels(pixels, 0, smallBitmap.getWidth(), 0, 0, smallBitmap.getWidth(), smallBitmap.getHeight());
+                    baos = new ByteArrayOutputStream();
+                    srcBitmap.compress(Bitmap.CompressFormat.PNG, 0 , baos); //bmp is the bitmap object
+                    byteArray = baos.toByteArray();
+                    encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-                    for (int pixel : pixels) {
-                        String temp = Integer.toHexString(pixel);
-                        while (temp.length() < 6)
-                            temp = '0' + temp;
-                        while (temp.length() > 6)
-                            temp = temp.substring(1);
 
-                        colorStr += temp;
-                    }
-
-                    putString("\t\t<colorset>" + colorStr + "</colorset>\n");
+                    putString("\t\t<colorset>" + encodedImage + "</colorset>\n");
                     putString("\t</level>\n");
                 }
 

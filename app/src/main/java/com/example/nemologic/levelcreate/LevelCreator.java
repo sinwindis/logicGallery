@@ -32,9 +32,23 @@ public class LevelCreator {
     private byte[][] colorBlobs;
     private byte[][] dataBlobs;
 
+    Thread makeBigLevelDataSetThread;
+
     public LevelCreator()
     {
 
+    }
+
+    public void removeData()
+    {
+        srcBitmap = null;
+        smallBitmap = null;
+        scaledBitmap = null;
+
+        colorBlob = null;
+        dataBlob = null;
+        colorBlobs = null;
+        dataBlobs = null;
     }
 
     private void calcAverageColor(Bitmap bitmap)
@@ -80,13 +94,57 @@ public class LevelCreator {
 
         colorBlob = stream.toByteArray();
 
-        scaledBitmap = Bitmap.createScaledBitmap(smallBitmap, 400, 400, false);
+        float widthPerHeight = width/ (float)height;
+
+        int widthSize;
+        int heightSize;
+
+        if(width > height)
+        {
+            //가로가 더 긴 경우
+            widthSize = 400;
+            heightSize = (int)((float)400 / widthPerHeight);
+        }
+        else
+        {
+            //세로가 더 긴 경우
+            widthSize = (int)((float)400 * widthPerHeight);
+            heightSize = 400;
+        }
+
+        Log.d("reduceImageSize", "width: " + width + " height: " + height);
+        Log.d("reduceImageSize", "widthPerHeight: " + widthPerHeight);
+        Log.d("reduceImageSize", "widthSize: " + widthSize + " heightSize: " + heightSize);
+
+        scaledBitmap = Bitmap.createScaledBitmap(smallBitmap, widthSize, heightSize, false);
     }
 
     public void loadFile(Context ctx, Uri uri)
     {
         try {
             srcBitmap = BitmapFactory.decodeStream(ctx.getContentResolver().openInputStream(uri));
+
+            float widthPerHeight = srcBitmap.getWidth()/ (float)srcBitmap.getHeight();
+
+            int widthSize;
+            int heightSize;
+
+            if(srcBitmap.getWidth() > srcBitmap.getHeight())
+            {
+                //가로가 더 긴 경우
+                widthSize = 1000;
+                heightSize = (int)((float)1000 / widthPerHeight);
+            }
+            else
+            {
+                //세로가 더 긴 경우
+                widthSize = (int)((float)1000 * widthPerHeight);
+                heightSize = 1000;
+            }
+
+
+
+            srcBitmap = Bitmap.createScaledBitmap(srcBitmap, widthSize, heightSize, true);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -117,8 +175,21 @@ public class LevelCreator {
         }
     }
 
-    public void makeBigLevelDataSet(int puzzleHeight, int puzzleWidth, int height, int width)
+    public void stopMakeBigLevel()
     {
+        makeBigLevelDataSetThread.interrupt();
+    }
+
+    public boolean makeBigLevelDataSet(final int puzzleHeight, final int puzzleWidth, final int height, final int width)
+    {
+        makeBigLevelDataSetThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+        makeBigLevelDataSetThread.start();
+
         reduceImageSize(puzzleHeight*height, puzzleWidth*width);
 
         Bitmap bitmapFrag;
@@ -157,6 +228,8 @@ public class LevelCreator {
                 }
             }
         }
+
+        return true;
     }
 
     public void showDataBlobLog()
@@ -201,6 +274,10 @@ public class LevelCreator {
         Log.d("dataBlob", log);
     }
 
+    public Bitmap getSrcBitmap()
+    {
+        return srcBitmap;
+    }
     public Bitmap getSmallBitmap()
     {
         return smallBitmap;

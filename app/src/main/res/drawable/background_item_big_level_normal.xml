@@ -3,17 +3,10 @@
 
     <item>
         <shape android:shape="rectangle">
-            <padding android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp" />
-            <solid
-                android:color="#00404040"/>
-        </shape>
-    </item>
-    <item>
-        <shape android:shape="rectangle">
             
             <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
             <solid
-                android:color="#04404040"/>
+                android:color="#00404040"/>
         </shape>
     </item>
     <item>
@@ -29,23 +22,23 @@
             
             <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
             <solid
-                android:color="#0C404040"/>
-        </shape>
-    </item>
-    <item>
-        <shape android:shape="rectangle">
-            
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
-            <solid
                 android:color="#10404040"/>
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            
+
             <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
             <solid
-                android:color="#14404040"/>
+                android:color="#18404040"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+
+            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid
+                android:color="#20404040"/>
         </shape>
     </item>
 

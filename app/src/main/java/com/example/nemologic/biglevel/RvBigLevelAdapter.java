@@ -2,7 +2,6 @@ package com.example.nemologic.biglevel;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,11 +22,7 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
 
     BigLevelThumbnailData[] data;
     Context ctx;
-    int puzzleWidth;
-    int puzzleHeight;
-
-    int itemWidthSize;
-    int itemHeightSize;
+    int puzzleSize;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -38,12 +33,23 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
         }
     }
 
-    RvBigLevelAdapter(Context ctx, BigLevelThumbnailData[] bigLevelThumbnailData, int puzzleWidth, int puzzleHeight) {
+    RvBigLevelAdapter(Context ctx, BigLevelThumbnailData[] bigLevelThumbnailData, int puzzleWidth, int puzzleHeight, int parentSize) {
         //생성자
         this.ctx = ctx;
         this.data = bigLevelThumbnailData;
-        this.puzzleWidth = puzzleWidth;
-        this.puzzleHeight = puzzleHeight;
+
+        if(puzzleWidth > puzzleHeight)
+        {
+            //가로가 더 긴 퍼즐
+            puzzleSize = parentSize/puzzleWidth;
+        }
+        else
+        {
+            //세로가 더 긴 퍼즐
+            puzzleSize = parentSize/puzzleHeight;
+        }
+
+        Log.d("RvBigLevelAdapter", "puzzleSize: " + puzzleSize);
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -51,12 +57,11 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
     @Override
     public RvBigLevelAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext() ;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.item_biglevel, parent, false) ;
-        itemWidthSize = parent.getMeasuredWidth()/ puzzleWidth;
-        itemHeightSize = parent.getMeasuredHeight()/puzzleHeight;
-        view.setLayoutParams(new RecyclerView.LayoutParams(itemWidthSize, itemHeightSize));
+        View view = inflater.inflate(R.layout.item_biglevel, parent, false);
+
+        view.setLayoutParams(new RecyclerView.LayoutParams(puzzleSize, puzzleSize));
 
         return new ViewHolder(view);
     }
@@ -77,13 +82,13 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
                 break;
             case 1:
                 //저장된 게임일 경우
-                bitmap = Bitmap.createScaledBitmap(data[position].getSaveBitmap(), itemWidthSize, itemHeightSize, false);
+                bitmap = Bitmap.createScaledBitmap(data[position].getSaveBitmap(), puzzleSize, puzzleSize, false);
                 iv.setImageBitmap(bitmap);
                 break;
             case 2:
             case 3:
                 //완료한 게임일 경우
-                bitmap = Bitmap.createScaledBitmap(data[position].getColorBitmap(), itemWidthSize, itemHeightSize, false);
+                bitmap = Bitmap.createScaledBitmap(data[position].getColorBitmap(), puzzleSize, puzzleSize, false);
                 iv.setImageBitmap(bitmap);
                 break;
         }

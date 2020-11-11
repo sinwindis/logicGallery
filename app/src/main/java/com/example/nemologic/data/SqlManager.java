@@ -48,8 +48,10 @@ public class SqlManager {
     public static final class BigPuzzleDBSql implements BaseColumns {
         public static final String ID = "id";
         public static final String A_ID = "a_id";
-        public static final String WIDTH = "width";
-        public static final String HEIGHT = "height";
+        public static final String WIDTH = "p_width";
+        public static final String HEIGHT = "p_height";
+        public static final String L_WIDTH = "l_width";
+        public static final String L_HEIGHT = "l_height";
         public static final String PROGRESS = "progress";
         public static final String COLORSET = "colorSet";
         public static final String _TABLENAME = "BigPuzzle";
@@ -59,6 +61,8 @@ public class SqlManager {
                         + A_ID +" integer not null, "
                         + WIDTH +" integer not null , "
                         + HEIGHT +" integer not null , "
+                        + L_WIDTH +" integer not null , "
+                        + L_HEIGHT +" integer not null , "
                         + PROGRESS +" integer not null , "
                         + COLORSET +" BLOB not null );";
     }

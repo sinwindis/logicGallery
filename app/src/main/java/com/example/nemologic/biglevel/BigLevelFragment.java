@@ -4,12 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,15 +68,15 @@ public class BigLevelFragment extends Fragment {
 
         //name 다시
         String name = StringGetter.p_name.get(p_id);
-        int puzzleWidth = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.WIDTH));
-        int puzzleHeight = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.HEIGHT));
+        final int puzzleWidth = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.WIDTH));
+        final int puzzleHeight = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.HEIGHT));
 
         TextView tv_title = fragmentView.findViewById(R.id.tv_title);
 
         tv_title.setText(name);
 
         Cursor bigLevelCursor =  mDbOpenHelper.getBigLevelsCursorByParentId(p_id);
-        BigLevelThumbnailData[] levelThumbnailData = new BigLevelThumbnailData[bigLevelCursor.getCount()];
+        final BigLevelThumbnailData[] levelThumbnailData = new BigLevelThumbnailData[bigLevelCursor.getCount()];
         int fullCount = 0;
         int clearCount = 0;
 
@@ -103,9 +105,19 @@ public class BigLevelFragment extends Fragment {
 
         //rv_level.addItemDecoration(new BigLevelBorder(ctx, R.drawable.border_gameboard_normal, puzzleWidth));
 
+        final ConstraintLayout cl_rv_cover = fragmentView.findViewById(R.id.cl_rv_cover);
+
         rv_level.setLayoutManager(new GridLayoutManager(ctx, puzzleWidth));
 
-        rv_level.setAdapter(new RvBigLevelAdapter(ctx, levelThumbnailData, puzzleWidth, puzzleHeight));
+        cl_rv_cover.post(new Runnable() {
+            @Override
+            public void run() {
+                int parentSize = cl_rv_cover.getMeasuredWidth();
+                Log.d("BigLevelFragment", "parentSize: " + parentSize);
+
+                rv_level.setAdapter(new RvBigLevelAdapter(ctx, levelThumbnailData, puzzleWidth, puzzleHeight, parentSize));
+            }
+        });
 
         rv_level.addOnItemTouchListener(new BigLevelItemTouchListener(ctx));
 

@@ -76,6 +76,8 @@ public class GalleryFragment extends Fragment {
             int width = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.WIDTH));
             int height = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.HEIGHT));
             int progress = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.PROGRESS));
+            int l_width = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.L_WIDTH));
+            int l_height = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.L_HEIGHT));
 
             Log.d("loadPuzzleData", "progress: " + progress);
             byte[] colorSet = bigPuzzleCursor.getBlob(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.COLORSET));
@@ -83,7 +85,7 @@ public class GalleryFragment extends Fragment {
 
             Bitmap bitmap = BitmapFactory.decodeByteArray( colorSet, 0, colorSet.length );
 
-            bigPuzzleData.add(new BigPuzzleData(id, a_id, name, bitmap, width, height, progress, custom));
+            bigPuzzleData.add(new BigPuzzleData(id, a_id, name, bitmap, width, height, l_width, l_height, progress, custom));
 
             fullCount++;
             if(progress == width*height)

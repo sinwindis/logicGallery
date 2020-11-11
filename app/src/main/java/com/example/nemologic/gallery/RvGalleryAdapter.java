@@ -81,8 +81,8 @@ public class RvGalleryAdapter extends RecyclerView.Adapter<RvGalleryAdapter.View
         tv_puzzleSize.setText(strPuzzleProgress);
 
         //레벨 아이템 사이즈 표시
-        int levelWidth = bigPuzzleData.get(position).bitmap.getWidth()/bigPuzzleData.get(position).width;
-        int levelHeight = bigPuzzleData.get(position).bitmap.getHeight()/bigPuzzleData.get(position).height;
+        int levelWidth = bigPuzzleData.get(position).l_width;
+        int levelHeight = bigPuzzleData.get(position).l_height;
 
         String strLevelSize = levelWidth + "X" + levelHeight;
 

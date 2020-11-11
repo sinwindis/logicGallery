@@ -26,46 +26,50 @@ public class LoadActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_load);
 
-        final Handler loadHandler = new Handler();
         final Handler intentHandler = new Handler();
 
-        runOnUiThread(new Runnable() {
+        Thread loadThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                setContentView(R.layout.activity_load);
+                Context ctx = getBaseContext();
 
-                loadHandler.post(new Runnable() {
+                DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
+                try {
+                    mDbOpenHelper.open();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                mDbOpenHelper.create();
+                mDbOpenHelper.close();
+
+                DbManager dbManger = new DbManager(ctx);
+
+
+                dbManger.loadData();
+                StringGetter.loadData(ctx);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                intentHandler.post(new Runnable(){
                     @Override
-                    public void run() {
-
-                        Context ctx = getBaseContext();
-
-                        DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
-                        try {
-                            mDbOpenHelper.open();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                        mDbOpenHelper.create();
-                        mDbOpenHelper.close();
-
-                        DbManager dbManger = new DbManager(ctx);
-
-                        dbManger.loadData();
-                        StringGetter.loadData(ctx);
-
-                        intentHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent intent = new Intent(LoadActivity.this, MainActivity.class);
-                                startActivity(intent);
-                            }
-                        });
+                    public void run()
+                    {
+                        // UI 작업 수행 O
+                        Intent intent = new Intent(LoadActivity.this, MainActivity.class);
+                        startActivity(intent);
                     }
                 });
             }
         });
+
+        loadThread.start();
+
     }
 
     @Override
