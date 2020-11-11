@@ -36,7 +36,7 @@
     <string name="str_puzzlesize">Input Puzzle Size:</string>
     <string name="str_inputname">Input Puzzle Name:</string>
     <string name="str_puzzlenum">Input Puzzle Count:</string>
-    <string name="str_loading">"      Loading..."</string>
+    <string name="str_loading">"      Loading…"</string>
     <string name="str_tutorial1">The number 3 at right upper side of the board shows you that the right column contains three continuous check.\\nFortunately there are only three cells in the column so every cell should be checked to satisfy three continuous chekced cell.</string>
     <string name="str_tutorial2">ㅇ</string>
     <string name="str_tutorial3">d</string>

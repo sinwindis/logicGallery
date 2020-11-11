@@ -321,7 +321,7 @@ public class DbManager {
 
 
 
-        Log.d("DBManager", "load end");
+        Log.d("DBManager", "loadData end");
 
         return currentVersion;
     }
