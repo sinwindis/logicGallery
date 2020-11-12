@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -131,7 +130,7 @@ public class GameFragment extends Fragment {
         //토글 버튼
         final ImageView img_toggle = fragmentView.findViewById(R.id.img_toggle);
 
-        ButtonAnimation.setButtonAnimationShadow(img_toggle);
+        ButtonAnimation.setOvalButtonAnimationShadow(img_toggle);
 
         img_toggle.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -140,11 +139,11 @@ public class GameFragment extends Fragment {
 
                 if(touchMode == 1)
                 {
-                    ((ImageView)view).setImageResource(R.drawable.background_btn_x);
+                    ((ImageView)view).setImageResource(R.drawable.ic_x);
                 }
                 else
                 {
-                    ((ImageView)view).setImageResource(R.drawable.background_btn_o);
+                    ((ImageView)view).setImageResource(R.drawable.ic_o);
                 }
                 
             }
@@ -152,7 +151,7 @@ public class GameFragment extends Fragment {
 
         //다음 스택 버튼
         ImageView img_next = fragmentView.findViewById(R.id.img_nextstack);
-        ButtonAnimation.setButtonAnimationShadow(img_next);
+        ButtonAnimation.setOvalButtonAnimationShadow(img_next);
 
         img_next.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -163,7 +162,7 @@ public class GameFragment extends Fragment {
         });
 
         ImageView img_prev = fragmentView.findViewById(R.id.img_prevstack);
-        ButtonAnimation.setButtonAnimationShadow(img_prev);
+        ButtonAnimation.setOvalButtonAnimationShadow(img_prev);
 
         img_prev.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -174,7 +173,7 @@ public class GameFragment extends Fragment {
 
         //힌트 버튼
         ImageView img_hint = fragmentView.findViewById(R.id.img_hint);
-        ButtonAnimation.setButtonAnimationShadow(img_hint);
+        ButtonAnimation.setOvalButtonAnimationShadow(img_hint);
 
         img_hint.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -187,7 +186,7 @@ public class GameFragment extends Fragment {
         //튜토리얼 버튼
         ImageView img_tutorial = fragmentView.findViewById(R.id.img_tutorial);
 
-        ButtonAnimation.setButtonAnimationNormal(img_tutorial);
+        ButtonAnimation.setOvalButtonAnimationNormal(img_tutorial);
         img_tutorial.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -203,7 +202,7 @@ public class GameFragment extends Fragment {
 
         //옵션 버튼
         ImageView img_option = fragmentView.findViewById(R.id.img_option);
-        ButtonAnimation.setButtonAnimationNormal(img_option);
+        ButtonAnimation.setOvalButtonAnimationNormal(img_option);
 
         img_option.setOnClickListener(new View.OnClickListener() {
 
@@ -226,7 +225,7 @@ public class GameFragment extends Fragment {
 
         //뒤로가기 버튼
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
-        ButtonAnimation.setButtonAnimationNormal(img_back);
+        ButtonAnimation.setOvalButtonAnimationNormal(img_back);
 
         img_back.setOnClickListener(new View.OnClickListener() {
 

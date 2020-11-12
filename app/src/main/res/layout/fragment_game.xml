@@ -221,7 +221,7 @@
                 android:padding="15dp"
                 android:layout_margin="2dp"
                 android:src="@drawable/ic_next"
-                android:background="@drawable/background_btn_normal"
+                android:background="@drawable/background_btn_oval_normal"
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/img_prevstack"
@@ -235,7 +235,7 @@
                 android:padding="15dp"
                 android:layout_margin="2dp"
                 android:src="@drawable/ic_prev"
-                android:background="@drawable/background_btn_normal"
+                android:background="@drawable/background_btn_oval_normal"
                 app:layout_constraintEnd_toStartOf="@id/img_nextstack"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -250,8 +250,8 @@
             android:padding="15dp"
             android:layout_marginStart="40dp"
             android:layout_marginBottom="20dp"
-            android:src="@drawable/background_btn_o"
-            android:background="@drawable/background_btn_normal"
+            android:src="@drawable/ic_o"
+            android:background="@drawable/background_btn_oval_normal"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -286,7 +286,7 @@
                 android:padding="15dp"
                 android:layout_margin="2dp"
                 android:src="@drawable/ic_hint"
-                android:background="@drawable/background_btn_normal"
+                android:background="@drawable/background_btn_oval_normal"
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

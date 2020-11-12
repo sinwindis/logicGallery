@@ -203,7 +203,8 @@ public class DbOpenHelper {
     }
 
     public Cursor getBigPuzzleCursor(){
-        Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.BigPuzzleDBSql._TABLENAME + ";", null);
+        Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.BigPuzzleDBSql._TABLENAME + " ORDER BY " + SqlManager.BigPuzzleDBSql.A_ID + " , " + SqlManager.BigPuzzleDBSql.L_WIDTH + " , " + SqlManager.BigPuzzleDBSql.L_HEIGHT, null);
+
 
         return c;
     }

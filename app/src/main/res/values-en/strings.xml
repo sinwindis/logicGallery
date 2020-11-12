@@ -36,5 +36,8 @@
     <string name="str_loading">"      Loading..."</string>
     <string name="str_tutorial1">The number 3 at right upper side of the board shows you that the right column contains three continuous check.\\nFortunately there are only three cells in the column so every cell should be checked to satisfy three continuous chekced cell.</string>
     <string name="str_tutorial2">3개의 칸을 모두 클릭하여 체크해 보았습니다.\\n오른쪽 위의 3이라는 숫자가 회색으로 바뀐 것을 확인할 수 있습니다. 이는 해당 숫자가 완성되었다는 뜻입니다.</string>
+    <string name="search_artist">Artist:</string>
+    <string name="search_size">Game Size:</string>
+    <string name="search_progress">Progress:</string>
 
 </resources>

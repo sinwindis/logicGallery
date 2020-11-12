@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -149,7 +148,7 @@ public class LevelCreateFragment extends Fragment {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_oval_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:

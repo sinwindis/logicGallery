@@ -47,5 +47,8 @@
     <string name="str_tutorial8">d</string>
     <string name="str_tutorial9">d</string>
     <string name="str_tutorial10">d</string>
+    <string name="search_artist">Artist:</string>
+    <string name="search_size">Game Size:</string>
+    <string name="search_progress">Progress:</string>
 
 </resources>

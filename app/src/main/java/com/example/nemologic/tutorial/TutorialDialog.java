@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.provider.ContactsContract;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -69,10 +68,10 @@ public class TutorialDialog {
         switch (type)
         {
             case 0:
-                iv_toggle.setImageResource(R.drawable.background_btn_o);
+                iv_toggle.setImageResource(R.drawable.ic_o);
                 break;
             case 1:
-                iv_toggle.setImageResource(R.drawable.background_btn_x);
+                iv_toggle.setImageResource(R.drawable.ic_x);
                 break;
             case 2:
                 iv_toggle.setImageResource(R.drawable.ic_hint);

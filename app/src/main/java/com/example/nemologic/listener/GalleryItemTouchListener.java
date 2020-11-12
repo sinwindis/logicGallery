@@ -5,18 +5,18 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 
 
-public class GalleryItemTouchListener implements RecyclerView.OnItemTouchListener {
+public class GalleryItemTouchListener implements ImageView.OnTouchListener {
     Drawable press;
     Drawable up;
-
-    View v;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public GalleryItemTouchListener(Context ctx){
@@ -26,44 +26,24 @@ public class GalleryItemTouchListener implements RecyclerView.OnItemTouchListene
     }
 
     @Override
-    public boolean onInterceptTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
+    public boolean onTouch(View view, MotionEvent motionEvent) {
 
-        if(motionEvent.getPointerCount() > 1){
-
-            return false;
-        }
-
-        int action = motionEvent.getAction();
-
-        if(action == MotionEvent.ACTION_DOWN){
-
-            v = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-
-            if(v != null)
+        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+            if(view != null)
             {
-                v.setBackground(press);
+                view.setBackground(press);
             }
 
 
         }
-        else if(action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP || action == MotionEvent.ACTION_CANCEL){
+        else if(motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_POINTER_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL){
 
-            if(v != null)
+            if(view != null)
             {
-                v.setBackground(up);
+                view.setBackground(up);
             }
-
-            return false;
         }
-
-
 
         return false;
     }
-
-    @Override
-    public void onTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) { }
-
-    @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean b) { }
 }

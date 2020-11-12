@@ -23,7 +23,6 @@ import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.data.StringGetter;
 import com.example.nemologic.listener.BigLevelItemTouchListener;
-import com.example.nemologic.listener.LevelItemTouchListener;
 
 import java.sql.SQLException;
 
@@ -124,7 +123,7 @@ public class BigLevelFragment extends Fragment {
 
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
 
-        ButtonAnimation.setButtonAnimationNormal(img_back);
+        ButtonAnimation.setOvalButtonAnimationNormal(img_back);
 
         img_back.setOnClickListener(new View.OnClickListener() {
 

@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,16 +21,13 @@ import com.example.nemologic.R;
 import com.example.nemologic.data.BigLevelData;
 import com.example.nemologic.data.StringGetter;
 import com.example.nemologic.gallery.GalleryFragment;
-import com.example.nemologic.data.BigLevelThumbnailData;
 import com.example.nemologic.data.DbOpenHelper;
-import com.example.nemologic.data.LevelThumbnailData;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.game.GameFragment;
 import com.example.nemologic.levelcreate.LevelCreateFragment;
 import com.example.nemologic.option.OptionDialog;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -122,7 +118,7 @@ public class MainFragment extends Fragment {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_oval_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -157,7 +153,7 @@ public class MainFragment extends Fragment {
                 switch (motionEvent.getActionMasked())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_shadow));
+                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_oval_shadow));
                         break;
 
                     case MotionEvent.ACTION_UP:
