@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -85,23 +87,31 @@ public class GalleryFragment extends Fragment {
         @SuppressLint("UseCompatLoadingForDrawables")
         final Drawable up = ctx.getResources().getDrawable(R.drawable.background_gallery_image);
         cl_touchBox.setOnTouchListener(new View.OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-                    if(view != null)
-                    {
-                        cl_frame.setBackground(press);
+//                    if(view != null)
+//                    {
+//                        cl_frame.setBackground(press);
+//
+//                    }
 
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        cl_frame.setElevation(0F);
                     }
-
 
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_POINTER_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL){
 
-                    if(view != null)
-                    {
-                        cl_frame.setBackground(up);
+//                    if(view != null)
+//                    {
+//                        cl_frame.setBackground(up);
+//                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        cl_frame.setElevation(20F);
                     }
                 }
                 return false;
