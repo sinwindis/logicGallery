@@ -66,8 +66,6 @@ public class GameBoard {
     private float viewSize;
 
     private boolean[][] dragTemp;
-    private boolean[][] dragIndexTemp;
-    private boolean[][] hint;
 
     //0: 체크, 1: X, 2: 힌트
     int touchMode = 0;
@@ -105,16 +103,11 @@ public class GameBoard {
         //hint properties
         sharedPreferences = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
         hintCount = sharedPreferences.getInt("hint", 3);
-
-        //for debug
-        hintCount = 5;
     }
 
     private void initialize()
     {
         dragTemp = new boolean[lpm.height][lpm.width];
-        dragIndexTemp = new boolean[lpm.height][lpm.width];
-        hint = new boolean[lpm.height][lpm.width];
         rv_board = targetView.findViewById(R.id.rv_board);
         rv_row = targetView.findViewById(R.id.cl_row);
         rv_column = targetView.findViewById(R.id.cl_column);
@@ -137,7 +130,6 @@ public class GameBoard {
             for(int x = 0; x < lpm.width; x++)
             {
                 dragTemp[y][x] = false;
-                dragIndexTemp[y][x] = false;
             }
         }
 
@@ -218,18 +210,6 @@ public class GameBoard {
             lastY = touchEndY;
             dragCount = (dragEndX - dragStartX + 1) * (dragEndY - dragStartY + 1);
         }
-
-
-        //마지막 드래그한 칸의 가로줄과 세로줄에 하이라이트를 해 준다.
-        for(int y = 0; y < lpm.height; y++)
-        {
-            dragIndexTemp[y][lastX] = true;
-        }
-        for(int x = 0; x < lpm.width; x++)
-        {
-            dragIndexTemp[lastY][x] = true;
-        }
-
 
         for(int y = dragStartY; y <= dragEndY; y++)
         {
@@ -328,7 +308,7 @@ public class GameBoard {
         {
             for(int x = 0; x < lpm.width; x++)
             {
-                if(dragTemp[y][x] && !hint[y][x])
+                if(dragTemp[y][x] && !lpm.hint[y*lpm.width + x])
                 {
                     switch(macroMode)
                     {
@@ -348,7 +328,7 @@ public class GameBoard {
                             //힌트
                             if(hintCount > 0)
                             {
-                                hint[y][x] = true;
+                                lpm.hint[y*lpm.width + x] = true;
                                 lpm.checkedSet[y * lpm.width + x] = lpm.dataSet[y * lpm.width + x];
                                 hintCount--;
                             }
@@ -443,7 +423,10 @@ public class GameBoard {
         removeDragTemp();
         updateNumColor();
         checkAutoX();
-        lpm.pushCheckStack();
+        if(macroMode != 3)
+        {
+            lpm.pushCheckStack();
+        }
         setText();
         refreshBoard();
 
@@ -535,7 +518,7 @@ public class GameBoard {
                     continue;
                 }
 
-                if(hint[y][x])
+                if(lpm.hint[y*lpm.width + x])
                 {
                     switch(lpm.checkedSet[y * lpm.width + x])
                     {
@@ -590,63 +573,22 @@ public class GameBoard {
                 if(dragTemp[y][x])
                 {
                     //dragTemp 가 true 인 경우 드래그된 칸은 macroMode 에 맞게 그래픽을 갱신해 준다.
-                    //만약 dragIndexTemp 또한 true 일 경우 드래그인덱스 그래픽을 표시, 이외에는 일반 그래픽 표시
-                    if(dragIndexTemp[y][x])
-                    {
-                        switch(macroMode)
-                        {
-                            case 0:
-                                view.setImageDrawable(null);
-                                view.setBackgroundColor(Color.parseColor("#82C3FF"));
-                                break;
-                            case 1:
-                                view.setImageDrawable(null);
-                                view.setBackgroundColor(Color.parseColor("#406F9A"));
-                                break;
-                            case 2:
-                                view.setImageResource(R.drawable.background_x);
-                                view.setBackgroundColor(Color.parseColor("#82C3FF"));
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        switch(macroMode)
-                        {
-                            case 0:
-                                //공백
-                                view.setImageDrawable(null);
-                                view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                break;
-                            case 1:
-                                //체크
-                                view.setImageDrawable(null);
-                                view.setBackgroundColor(Color.parseColor("#000000"));
-                                break;
-                            case 2:
-                                //X
-                                view.setImageResource(R.drawable.background_x);
-                                view.setBackgroundColor(Color.parseColor("#ffffff"));
-                                break;
-                        }
-                    }
-
-                }
-                else if(dragIndexTemp[y][x])
-                {
-                    switch(lpm.checkedSet[y * lpm.width + x])
+                    switch(macroMode)
                     {
                         case 0:
+                            //공백
                             view.setImageDrawable(null);
-                            view.setBackgroundColor(Color.parseColor("#82C3FF"));
+                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                             break;
                         case 1:
+                            //체크
                             view.setImageDrawable(null);
-                            view.setBackgroundColor(Color.parseColor("#406F9A"));
+                            view.setBackgroundColor(Color.parseColor("#000000"));
                             break;
                         case 2:
+                            //X
                             view.setImageResource(R.drawable.background_x);
-                            view.setBackgroundColor(Color.parseColor("#82C3FF"));
+                            view.setBackgroundColor(Color.parseColor("#ffffff"));
                             break;
                     }
                 }

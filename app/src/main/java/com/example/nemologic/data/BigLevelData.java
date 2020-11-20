@@ -66,7 +66,7 @@ public class BigLevelData {
             for(int x = 0; x < width; x++)
             {
                 int color;
-                if(saveData[y*width + x] == 1)
+                if(saveData[y*width + x] == 1 || saveData[y*width + x] == -1)
                 {
                     //체크된 칸은 검은색 컬러
                     color = Integer.parseInt("000000", 16);

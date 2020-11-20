@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
 import com.example.nemologic.animation.ButtonAnimation;
-import com.example.nemologic.data.BigLevelThumbnailData;
+import com.example.nemologic.data.BigLevelData;
 import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.data.StringGetter;
@@ -43,16 +43,21 @@ public class BigLevelFragment extends Fragment {
         View fragmentView = inflater.inflate(R.layout.fragment_biglevel, container, false);
 
         final RecyclerView rv_level = fragmentView.findViewById(R.id.rv_biglevel);
+        
+        int puzzleWidth;
+        int puzzleHeight;
+        int fullCount = 0;
+        int clearCount = 0;
+
+        BigLevelData[] levelThumbnailData;
 
         int p_id = 0;
-        String p_name = "";
+        boolean custom = false;
 
         if(getArguments() != null){
             p_id = getArguments().getInt("p_id"); // 전달한 key 값
-            p_name = getArguments().getString("p_name");
+            custom = getArguments().getBoolean("custom");
         }
-
-
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
@@ -61,43 +66,83 @@ public class BigLevelFragment extends Fragment {
             e.printStackTrace();
         }
 
-        Cursor bigPuzzleCursor =  mDbOpenHelper.getBigPuzzleCursorById(p_id);
+        if(custom)
+        {
+            Cursor customBigPuzzleCursor =  mDbOpenHelper.getCustomBigPuzzleCursorById(p_id);
+            customBigPuzzleCursor.moveToNext();
 
-        bigPuzzleCursor.moveToNext();
+            String name = customBigPuzzleCursor.getString(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_NAME));
+            puzzleWidth = customBigPuzzleCursor.getInt(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_WIDTH));
+            puzzleHeight = customBigPuzzleCursor.getInt(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_HEIGHT));
 
-        //name 다시
-        String name = StringGetter.p_name.get(p_id);
-        final int puzzleWidth = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.WIDTH));
-        final int puzzleHeight = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.HEIGHT));
+            TextView tv_title = fragmentView.findViewById(R.id.tv_title);
 
-        TextView tv_title = fragmentView.findViewById(R.id.tv_title);
+            tv_title.setText(name);
 
-        tv_title.setText(name);
+            Cursor customBigLevelCursor =  mDbOpenHelper.getCustomBigLevelsCursorByParentId(p_id);
+            levelThumbnailData = new BigLevelData[customBigLevelCursor.getCount()];
 
-        Cursor bigLevelCursor =  mDbOpenHelper.getBigLevelsCursorByParentId(p_id);
-        final BigLevelThumbnailData[] levelThumbnailData = new BigLevelThumbnailData[bigLevelCursor.getCount()];
-        int fullCount = 0;
-        int clearCount = 0;
+            while(customBigLevelCursor.moveToNext()) {
 
-        while(bigLevelCursor.moveToNext()) {
+                int id = customBigLevelCursor.getInt(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.ID));
+                int number = customBigLevelCursor.getInt(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.NUMBER));
+                int width = customBigLevelCursor.getInt(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.WIDTH));
+                int height = customBigLevelCursor.getInt(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.HEIGHT));
+                int progress = customBigLevelCursor.getInt(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.PROGRESS));
+                byte[] dataSet = customBigLevelCursor.getBlob(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.DATASET));
+                byte[] colorSet = customBigLevelCursor.getBlob(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.COLORSET));
+                byte[] saveData = new byte[0];
+                if(progress == 1 || progress == 3)
+                    saveData = customBigLevelCursor.getBlob(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.SAVEDATA));
 
-            int id = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.ID));
-            int width = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
-            int height = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
-            int progress = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
-            byte[] dataSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
-            byte[] colorSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
-            byte[] saveData = new byte[0];
-            if(progress == 1 || progress == 3)
-                saveData = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
-
-            levelThumbnailData[fullCount] = new BigLevelThumbnailData(id, p_name, width, height, progress, dataSet, saveData, colorSet);
-            fullCount++;
-            if(progress == 2 || progress == 3)
-            {
-                clearCount++;
+                levelThumbnailData[fullCount] = new BigLevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet);
+                fullCount++;
+                if(progress == 2 || progress == 3)
+                {
+                    clearCount++;
+                }
             }
         }
+        else
+        {
+            Cursor bigPuzzleCursor =  mDbOpenHelper.getBigPuzzleCursorById(p_id);
+
+            bigPuzzleCursor.moveToNext();
+
+            puzzleWidth = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.P_WIDTH));
+            puzzleHeight = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.P_HEIGHT));
+
+            TextView tv_title = fragmentView.findViewById(R.id.tv_title);
+
+            String name = StringGetter.p_name.get(p_id);
+            tv_title.setText(name);
+
+            Cursor bigLevelCursor =  mDbOpenHelper.getBigLevelsCursorByParentId(p_id);
+            levelThumbnailData = new BigLevelData[bigLevelCursor.getCount()];
+
+            while(bigLevelCursor.moveToNext()) {
+
+                int id = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.ID));
+                int number = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.NUMBER));
+                int width = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
+                int height = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
+                int progress = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
+                byte[] dataSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
+                byte[] colorSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
+                byte[] saveData = new byte[0];
+                if(progress == 1 || progress == 3)
+                    saveData = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
+
+                levelThumbnailData[fullCount] = new BigLevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet);
+                fullCount++;
+                if(progress == 2 || progress == 3)
+                {
+                    clearCount++;
+                }
+            }
+        }
+
+
         mDbOpenHelper.close();
 
         ((TextView)fragmentView.findViewById(R.id.tv_level_num)).setText(clearCount + "/" + fullCount);
@@ -108,13 +153,16 @@ public class BigLevelFragment extends Fragment {
 
         rv_level.setLayoutManager(new GridLayoutManager(ctx, puzzleWidth));
 
+        final int finalPuzzleWidth = puzzleWidth;
+        final int finalPuzzleHeight = puzzleHeight;
+        final BigLevelData[] finalLevelThumbnailData = levelThumbnailData;
         cl_rv_cover.post(new Runnable() {
             @Override
             public void run() {
                 int parentSize = cl_rv_cover.getMeasuredWidth();
                 Log.d("BigLevelFragment", "parentSize: " + parentSize);
 
-                rv_level.setAdapter(new RvBigLevelAdapter(ctx, levelThumbnailData, puzzleWidth, puzzleHeight, parentSize));
+                rv_level.setAdapter(new RvBigLevelAdapter(ctx, finalLevelThumbnailData, finalPuzzleWidth, finalPuzzleHeight, parentSize));
             }
         });
 

@@ -25,10 +25,10 @@ public class DbOpenHelper {
 
         @Override
         public void onCreate(SQLiteDatabase db){
-            db.execSQL(SqlManager.LevelDBSql._CREATE);
-            db.execSQL(SqlManager.CategoryDBSql._CREATE);
             db.execSQL(SqlManager.BigPuzzleDBSql._CREATE);
             db.execSQL(SqlManager.BigLevelDBSql._CREATE);
+            db.execSQL(SqlManager.CustomBigPuzzleDBSql._CREATE);
+            db.execSQL(SqlManager.CustomBigLevelDBSql._CREATE);
         }
 
         @Override
@@ -94,8 +94,8 @@ public class DbOpenHelper {
         ContentValues values = new ContentValues();
         values.put(SqlManager.BigPuzzleDBSql.ID, id);
         values.put(SqlManager.BigPuzzleDBSql.A_ID, a_id);
-        values.put(SqlManager.BigPuzzleDBSql.WIDTH, width);
-        values.put(SqlManager.BigPuzzleDBSql.HEIGHT, height);
+        values.put(SqlManager.BigPuzzleDBSql.P_WIDTH, width);
+        values.put(SqlManager.BigPuzzleDBSql.P_HEIGHT, height);
         values.put(SqlManager.BigPuzzleDBSql.L_WIDTH, l_width);
         values.put(SqlManager.BigPuzzleDBSql.L_HEIGHT, l_height);
         values.put(SqlManager.BigPuzzleDBSql.PROGRESS, 0);
@@ -118,11 +118,16 @@ public class DbOpenHelper {
         return mDB.insert(SqlManager.CustomBigLevelDBSql._TABLENAME, null, values);
     }
 
-    public long insertCustomBigPuzzle(int width, int height, byte[] colorSet){
+    public long insertCustomBigPuzzle(String a_name, String p_name, int p_width, int p_height, int l_width, int l_height, byte[] colorSet){
 
         ContentValues values = new ContentValues();
-        values.put(SqlManager.CustomBigPuzzleDBSql.P_WIDTH, width);
-        values.put(SqlManager.CustomBigPuzzleDBSql.P_HEIGHT, height);
+
+        values.put(SqlManager.CustomBigPuzzleDBSql.A_NAME, a_name);
+        values.put(SqlManager.CustomBigPuzzleDBSql.P_NAME, p_name);
+        values.put(SqlManager.CustomBigPuzzleDBSql.P_WIDTH, p_width);
+        values.put(SqlManager.CustomBigPuzzleDBSql.P_HEIGHT, p_height);
+        values.put(SqlManager.CustomBigPuzzleDBSql.L_WIDTH, l_width);
+        values.put(SqlManager.CustomBigPuzzleDBSql.L_HEIGHT, l_height);
         values.put(SqlManager.CustomBigPuzzleDBSql.PROGRESS, 0);
         values.put(SqlManager.CustomBigPuzzleDBSql.COLORSET, colorSet);
 
@@ -205,12 +210,23 @@ public class DbOpenHelper {
     public Cursor getBigPuzzleCursor(){
         Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.BigPuzzleDBSql._TABLENAME + " ORDER BY " + SqlManager.BigPuzzleDBSql.A_ID + " , " + SqlManager.BigPuzzleDBSql.L_WIDTH + " , " + SqlManager.BigPuzzleDBSql.L_HEIGHT, null);
 
+        return c;
+    }
+
+    public Cursor getCustomBigPuzzleCursor(){
+        Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.CustomBigPuzzleDBSql._TABLENAME + " ORDER BY " + SqlManager.CustomBigPuzzleDBSql.A_NAME + " , " + SqlManager.CustomBigPuzzleDBSql.L_WIDTH + " , " + SqlManager.CustomBigPuzzleDBSql.L_HEIGHT, null);
 
         return c;
     }
 
     public Cursor getBigPuzzleCursorById(int id){
-        Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.BigPuzzleDBSql._TABLENAME + " WHERE " + SqlManager.BigLevelDBSql.ID + "='" + id + "';", null);
+        Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.BigPuzzleDBSql._TABLENAME + " WHERE " + SqlManager.BigPuzzleDBSql.ID + "='" + id + "';", null);
+
+        return c;
+    }
+
+    public Cursor getCustomBigPuzzleCursorById(int id){
+        Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.CustomBigPuzzleDBSql._TABLENAME + " WHERE " + SqlManager.CustomBigPuzzleDBSql.ID + "='" + id + "';", null);
 
         return c;
     }
@@ -225,6 +241,13 @@ public class DbOpenHelper {
     public Cursor getBigLevelsCursorByParentId(int id){
 
         Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.BigLevelDBSql._TABLENAME + " WHERE " + SqlManager.BigLevelDBSql.P_ID + "='" + id + "' ORDER BY " + SqlManager.BigLevelDBSql.NUMBER + " ASC;", null);
+
+        return c;
+    }
+
+    public Cursor getCustomBigLevelsCursorByParentId(int id){
+
+        Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.CustomBigLevelDBSql._TABLENAME + " WHERE " + SqlManager.CustomBigLevelDBSql.P_ID + "='" + id + "' ORDER BY " + SqlManager.CustomBigLevelDBSql.NUMBER + " ASC;", null);
 
         return c;
     }

@@ -40,19 +40,17 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <ImageView
-            android:id="@+id/img_search"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:padding="5dp"
-            android:layout_margin="15dp"
-            android:src="@drawable/ic_hint"
+<!--        <ImageView-->
+<!--            android:id="@+id/img_open_search"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:padding="5dp"-->
+<!--            android:layout_margin="15dp"-->
+<!--            android:src="@drawable/ic_hint"-->
 
-            android:visibility="gone"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -62,7 +60,7 @@
         android:layout_height="0dp"
         android:layout_margin="20dp"
         android:elevation="20dp"
-        android:background="@drawable/background_gallery_image"
+        android:background="@drawable/wood"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_top"
@@ -71,92 +69,99 @@
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp">
 
-            android:layout_margin="20dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
 
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/cl_summary">
-
-            <ImageView
-                android:id="@+id/iv_thumbnail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:background="@drawable/background_gallery_item_shadow"
+                android:layout_margin="20dp"
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-            </ImageView>
+                app:layout_constraintBottom_toTopOf="@id/cl_summary">
+
+                <ImageView
+                    android:id="@+id/iv_thumbnail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/background_gallery_item_shadow"
+
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+                </ImageView>
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_summary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_gallery_item_shadow"
-            android:layout_margin="20dp"
-            android:padding="20dp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            >
-
-            <TextView
-                style="@style/StyleFontLarge"
-
-                android:id="@+id/tv_gallery_item_puzzle_name"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_summary"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Puzzle Name"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:background="@drawable/background_gallery_item_shadow"
+                android:layout_margin="20dp"
+                android:padding="20dp"
 
-            <TextView
-                style="@style/StyleFontMedium"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
 
-                android:id="@+id/tv_gallery_item_artist_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                <TextView
+                    style="@style/StyleFontLarge"
 
-                android:text="Artist Name"
-                app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_puzzle_name"
-                app:layout_constraintStart_toStartOf="parent"/>
+                    android:id="@+id/tv_gallery_item_puzzle_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Puzzle Name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    style="@style/StyleFontMedium"
+
+                    android:id="@+id/tv_gallery_item_artist_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Artist Name"
+                    app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_puzzle_name"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
 
 
-            <TextView
-                style="@style/StyleFontSmall"
+                <TextView
+                    style="@style/StyleFontSmall"
 
-                android:id="@+id/tv_gallery_item_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                    android:id="@+id/tv_gallery_item_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-                android:text="Progress"
-                app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_artist_name"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                    android:text="Progress"
+                    app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_artist_name"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
-            <TextView
-                style="@style/StyleFontSmall"
+                <TextView
+                    style="@style/StyleFontSmall"
 
-                android:id="@+id/tv_gallery_item_level_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                    android:id="@+id/tv_gallery_item_level_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-                android:text="Level Size"
-                app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_artist_name"
-                app:layout_constraintStart_toStartOf="parent"/>
+                    android:text="Level Size"
+                    app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_artist_name"
+                    app:layout_constraintStart_toStartOf="parent"/>
 
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -173,8 +178,7 @@
             android:id="@+id/btn_delete"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:layout_margin="10dp"
-            android:alpha="0"
+            android:layout_margin="40dp"
             android:background="@drawable/background_x"
 
             app:layout_constraintTop_toTopOf="parent"
@@ -228,153 +232,6 @@
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_search"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/background_topboard"
-        android:visibility="gone"
-        >
-
-        <ImageView
-            android:id="@+id/img_quit_search"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:padding="5dp"
-            android:layout_margin="15dp"
-            android:src="@drawable/ic_up"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_quit_search"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_search_artist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                >
-
-                <TextView
-                    style="@style/StyleFontLarge"
-                    android:id="@+id/tv_search_artist"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="viewEnd"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintWidth_default="percent"
-                    app:layout_constraintWidth_percent="0.4"
-
-                    android:text="@string/search_artist"
-                    />
-
-                <Spinner
-                    android:id="@+id/sp_search_artist"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_search_artist"
-                    />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_search_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_search_artist"
-                app:layout_constraintEnd_toEndOf="parent"
-                >
-
-                <TextView
-                    style="@style/StyleFontLarge"
-                    android:id="@+id/tv_search_size"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="viewEnd"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintWidth_default="percent"
-                    app:layout_constraintWidth_percent="0.4"
-
-                    android:text="@string/search_size"
-                    />
-
-                <Spinner
-                    android:id="@+id/sp_search_size"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_search_size"
-                    />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_search_progress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cl_search_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                >
-
-                <TextView
-                    style="@style/StyleFontLarge"
-                    android:id="@+id/tv_search_progress"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="viewEnd"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintWidth_default="percent"
-                    app:layout_constraintWidth_percent="0.4"
-
-                    android:text="@string/search_progress"
-                    />
-
-                <Spinner
-                    android:id="@+id/sp_search_progress"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_search_progress"
-                    />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

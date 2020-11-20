@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +43,7 @@ public class GalleryFragment extends Fragment {
 
     private int puzzlePosition = 0;
     private int puzzleNum = 0;
+    private int customPuzzleNum = 0;
 
     //액자 부분 뷰
     private TextView tv_puzzleName;
@@ -54,6 +54,8 @@ public class GalleryFragment extends Fragment {
     private Button btn_delete;
 
     private Cursor bigPuzzleCursor;
+    private Cursor customBigPuzzleCursor;
+
 
     public GalleryFragment(Context ctx) {
         // Required empty public constructor
@@ -62,8 +64,7 @@ public class GalleryFragment extends Fragment {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View fragmentView = inflater.inflate(R.layout.fragment_gallery, container, false);
 
@@ -79,13 +80,20 @@ public class GalleryFragment extends Fragment {
 
         tv_level_num = fragmentView.findViewById(R.id.tv_level_num);
 
+        mDbOpenHelper = new DbOpenHelper(ctx);
+        try {
+            mDbOpenHelper.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         loadCursor();
 
         //클릭 애니메이션 설정
-        @SuppressLint("UseCompatLoadingForDrawables")
-        final Drawable press = ctx.getResources().getDrawable(R.drawable.background_gallery_image_press);
-        @SuppressLint("UseCompatLoadingForDrawables")
-        final Drawable up = ctx.getResources().getDrawable(R.drawable.background_gallery_image);
+//        @SuppressLint("UseCompatLoadingForDrawables")
+//        final Drawable press = ctx.getResources().getDrawable(R.drawable.background_gallery_image_press);
+//        @SuppressLint("UseCompatLoadingForDrawables")
+//        final Drawable up = ctx.getResources().getDrawable(R.drawable.background_gallery_image);
         cl_touchBox.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -97,10 +105,7 @@ public class GalleryFragment extends Fragment {
 //                        cl_frame.setBackground(press);
 //
 //                    }
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        cl_frame.setElevation(0F);
-                    }
+                    cl_frame.setElevation(0F);
 
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_POINTER_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL){
@@ -109,10 +114,7 @@ public class GalleryFragment extends Fragment {
 //                    {
 //                        cl_frame.setBackground(up);
 //                    }
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        cl_frame.setElevation(20F);
-                    }
+                    cl_frame.setElevation(20F);
                 }
                 return false;
             }
@@ -126,7 +128,7 @@ public class GalleryFragment extends Fragment {
                 // Fragment 생성
                 Bundle bundle = new Bundle();
                 bundle.putInt("p_id", bigPuzzleDataTemp.id);
-                bundle.putString("p_name", bigPuzzleDataTemp.name);
+                bundle.putBoolean("custom", bigPuzzleDataTemp.custom);
                 dest.setArguments(bundle);
                 ((MainActivity)ctx).fragmentMove(dest);
             }
@@ -146,6 +148,22 @@ public class GalleryFragment extends Fragment {
             }
         });
 
+        //검색 버튼
+//        ImageView img_search = fragmentView.findViewById(R.id.img_open_search);
+//
+//        ButtonAnimation.setOvalButtonAnimationNormal(img_search);
+//
+//        img_search.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                //클릭 시 해당 퍼즐의 레벨들을 보여주는 BigLevelFragment 로 이동한다.
+//                Fragment dest = new SearchFragment(ctx);
+//                // Fragment 생성
+//                ((MainActivity)ctx).fragmentMove(dest);
+//            }
+//        });
+
         ImageView img_prev = fragmentView.findViewById(R.id.img_prev);
 
         ButtonAnimation.setRoundButtonAnimationNormal(img_prev);
@@ -156,11 +174,11 @@ public class GalleryFragment extends Fragment {
             public void onClick(View view) {
                 //이전 레벨
                 if(puzzlePosition == 0)
-                    puzzlePosition = puzzleNum - 1;
+                    puzzlePosition = puzzleNum + customPuzzleNum - 1;
                 else
                     puzzlePosition--;
 
-                loadPuzzle(puzzlePosition);
+                getPuzzle(puzzlePosition);
                 showPuzzleData();
             }
         });
@@ -174,12 +192,12 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //다음 레벨
-                if(puzzlePosition == puzzleNum - 1)
+                if(puzzlePosition == puzzleNum + customPuzzleNum - 1)
                     puzzlePosition = 0;
                 else
                     puzzlePosition++;
 
-                loadPuzzle(puzzlePosition);
+                getPuzzle(puzzlePosition);
                 showPuzzleData();
             }
         });
@@ -188,19 +206,14 @@ public class GalleryFragment extends Fragment {
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
-                try {
-                    mDbOpenHelper.open();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
                 mDbOpenHelper.deleteCustomBigPuzzle(bigPuzzleDataTemp.id);
+                loadCursor();
 
-                mDbOpenHelper.close();
+                if(puzzlePosition == puzzleNum + customPuzzleNum)
+                    puzzlePosition--;
 
-                //지우고 나면 화면에 뭐 보여줄지 코딩
+                getPuzzle(puzzlePosition);
+                showPuzzleData();
             }
         });
 
@@ -211,7 +224,7 @@ public class GalleryFragment extends Fragment {
     public void onResume()
     {
         super.onResume();
-        loadPuzzle(puzzlePosition);
+        getPuzzle(puzzlePosition);
         showPuzzleData();
         //퍼즐 클리어하고 돌아왔을 때 화면 갱신해줘야 함
     }
@@ -226,39 +239,63 @@ public class GalleryFragment extends Fragment {
 
     private void loadCursor()
     {
-        mDbOpenHelper = new DbOpenHelper(ctx);
-        try {
-            mDbOpenHelper.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
         bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursor();
+        customBigPuzzleCursor = mDbOpenHelper.getCustomBigPuzzleCursor();
         puzzleNum = bigPuzzleCursor.getCount();
+        customPuzzleNum = customBigPuzzleCursor.getCount();
+    }
+
+    private void getPuzzle(int position)
+    {
+        if(position > puzzleNum - 1)
+        {
+            loadCustomPuzzle(position - puzzleNum);
+        }
+        else
+        {
+            loadPuzzle(position);
+        }
     }
 
     private void loadPuzzle(int position)
     {
-        Log.d("loadPuzzle", "load start");
         bigPuzzleCursor.moveToPosition(position);
 
         int id = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.ID));
+        String p_name = StringGetter.p_name.get(id);
         int a_id = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.A_ID));
-        String name = StringGetter.p_name.get(id);
-        int width = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.WIDTH));
-        int height = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.HEIGHT));
+        String a_name = StringGetter.a_name.get(a_id);
+        int width = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.P_WIDTH));
+        int height = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.P_HEIGHT));
         int progress = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.PROGRESS));
         int l_width = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.L_WIDTH));
         int l_height = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.L_HEIGHT));
 
         byte[] colorSet = bigPuzzleCursor.getBlob(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.COLORSET));
-        int custom = 0;
 
         Bitmap bitmap = BitmapFactory.decodeByteArray( colorSet, 0, colorSet.length);
 
-        bigPuzzleDataTemp = new BigPuzzleData(id, a_id, name, bitmap, width, height, l_width, l_height, progress, custom);
+        bigPuzzleDataTemp = new BigPuzzleData(id, a_name, p_name, bitmap, width, height, l_width, l_height, progress, false);
+    }
 
-        Log.d("loadPuzzle", "load end");
+    private void loadCustomPuzzle(int position)
+    {
+        customBigPuzzleCursor.moveToPosition(position);
+
+        int id = customBigPuzzleCursor.getInt(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.ID));
+        String p_name = customBigPuzzleCursor.getString(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_NAME));
+        String a_name = customBigPuzzleCursor.getString(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.A_NAME));
+        int width = customBigPuzzleCursor.getInt(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_WIDTH));
+        int height = customBigPuzzleCursor.getInt(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_HEIGHT));
+        int progress = customBigPuzzleCursor.getInt(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.PROGRESS));
+        int l_width = customBigPuzzleCursor.getInt(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.L_WIDTH));
+        int l_height = customBigPuzzleCursor.getInt(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.L_HEIGHT));
+
+        byte[] colorSet = customBigPuzzleCursor.getBlob(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.COLORSET));
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray( colorSet, 0, colorSet.length);
+
+        bigPuzzleDataTemp = new BigPuzzleData(id, a_name, p_name, bitmap, width, height, l_width, l_height, progress, true);
     }
 
     @SuppressLint("SetTextI18n")
@@ -268,11 +305,11 @@ public class GalleryFragment extends Fragment {
         Log.d("showPuzzleData", "refreshing view");
         //퍼즐 이름 표시
 
-        tv_puzzleName.setText(bigPuzzleDataTemp.name);
+        tv_puzzleName.setText(bigPuzzleDataTemp.p_name);
 
         //퍼즐 아티스트 이름 표시
 
-        String strArtistName = StringGetter.a_name.get(bigPuzzleDataTemp.a_id);
+        String strArtistName = bigPuzzleDataTemp.a_name;
         tv_artistName.setText(strArtistName);
 
         //퍼즐 진행도 표시
@@ -291,12 +328,11 @@ public class GalleryFragment extends Fragment {
 
         tv_levelSize.setText(strLevelSize);
 
-        tv_level_num.setText((puzzlePosition+1) + "/" + (puzzleNum));
+        tv_level_num.setText((puzzlePosition+1) + "/" + (puzzleNum+customPuzzleNum));
 
 
-        //레벨 아이템 진행 상황 표시
-
-        if(true||bigPuzzleDataTemp.progress == bigPuzzleDataTemp.width*bigPuzzleDataTemp.height)
+        //퍼즐 썸네일 표시
+        if(bigPuzzleDataTemp.progress == bigPuzzleDataTemp.width*bigPuzzleDataTemp.height)
         {
             //완료한 게임이면
             //컬러셋을 가져온다
@@ -309,9 +345,13 @@ public class GalleryFragment extends Fragment {
             iv_thumbnail.setImageResource(R.drawable.ic_unknown);
         }
 
-        if(bigPuzzleDataTemp.custom == 1)
+        if(bigPuzzleDataTemp.custom)
         {
             btn_delete.setAlpha(1.0F);
+        }
+        else
+        {
+            btn_delete.setAlpha(0F);
         }
     }
 }

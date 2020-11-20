@@ -14,13 +14,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.nemologic.R;
-import com.example.nemologic.data.BigLevelThumbnailData;
+import com.example.nemologic.data.BigLevelData;
 import com.example.nemologic.game.GameFragment;
 import com.example.nemologic.mainactivity.MainActivity;
 
 public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.ViewHolder> {
 
-    BigLevelThumbnailData[] data;
+    BigLevelData[] data;
     Context ctx;
     int puzzleSize;
 
@@ -33,7 +33,7 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
         }
     }
 
-    RvBigLevelAdapter(Context ctx, BigLevelThumbnailData[] bigLevelThumbnailData, int puzzleWidth, int puzzleHeight, int parentSize) {
+    RvBigLevelAdapter(Context ctx, BigLevelData[] bigLevelThumbnailData, int puzzleWidth, int puzzleHeight, int parentSize) {
         //생성자
         this.ctx = ctx;
         this.data = bigLevelThumbnailData;

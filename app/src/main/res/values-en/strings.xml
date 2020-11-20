@@ -39,5 +39,7 @@
     <string name="search_artist">Artist:</string>
     <string name="search_size">Game Size:</string>
     <string name="search_progress">Progress:</string>
+    <string name="str_input_a_name">Input Artist Name:</string>
+    <string name="str_a_name">Artist Name</string>
 
 </resources>

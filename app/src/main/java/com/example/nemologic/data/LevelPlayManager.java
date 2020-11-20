@@ -20,6 +20,7 @@ public class LevelPlayManager {
     public int width;
     public int progress;
     public int p_id;
+    public boolean[] hint;
 
     public int stackNum = 0;
     public int stackMaxNum = 0;
@@ -33,6 +34,7 @@ public class LevelPlayManager {
         this.height = height;
         this.width = width;
         this.progress = progress;
+        this.hint = new boolean[dataSet.length];
         if(saveData.length == 0)
         {
             //저장 데이터가 없으면 새로 빈 array 할당
@@ -46,6 +48,18 @@ public class LevelPlayManager {
         {
             //저장 데이터가 있으면 해당 데이터를 파싱해서 저장
             this.checkedSet = saveData;
+            for(int i = 0; i < checkedSet.length; i++)
+            {
+                if(checkedSet[i] < 0)
+                {
+                    hint[i] = true;
+                    checkedSet[i] *= -1;
+                }
+                else
+                {
+                    hint[i] = false;
+                }
+            }
         }
 
         this.checkStack = new byte[10][checkedSet.length];
@@ -78,6 +92,13 @@ public class LevelPlayManager {
             if(progress != 2)
             {
                 //이번 플레이 저장
+                for(int i = 0; i < checkedSet.length; i++)
+                {
+                    if(hint[i])
+                    {
+                        checkedSet[i] *= -1;
+                    }
+                }
                 mDbOpenHelper.updateBigLevel(id, progress, checkedSet);
                 //가장 최근에 한 게임 데이터 갱신하기
 
@@ -91,9 +112,9 @@ public class LevelPlayManager {
                 //해당 레벨의 퍼즐에 해당하는 db 의 progress 값 늘려주기
                 mDbOpenHelper.increaseBigPuzzleProgress(p_id);
 
-                //가장 최근에 한 게임 데이터 없애기
+                //가장 최근에 한 게임 데이터 완료 버전으로 저장
 
-                editor.putInt("id", -1);
+                editor.putInt("id", -1*id);
             }
 
             editor.apply();
@@ -143,7 +164,13 @@ public class LevelPlayManager {
             return;
         stackNum--;
 
-        System.arraycopy(checkStack[stackNum], 0, checkedSet, 0, checkedSet.length);
+        for(int i = 0; i < width*height; i++)
+        {
+            if(!hint[i])
+            {
+                checkedSet[i] = checkStack[stackNum][i];
+            }
+        }
     }
 
     public void nextCheckStack()
@@ -153,7 +180,13 @@ public class LevelPlayManager {
 
         stackNum++;
 
-        System.arraycopy(checkStack[stackNum], 0, checkedSet, 0, checkedSet.length);
+        for(int i = 0; i < width*height; i++)
+        {
+            if(!hint[i])
+            {
+                checkedSet[i] = checkStack[stackNum][i];
+            }
+        }
     }
 
     public boolean isGameEnd()

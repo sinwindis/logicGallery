@@ -25,6 +25,7 @@ public class StringGetter {
 
     public static void loadData(Context ctx)
     {
+
         a_name = new ArrayList<>();
         p_name = new ArrayList<>();
 

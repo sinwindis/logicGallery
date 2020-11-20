@@ -5,21 +5,21 @@ import android.graphics.Bitmap;
 public class BigPuzzleData {
 
     public int id;
-    public int a_id;
-    public String name;
+    public String a_name;
+    public String p_name;
     public Bitmap bitmap;
     public int width;
     public int height;
     public int l_width;
     public int l_height;
     public int progress;
-    public int custom;
+    public boolean custom;
 
-    public BigPuzzleData(int id, int a_id, String name, Bitmap bitmap, int width, int height, int l_width, int l_height, int progress, int custom)
+    public BigPuzzleData(int id, String a_name, String p_name, Bitmap bitmap, int width, int height, int l_width, int l_height, int progress, boolean custom)
     {
         this.id = id;
-        this.a_id = a_id;
-        this.name = name;
+        this.a_name = a_name;
+        this.p_name = p_name;
         this.bitmap = bitmap;
         this.width = width;
         this.height = height;

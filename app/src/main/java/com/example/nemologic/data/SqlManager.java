@@ -48,8 +48,8 @@ public class SqlManager {
     public static final class BigPuzzleDBSql implements BaseColumns {
         public static final String ID = "id";
         public static final String A_ID = "a_id";
-        public static final String WIDTH = "p_width";
-        public static final String HEIGHT = "p_height";
+        public static final String P_WIDTH = "p_width";
+        public static final String P_HEIGHT = "p_height";
         public static final String L_WIDTH = "l_width";
         public static final String L_HEIGHT = "l_height";
         public static final String PROGRESS = "progress";
@@ -59,8 +59,8 @@ public class SqlManager {
                 "create table if not exists "+ _TABLENAME + " ("
                         + ID +" integer primary key autoincrement, "
                         + A_ID +" integer not null, "
-                        + WIDTH +" integer not null , "
-                        + HEIGHT +" integer not null , "
+                        + P_WIDTH +" integer not null , "
+                        + P_HEIGHT +" integer not null , "
                         + L_WIDTH +" integer not null , "
                         + L_HEIGHT +" integer not null , "
                         + PROGRESS +" integer not null , "
@@ -93,16 +93,24 @@ public class SqlManager {
 
     public static final class CustomBigPuzzleDBSql implements BaseColumns {
         public static final String ID = "id";
+        public static final String A_NAME = "a_name";
+        public static final String P_NAME = "p_name";
         public static final String P_WIDTH = "p_width";
         public static final String P_HEIGHT = "p_height";
+        public static final String L_WIDTH = "l_width";
+        public static final String L_HEIGHT = "l_height";
         public static final String PROGRESS = "progress";
         public static final String COLORSET = "colorSet";
         public static final String _TABLENAME = "CustomBigPuzzle";
         public static final String _CREATE =
                 "create table if not exists "+ _TABLENAME + " ("
                         + ID +" integer primary key autoincrement, "
+                        + A_NAME +" text not null , "
+                        + P_NAME +" text not null , "
                         + P_WIDTH +" integer not null , "
                         + P_HEIGHT +" integer not null , "
+                        + L_WIDTH +" integer not null , "
+                        + L_HEIGHT +" integer not null , "
                         + PROGRESS +" integer not null , "
                         + COLORSET +" BLOB not null );";
     }
