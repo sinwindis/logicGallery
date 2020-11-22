@@ -30,6 +30,8 @@ public class LoadActivity extends AppCompatActivity {
 
         final Handler intentHandler = new Handler();
 
+
+
         Thread loadThread = new Thread(new Runnable() {
             @Override
             public void run() {

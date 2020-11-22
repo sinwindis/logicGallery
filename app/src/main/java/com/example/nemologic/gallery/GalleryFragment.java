@@ -129,6 +129,7 @@ public class GalleryFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("p_id", bigPuzzleDataTemp.id);
                 bundle.putBoolean("custom", bigPuzzleDataTemp.custom);
+                Log.d("galleryFrag", "p_id: " + bigPuzzleDataTemp.id + " custom: " + bigPuzzleDataTemp.custom);
                 dest.setArguments(bundle);
                 ((MainActivity)ctx).fragmentMove(dest);
             }

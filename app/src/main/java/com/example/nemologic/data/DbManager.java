@@ -159,7 +159,7 @@ public class DbManager {
 
         byte[] colorSetByteArray = Base64.decode(colorSet, Base64.DEFAULT);
         
-        BigLevelData bigLevelData = new BigLevelData(-1, p_id, number, width, height, 0, CustomParser.parseDataSetStringToByteArray(dataSet), null, colorSetByteArray);
+        BigLevelData bigLevelData = new BigLevelData(-1, p_id, number, width, height, 0, CustomParser.parseDataSetStringToByteArray(dataSet), null, colorSetByteArray, false);
         int insertId = bigLevelData.saveData(ctx);
 
         Log.d("loadLevel", "insert ID: " + insertId);

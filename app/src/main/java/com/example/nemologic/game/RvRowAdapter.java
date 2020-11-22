@@ -6,6 +6,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,13 +63,25 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
 
         view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, parent.getMeasuredHeight()/length + heightOffset));
 
+        heightOffset = 0;
+
         return new ViewHolder(view);
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(RvRowAdapter.ViewHolder holder, int position) {
-        tvList.add((TextView)  holder.itemView.findViewById(R.id.tv_item_row));
+
+        final TextView tv = holder.itemView.findViewById(R.id.tv_item_row);
+        tv.post(new Runnable() {
+            @Override
+            public void run() {
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, tv.getMeasuredHeight()/2);
+            }
+        });
+
+
+        tvList.add(tv);
 
         refreshView(position);
     }

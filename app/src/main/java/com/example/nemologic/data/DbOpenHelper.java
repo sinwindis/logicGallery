@@ -252,11 +252,19 @@ public class DbOpenHelper {
         return c;
     }
 
-    public Cursor getBigLevelsCursorById(int id){
+    public Cursor getBigLevelCursorById(int id){
 
         Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.BigLevelDBSql._TABLENAME + " WHERE " + SqlManager.BigLevelDBSql.ID + "='" + id + "';", null);
 
         return c;
     }
+
+    public Cursor getCustomBigLevelCursorById(int id){
+
+        Cursor c = mDB.rawQuery( "SELECT * FROM " + SqlManager.CustomBigLevelDBSql._TABLENAME + " WHERE " + SqlManager.CustomBigLevelDBSql.ID + "='" + id + "';", null);
+
+        return c;
+    }
+
 
 }

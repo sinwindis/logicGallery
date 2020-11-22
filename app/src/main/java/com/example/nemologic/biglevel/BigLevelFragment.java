@@ -57,6 +57,8 @@ public class BigLevelFragment extends Fragment {
         if(getArguments() != null){
             p_id = getArguments().getInt("p_id"); // 전달한 key 값
             custom = getArguments().getBoolean("custom");
+
+            Log.d("BigLevelFragment", "p_id: " + p_id + " custom: " + custom);
         }
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
@@ -95,7 +97,7 @@ public class BigLevelFragment extends Fragment {
                 if(progress == 1 || progress == 3)
                     saveData = customBigLevelCursor.getBlob(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.SAVEDATA));
 
-                levelThumbnailData[fullCount] = new BigLevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet);
+                levelThumbnailData[fullCount] = new BigLevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet, true);
                 fullCount++;
                 if(progress == 2 || progress == 3)
                 {
@@ -133,7 +135,7 @@ public class BigLevelFragment extends Fragment {
                 if(progress == 1 || progress == 3)
                     saveData = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
 
-                levelThumbnailData[fullCount] = new BigLevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet);
+                levelThumbnailData[fullCount] = new BigLevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet, false);
                 fullCount++;
                 if(progress == 2 || progress == 3)
                 {
@@ -159,10 +161,10 @@ public class BigLevelFragment extends Fragment {
         cl_rv_cover.post(new Runnable() {
             @Override
             public void run() {
-                int parentSize = cl_rv_cover.getMeasuredWidth();
-                Log.d("BigLevelFragment", "parentSize: " + parentSize);
+                int parentWidth = cl_rv_cover.getMeasuredWidth() - rv_level.getPaddingEnd() - rv_level.getPaddingStart();
+                int parentHeight = cl_rv_cover.getMeasuredHeight() - rv_level.getPaddingTop() - rv_level.getPaddingBottom();
 
-                rv_level.setAdapter(new RvBigLevelAdapter(ctx, finalLevelThumbnailData, finalPuzzleWidth, finalPuzzleHeight, parentSize));
+                rv_level.setAdapter(new RvBigLevelAdapter(ctx, finalLevelThumbnailData, finalPuzzleWidth, finalPuzzleHeight, parentWidth, parentHeight));
             }
         });
 

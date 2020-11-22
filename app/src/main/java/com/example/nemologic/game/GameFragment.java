@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class GameFragment extends Fragment {
     private TextView tv_title;
 
     private int id;
+    private boolean custom = false;
 
     public GameFragment(Context ctx) {
         mainActivityContext = ctx;
@@ -65,8 +67,13 @@ public class GameFragment extends Fragment {
         //bundle 로 받은 id 를 저장한다.
         if(getArguments() != null){
             id = getArguments().getInt("id");
+            custom = getArguments().getBoolean("custom");
+
+            Log.d("GameFragment", "id: " + id + " custom: " + custom);
         }
 
+        String name;
+        int p_id;
         int width;
         int height;
         int progress;
@@ -74,38 +81,77 @@ public class GameFragment extends Fragment {
         byte[] saveData;
         
         Cursor levelCursor;
-
-        levelCursor = mDbOpenHelper.getBigLevelsCursorById(id);
-        levelCursor.moveToNext();
-
-        int p_id = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
-        String name = StringGetter.p_name.get(p_id);
-
-        Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
-
-        bigPuzzleCursor.moveToNext();
-
-        width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
-        height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
-        progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
-        dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
-        saveData = new byte[0];
-
-        switch (progress)
+        
+        if(custom)
         {
-            case 0:
-                progress = 1;
-                break;
-            case 1:
-            case 3:
-                saveData = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
-                break;
-            case 2:
-                progress = 3;
-                break;
+            levelCursor = mDbOpenHelper.getCustomBigLevelCursorById(id);
+            levelCursor.moveToNext();
+
+            p_id = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.P_ID));
+
+            Cursor bigPuzzleCursor = mDbOpenHelper.getCustomBigPuzzleCursorById(p_id);
+
+            bigPuzzleCursor.moveToNext();
+            name = bigPuzzleCursor.getString(bigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_NAME));
+
+            width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.WIDTH));
+            height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.HEIGHT));
+            progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.PROGRESS));
+            dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.DATASET));
+
+            saveData = new byte[0];
+            switch (progress)
+            {
+                case 0:
+                    progress = 1;
+                    break;
+                case 1:
+                case 3:
+                    saveData = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.SAVEDATA));
+                    break;
+                case 2:
+                    progress = 3;
+                    break;
+            }
+        }
+        else
+        {
+            levelCursor = mDbOpenHelper.getBigLevelCursorById(id);
+            levelCursor.moveToNext();
+
+            p_id = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
+            name = StringGetter.p_name.get(p_id);
+
+            Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
+
+            bigPuzzleCursor.moveToNext();
+
+            width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
+            height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
+            progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
+            dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
+
+            saveData = new byte[0];
+            switch (progress)
+            {
+                case 0:
+                    progress = 1;
+                    break;
+                case 1:
+                case 3:
+                    saveData = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
+                    break;
+                case 2:
+                    progress = 3;
+                    break;
+            }
         }
 
-        lpm = new LevelPlayManager(id, p_id, name, progress, width, height, dataSet, saveData);
+
+
+        lpm = new LevelPlayManager(id, p_id, name, progress, width, height, dataSet, saveData, custom);
+
+        
 
         mDbOpenHelper.close();
 

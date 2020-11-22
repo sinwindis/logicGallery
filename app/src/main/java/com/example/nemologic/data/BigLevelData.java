@@ -15,12 +15,13 @@ public class BigLevelData {
     private int width;
     private int height;
     private int progress;
+    private boolean custom;
     private byte[] dataSet;
     private byte[] saveData;
     private byte[] colorSet;
 
 
-    public BigLevelData(int id, int p_id, int number, int width, int height, int progress, byte[] dataSet, byte[] saveData, byte[] colorSet)
+    public BigLevelData(int id, int p_id, int number, int width, int height, int progress, byte[] dataSet, byte[] saveData, byte[] colorSet, boolean custom)
     {
         this.id = id;
         this.p_id = p_id;
@@ -31,6 +32,7 @@ public class BigLevelData {
         this.progress = progress;
         this.saveData = saveData;
         this.colorSet = colorSet;
+        this.custom = custom;
     }
 
     public int saveData(Context ctx)
@@ -83,4 +85,5 @@ public class BigLevelData {
     }
     public Bitmap getColorBitmap() { return BitmapFactory.decodeByteArray( colorSet, 0, colorSet.length ); }
     public byte[] getDataSet() {return this.dataSet;}
+    public boolean getCustom() {return this.custom;}
 }

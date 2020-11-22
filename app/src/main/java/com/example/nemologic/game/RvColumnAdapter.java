@@ -6,6 +6,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +51,9 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
     @Override
     public RvColumnAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.item_column, parent, false) ;
+        View view = inflater.inflate(R.layout.item_column, parent, false);
 
 
         widthUnder += parent.getMeasuredWidth()%this.length/((float)this.length);
@@ -65,13 +66,23 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
 
         view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.length + widthOffset, ViewGroup.LayoutParams.MATCH_PARENT));
 
+        widthOffset = 0;
+
         return new ViewHolder(view);
     }
 
     // onBindViewHolder() - position 에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(RvColumnAdapter.ViewHolder holder, int position) {
-        tvList.add((TextView)  holder.itemView.findViewById(R.id.tv_item_column));
+        final TextView tv = holder.itemView.findViewById(R.id.tv_item_column);
+        tv.post(new Runnable() {
+            @Override
+            public void run() {
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, tv.getMeasuredWidth()/2);
+            }
+        });
+
+        tvList.add(tv);
         refreshView(position);
     }
 

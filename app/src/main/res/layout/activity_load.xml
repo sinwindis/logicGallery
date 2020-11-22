@@ -36,14 +36,27 @@
         app:layout_constraintBottom_toTopOf="@id/tv_logo"
         app:layout_constraintEnd_toEndOf="@id/tv_logo"
         />
-
     <TextView
         style="@style/StyleFontSmall"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="5dp"
         android:text="@string/str_loading"
+
+        app:layout_constraintBottom_toTopOf="@id/tv_load"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tv_load"
+        style="@style/StyleFontSmall"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="@string/load_sorry"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

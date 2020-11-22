@@ -21,11 +21,12 @@ public class LevelPlayManager {
     public int progress;
     public int p_id;
     public boolean[] hint;
+    public boolean custom;
 
     public int stackNum = 0;
     public int stackMaxNum = 0;
 
-    public LevelPlayManager(int id, int p_id, String name, int progress, int width, int height, byte[] dataSet, byte[] saveData)
+    public LevelPlayManager(int id, int p_id, String name, int progress, int width, int height, byte[] dataSet, byte[] saveData, boolean custom)
     {
         this.id = id;
         this.p_id = p_id;
@@ -35,6 +36,7 @@ public class LevelPlayManager {
         this.width = width;
         this.progress = progress;
         this.hint = new boolean[dataSet.length];
+        this.custom = custom;
         if(saveData.length == 0)
         {
             //저장 데이터가 없으면 새로 빈 array 할당
@@ -99,10 +101,19 @@ public class LevelPlayManager {
                         checkedSet[i] *= -1;
                     }
                 }
-                mDbOpenHelper.updateBigLevel(id, progress, checkedSet);
+                if(custom)
+                {
+                    mDbOpenHelper.updateCustomBigLevel(id, progress, checkedSet);
+                }
+                else
+                {
+                    mDbOpenHelper.updateBigLevel(id, progress, checkedSet);
+                }
+
                 //가장 최근에 한 게임 데이터 갱신하기
 
                 editor.putInt("id", id);
+                editor.putBoolean("custom", custom);
             }
 
             else
@@ -115,6 +126,7 @@ public class LevelPlayManager {
                 //가장 최근에 한 게임 데이터 완료 버전으로 저장
 
                 editor.putInt("id", -1*id);
+                editor.putBoolean("custom", custom);
             }
 
             editor.apply();

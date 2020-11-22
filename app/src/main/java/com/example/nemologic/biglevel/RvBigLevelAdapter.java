@@ -33,21 +33,15 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
         }
     }
 
-    RvBigLevelAdapter(Context ctx, BigLevelData[] bigLevelThumbnailData, int puzzleWidth, int puzzleHeight, int parentSize) {
+    RvBigLevelAdapter(Context ctx, BigLevelData[] bigLevelThumbnailData, int puzzleWidth, int puzzleHeight, int parentWidth, int parentHeight) {
         //생성자
         this.ctx = ctx;
         this.data = bigLevelThumbnailData;
 
-        if(puzzleWidth > puzzleHeight)
-        {
-            //가로가 더 긴 퍼즐
-            puzzleSize = parentSize/puzzleWidth;
-        }
-        else
-        {
-            //세로가 더 긴 퍼즐
-            puzzleSize = parentSize/puzzleHeight;
-        }
+        int widthTemp = parentWidth / puzzleWidth;
+        int heightTemp = parentHeight / puzzleHeight;
+
+        puzzleSize = Math.min(widthTemp, heightTemp);
 
         Log.d("RvBigLevelAdapter", "puzzleSize: " + puzzleSize);
     }
@@ -101,7 +95,7 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
                 // Fragment 생성
                 Bundle bundle = new Bundle();
                 //type 가 1이면 빅레벨 테이블에서 가져와야 함
-                bundle.putInt("type", 1);
+                bundle.putBoolean("custom", data[position].getCustom());
                 bundle.putInt("id", data[position].getId());
                 dest.setArguments(bundle);
                 ((MainActivity)ctx).fragmentMove(dest);

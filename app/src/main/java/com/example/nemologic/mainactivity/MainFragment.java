@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -166,6 +165,7 @@ public class MainFragment extends Fragment {
 
         //마지막 플레이한 레벨의 이름과 카테고리를 받아온다.
         final int lastPlayId = lastPlayPref.getInt("id", 0);
+        final boolean custom = lastPlayPref.getBoolean("custom", false);
 
 
 
@@ -180,60 +180,120 @@ public class MainFragment extends Fragment {
                     e.printStackTrace();
                 }
 
+                
+                
                 Cursor cursor;
 
                 boolean dataLoad = false;
 
-                if(lastPlayId != 0)
+                if(custom)
                 {
-                    if(lastPlayId > 0)
+                    if(lastPlayId != 0)
                     {
-                        cursor =  mDbOpenHelper.getBigLevelsCursorById(lastPlayId);
-                        dataLoad = true;
-                    }
-                    else
-                    {
-                        cursor =  mDbOpenHelper.getBigLevelsCursorById(-1*lastPlayId);
-                    }
-
-
-                    if(cursor.getCount() > 0)
-                    {
-
-                        cursor.moveToNext();
-                        int id = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.ID));
-                        int p_id = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
-                        int number = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.NUMBER));
-                        int width = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
-                        int height = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
-                        int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
-                        byte[] dataSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
-                        byte[] colorSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
-                        byte[] saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
-
-                        Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
-
-                        bigPuzzleCursor.moveToNext();
-
-                        BigLevelData lastPlayLevel = new BigLevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet);
-
-                        Bitmap scaledBitmap;
-
-
-
                         if(lastPlayId > 0)
                         {
-                            scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getSaveBitmap(), iv_thumbnail.getMeasuredWidth(), iv_thumbnail.getMeasuredHeight(), false);
+                            cursor =  mDbOpenHelper.getCustomBigLevelCursorById(lastPlayId);
+                            dataLoad = true;
                         }
                         else
                         {
-                            scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getColorBitmap(), iv_thumbnail.getMeasuredWidth(), iv_thumbnail.getMeasuredHeight(), false);
+                            cursor =  mDbOpenHelper.getCustomBigLevelCursorById(-1*lastPlayId);
                         }
 
-                        iv_thumbnail.setImageBitmap(scaledBitmap);
-                    }
 
+                        if(cursor.getCount() > 0)
+                        {
+
+                            cursor.moveToNext();
+                            int id = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.ID));
+                            int p_id = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.P_ID));
+                            int number = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.NUMBER));
+                            int width = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.WIDTH));
+                            int height = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.HEIGHT));
+                            int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.PROGRESS));
+                            byte[] dataSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.DATASET));
+                            byte[] colorSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.COLORSET));
+                            byte[] saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.SAVEDATA));
+
+                            Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
+
+                            bigPuzzleCursor.moveToNext();
+
+                            BigLevelData lastPlayLevel = new BigLevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet, true);
+
+                            Bitmap scaledBitmap;
+
+
+
+                            if(lastPlayId > 0)
+                            {
+                                scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getSaveBitmap(), iv_thumbnail.getMeasuredWidth(), iv_thumbnail.getMeasuredHeight(), false);
+                            }
+                            else
+                            {
+                                scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getColorBitmap(), iv_thumbnail.getMeasuredWidth(), iv_thumbnail.getMeasuredHeight(), false);
+                            }
+
+                            iv_thumbnail.setImageBitmap(scaledBitmap);
+                        }
+
+                    }
                 }
+                else
+                {
+                    if(lastPlayId != 0)
+                    {
+                        if(lastPlayId > 0)
+                        {
+                            cursor =  mDbOpenHelper.getBigLevelCursorById(lastPlayId);
+                            dataLoad = true;
+                        }
+                        else
+                        {
+                            cursor =  mDbOpenHelper.getBigLevelCursorById(-1*lastPlayId);
+                        }
+
+
+                        if(cursor.getCount() > 0)
+                        {
+
+                            cursor.moveToNext();
+                            int id = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.ID));
+                            int p_id = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
+                            int number = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.NUMBER));
+                            int width = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
+                            int height = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
+                            int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
+                            byte[] dataSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
+                            byte[] colorSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
+                            byte[] saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
+
+                            Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
+
+                            bigPuzzleCursor.moveToNext();
+
+                            BigLevelData lastPlayLevel = new BigLevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet, false);
+
+                            Bitmap scaledBitmap;
+
+
+
+                            if(lastPlayId > 0)
+                            {
+                                scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getSaveBitmap(), iv_thumbnail.getMeasuredWidth(), iv_thumbnail.getMeasuredHeight(), false);
+                            }
+                            else
+                            {
+                                scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getColorBitmap(), iv_thumbnail.getMeasuredWidth(), iv_thumbnail.getMeasuredHeight(), false);
+                            }
+
+                            iv_thumbnail.setImageBitmap(scaledBitmap);
+                        }
+
+                    }
+                }
+                
+                
                 mDbOpenHelper.close();
 
                 final boolean isContinue = dataLoad;

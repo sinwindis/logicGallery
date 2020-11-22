@@ -5,11 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nemologic.R;
 import com.example.nemologic.data.CustomParser;
 import com.example.nemologic.data.DbOpenHelper;
-import com.example.nemologic.data.LevelPlayManager;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.data.StringGetter;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 
 public class EndFragment extends Fragment {
 
@@ -93,7 +88,7 @@ public class EndFragment extends Fragment {
         byte[] colorSet;
 
         //빅 레벨
-        Cursor bigLevelCursor =  mDbOpenHelper.getBigLevelsCursorById(id);
+        Cursor bigLevelCursor =  mDbOpenHelper.getBigLevelCursorById(id);
         bigLevelCursor.moveToNext();
 
         p_id = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
