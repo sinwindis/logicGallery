@@ -1,9 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">Logic Gallery</string>
-    <string name="admob_app_id">ca-app-pub-9444386713531243~4932680796</string>
-    <string name="banner_ad_unit_id">ca-app-pub-9444386713531243/8680354114</string>
-    <string name="popup_ad_unit_id">ca-app-pub-9444386713531243/6098809845</string>
-    <string name="banner_ad_unit_id_for_test">ca-app-pub-3940256099942544/6300978111</string>
     <string name="app_logo">로직 갤러리</string>
     <string name="app_logo_upper">플러스+</string>
     <string name="str_continue">이어하기</string>
@@ -29,26 +24,32 @@
     <string name="str_next">다음</string>
     <string name="str_prev">이전</string>
     <string name="str_option">옵션</string>
-    <string name="str_tutorial0">이 튜토리얼은 이 게임을 어떻게 플레이해야 하는지 알려줄 것입니다.\n다음 버튼을 눌러 튜토리얼을 진행하세요.</string>
+
     <string name="str_puzzlesize">퍼즐 크기 입력:</string>
     <string name="str_inputname">"퍼즐 이름 입력: "</string>
     <string name="str_puzzlenum">퍼즐 개수 입력:</string>
     <string name="str_loading">"      로딩중…"</string>
-    <string name="str_tutorial1">오른쪽 위의 3이라는 숫자는 해당 세로줄의 칸 중 3개의 연속된 칸이 체크되어야 한다는 것을 의미합니다.\n마침 해당 세로줄에는 칸이 3개밖에 없으므로 3개의 칸이 모두 체크되어야 합니다.</string>
-    <string name="str_tutorial2">3개의 칸을 모두 클릭하여 체크해 보았습니다.\n오른쪽 위의 3이라는 숫자가 회색으로 바뀐 것을 확인할 수 있습니다. 이는 해당 숫자가 완성되었다는 뜻입니다.</string>
-    <string name="str_tutorial3">이번에는 왼쪽 위의 2라는 숫자를 확인해 보겠습니다.\n아까의 숫자 3과 마찬가지로 해당 가로줄에 2개의 칸이 연속적으로 칠해져야 한다는 뜻입니다.</string>
-    <string name="str_tutorial4">해당 가로줄의 맨 오른쪽 칸은 이미 칠해져 있습니다.\n두개의 칸이 연속해서 칠해져야 하므로 나머지 두 칸 중 이미 칠해져 있는 칸과 이웃해 있는 가운데 칸을 칠해주었습니다.</string>
-    <string name="str_tutorial5">가운데 세로줄을 확인해 보겠습니다.\n이번에는 숫자 1이 두개가 있습니다. 2가 아니라 1과 1로 구분되어 있으므로 해당 칸들은 반드시 한 칸 이상 떨어져서 칠해져야 합니다.\n맨 윗 칸은 이미 칠해져 있으므로 그 바로 아래 칸은 칠해져서는 안됩니다.\n해당 칸에 칠해서는 안된다는 표시를 해 주기 위해 O버튼을 눌러 X버튼으로 바꿔 주었습니다.</string>
-    <string name="str_tutorial6">가운데 칸을 클릭하여 X표시를 해 주었습니다.\nX표시는 하지 않고서도 게임을 완성시킬 수 있습니다. 하지만 게임을 하는 도중 칠해서는 안 되는 칸을 기억하기 쉽게 하기 위해 마음대로 체크할 수 있습니다.</string>
-    <string name="str_tutorial7">이런 실수로 그 아래 칸까지 X표시를 해 버렸네요.\n게임을 하다 실수했을 때는 해당 버튼을 눌러 뒤로 돌아갈 수 있습니다.</string>
-    <string name="str_tutorial8">버튼을 눌렀더니 이전 상황으로 되돌아오고 그 위에 표시되던 숫자가 바뀌었습니다.\n이전 버튼을 눌러 보드를 이전 상황으로 돌리거나, 다음 버튼을 눌러 이전으로 돌린 보드를 복구할 수 있습니다.</string>
-    <string name="str_tutorial9">힌트 버튼을 눌러 힌트를 사용할 수 있습니다.\n오른쪽의 힌트 버튼을 누르면 가운데의 토글 버튼이 힌트 아이콘으로 변합니다.\n이 상태에서 보드의 칸을 클릭하면 해당 칸의 정답을 알 수 있습니다.</string>
-    <string name="str_tutorial10">가장 아래 줄의 가운데 칸을 클릭했더니 해당 칸이 체크되었습니다. 해당 칸은 체크하는게 정답이었군요.\n실제 게임에서 힌트를 사용할 경우 해당 칸은 영구히 저장됩니다.</string>
     <string name="search_artist">아티스트:</string>
     <string name="search_size">게임 사이즈:</string>
     <string name="search_progress">진행도:</string>
     <string name="str_input_a_name">아티스트 이름 입력:</string>
     <string name="str_a_name">아티스트 이름</string>
     <string name="load_sorry">게임 설치, 업데이트 이후 첫 플레이는 로딩이 오래 걸릴 수 있습니다</string>
+    <string name="todays_reward">오늘의 보상</string>
+    <string name="hint_added">힌트를 하나 받았습니다</string>
+
+    <string name="tutorial_0">이 튜토리얼은 이 게임을 어떻게 플레이해야 하는지 알려줄 것입니다.\n다음 버튼을 눌러 튜토리얼을 진행하세요.</string>
+    <string name="tutorial_1">오른쪽 위의 3이라는 숫자는 해당 세로줄의 칸 중 3개의 연속된 칸이 체크되어야 한다는 것을 의미합니다.</string>
+    <string name="tutorial_2">3개의 칸을 모두 클릭하여 체크해 보았습니다.\n오른쪽 위의 3이라는 숫자가 회색으로 바뀐 것을 확인할 수 있습니다.\n이는 해당 숫자가 완성되었다는 뜻입니다.</string>
+    <string name="tutorial_3">이번에는 왼쪽 위의 2라는 숫자를 확인해 보겠습니다.\n아까와 마찬가지로 해당 가로줄에 2개의 칸이 연속적으로 칠해져야 한다는 뜻입니다.</string>
+    <string name="tutorial_4">두 칸이 연속으로 칠해지기 위해서는 가운데 칸이 칠해져야 합니다.\n가운데 칸을 칠하여 숫자 2를 완성시켜 주었습니다.</string>
+    <string name="tutorial_5">가운데 세로줄을 확인해 보겠습니다.\n이번에는 1이라는 숫자가 두 개 있습니다. 이는 칸 하나를 칠하고 최소 한 칸 이상을 떨어뜨려 다른 한 칸을 칠해야 한다는 뜻입니다.\n맨 윗 칸은 이미 칠해져 있으므로 그 바로 아래 칸은 칠해져서는 안됩니다.\n해당 칸에 칠해서는 안된다는 표시를 해 주기 위해 O버튼을 눌러 X버튼으로 바꿔 주었습니다.</string>
+    <string name="tutorial_6">가운데 칸을 클릭하여 X표시를 해 주었습니다.\nX표시는 하지 않고서도 게임을 완성시킬 수 있습니다.\n하지만 게임을 하는 도중 칠해서는 안 되는 칸을 기억하기 쉽게 하기 위해 마음대로 체크할 수 있습니다.</string>
+    <string name="tutorial_7">이런 실수로 그 아래 칸까지 X표시를 해 버렸네요.\n게임을 하다 실수했을 때는 이전 버튼을 눌러 뒤로 돌아갈 수 있습니다.</string>
+    <string name="tutorial_8">버튼을 눌렀더니 이전 상황으로 되돌아오고 그 위에 표시되던 숫자가 바뀌었습니다.\n이전 버튼을 눌러 보드를 이전 상황으로 돌리거나, 다음 버튼을 눌러 이전으로 돌린 보드를 복구할 수 있습니다.</string>
+    <string name="tutorial_9">힌트 버튼을 눌러 힌트를 사용할 수 있습니다.\n오른쪽의 힌트 버튼을 누르면 가운데의 토글 버튼이 힌트 아이콘으로 변합니다.\n이 상태에서 보드의 칸을 클릭하면 해당 칸의 정답을 알 수 있습니다.</string>
+    <string name="tutorial_10">가장 아래 줄의 가운데 칸을 클릭했더니 해당 칸이 체크되었습니다. 해당 칸은 체크하는게 정답이었군요.\n실제 게임에서 힌트를 사용할 경우 해당 칸은 영구히 저장됩니다.\n힌트는 하루에 한 개씩 충전되니 신중히 사용하세요.</string>
+    <string name="tutorial_11">튜토리얼이 완료되었습니다.\n본인이 원하는 퍼즐을 선택하여 게임을 즐기시기 바랍니다.</string>
+    <string name="app_name">로직 갤러리</string>
 
 </resources>

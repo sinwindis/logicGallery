@@ -28,6 +28,10 @@ import com.example.nemologic.option.OptionDialog;
 import com.example.nemologic.tutorial.TutorialDialog;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -167,7 +171,16 @@ public class MainFragment extends Fragment {
         final int lastPlayId = lastPlayPref.getInt("id", 0);
         final boolean custom = lastPlayPref.getBoolean("custom", false);
 
-
+        //날짜가 하루 이상 지났으면
+        if(isDateChanged())
+        {
+            //hint 1개 추가
+            addHint();
+            RewardDialog rewardDialog = new RewardDialog();
+            rewardDialog.makeDialog(getActivity());
+            rewardDialog.dialog.show();
+            Objects.requireNonNull(rewardDialog.dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
 
         iv_thumbnail.post(new Runnable() {
             @Override
@@ -325,9 +338,46 @@ public class MainFragment extends Fragment {
                 });
             }
         });
+    }
 
 
+    private void addHint()
+    {
+        SharedPreferences hintPref = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
+        SharedPreferences.Editor editor = hintPref.edit();
+
+        int hintCount = hintPref.getInt("hint", 4);
+        editor.putInt("hint", hintCount + 1);
+        editor.apply();
+    }
+
+    private boolean isDateChanged()
+    {
+        //현재 날짜 확인
+        Date c = Calendar.getInstance().getTime();
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String formattedDate = df.format(c);
+        String[] currentDate = formattedDate.split("-");
 
 
+        //기존 날짜 확인
+        SharedPreferences datePref = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
+        String lastDateStr = datePref.getString("date", "00-00-0000");
+        String[] lastDate = lastDateStr.split("-");
+
+        SharedPreferences.Editor editor = datePref.edit();
+
+        editor.putString("date", formattedDate);
+        editor.apply();
+
+        int lastYear = Integer.parseInt(lastDate[2]);
+        int currentYear = Integer.parseInt(currentDate[2]);
+        int lastMonth = Integer.parseInt(lastDate[1]);
+        int currentMonth = Integer.parseInt(currentDate[1]);
+        int lastDay = Integer.parseInt(lastDate[0]);
+        int currentDay = Integer.parseInt(currentDate[0]);
+
+        return (lastYear < currentYear || lastMonth < currentMonth || lastDay < currentDay);
     }
 }

@@ -42,7 +42,7 @@ public class TutorialDialog {
     private TextView tv_hint;
 
     int tutorialCount;
-    final int MAX_TUTORIAL = 999;
+    final int MAX_TUTORIAL = 12;
     
     private TutorialScene[] tutorialScenes;
 
@@ -306,16 +306,16 @@ public class TutorialDialog {
 
         //tutorial0
         targetScene = tutorialScenes[0];
-        targetScene.tutorialText = res.getString(R.string.str_tutorial0);
+        targetScene.tutorialText = res.getString(R.string.tutorial_0);
 
         //tutorial1
         targetScene = tutorialScenes[1];
-        targetScene.tutorialText = res.getString(R.string.str_tutorial1);
+        targetScene.tutorialText = res.getString(R.string.tutorial_1);
         targetScene.accentArray[5] = true;
 
         //tutorial2
         targetScene = tutorialScenes[2];
-        targetScene.tutorialText = res.getString(R.string.str_tutorial2);
+        targetScene.tutorialText = res.getString(R.string.tutorial_2);
         targetScene.checkedSet = new byte[][] {{0, 0, 1}, {0, 0, 1}, {0, 0, 1}};
         targetScene.accentArray[1] = true;
         targetScene.accentArray[3] = true;
@@ -325,20 +325,20 @@ public class TutorialDialog {
 
         //tutorial3
         targetScene = tutorialScenes[3];
-        targetScene.tutorialText = res.getString(R.string.str_tutorial3);
+        targetScene.tutorialText = res.getString(R.string.tutorial_3);
         targetScene.checkedSet = new byte[][] {{0, 0, 1}, {0, 0, 1}, {0, 0, 1}};
         targetScene.accentArray[0] = true;
 
         //tutorial4
         targetScene = tutorialScenes[4];
-        targetScene.tutorialText = res.getString(R.string.str_tutorial4);
+        targetScene.tutorialText = res.getString(R.string.tutorial_4);
         targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 0, 1}, {0, 0, 1}};
         targetScene.tutorialCurrentStackNum = 2;
         targetScene.tutorialMaxStackNum = 2;
 
         //tutorial5
         targetScene = tutorialScenes[5];
-        targetScene.tutorialText = res.getString(R.string.str_tutorial5);
+        targetScene.tutorialText = res.getString(R.string.tutorial_5);
         targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 0, 1}, {0, 0, 1}};
         targetScene.accentArray[4] = true;
         targetScene.accentArray[6] = true;
@@ -346,7 +346,7 @@ public class TutorialDialog {
 
         //tutorial6
         targetScene = tutorialScenes[6];
-        targetScene.tutorialText = res.getString(R.string.str_tutorial6);
+        targetScene.tutorialText = res.getString(R.string.tutorial_6);
         targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 2, 1}, {0, 0, 1}};
         targetScene.btnToggleStatus = 1;
         targetScene.tutorialCurrentStackNum = 3;
@@ -354,7 +354,7 @@ public class TutorialDialog {
 
         //tutorial7
         targetScene = tutorialScenes[7];
-        targetScene.tutorialText= res.getString(R.string.str_tutorial7);
+        targetScene.tutorialText= res.getString(R.string.tutorial_7);
         targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 2, 1}, {0, 2, 1}};
         targetScene.btnToggleStatus = 1;
         targetScene.accentArray[7] = true;
@@ -363,7 +363,7 @@ public class TutorialDialog {
 
         //tutorial8
         targetScene = tutorialScenes[8];
-        targetScene.tutorialText = res.getString(R.string.str_tutorial8);
+        targetScene.tutorialText = res.getString(R.string.tutorial_8);
         targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 2, 1}, {0, 0, 1}};
         targetScene.btnToggleStatus = 1;
         targetScene.accentArray[7] = true;
@@ -373,7 +373,7 @@ public class TutorialDialog {
 
         //tutorial9
         targetScene = tutorialScenes[9];
-        targetScene.tutorialText = res.getString(R.string.str_tutorial9);
+        targetScene.tutorialText = res.getString(R.string.tutorial_9);
         targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 2, 1}, {0, 0, 1}};
         targetScene.btnToggleStatus = 2;
         targetScene.accentArray[6] = true;
@@ -383,9 +383,18 @@ public class TutorialDialog {
 
         //tutorial10
         targetScene = tutorialScenes[10];
-        targetScene.tutorialText = res.getString(R.string.str_tutorial10);
+        targetScene.tutorialText = res.getString(R.string.tutorial_10);
         targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 2, 1}, {0, 1, 1}};
         targetScene.btnToggleStatus = 2;
+        targetScene.tutorialCurrentStackNum = 4;
+        targetScene.tutorialMaxStackNum = 4;
+        targetScene.tutorialHintNum = 0;
+
+        //tutorial11
+        targetScene = tutorialScenes[11];
+        targetScene.tutorialText = res.getString(R.string.tutorial_11);
+        targetScene.checkedSet = new byte[][] {{2, 1, 1}, {2, 2, 1}, {2, 1, 1}};
+        targetScene.btnToggleStatus = 0;
         targetScene.tutorialCurrentStackNum = 4;
         targetScene.tutorialMaxStackNum = 4;
         targetScene.tutorialHintNum = 0;
@@ -420,10 +429,14 @@ public class TutorialDialog {
 
     public void showNextTutorial()
     {
-        if(tutorialCount < MAX_TUTORIAL)
+        if(tutorialCount < MAX_TUTORIAL - 1)
         {
             tutorialCount++;
             showTutorialScene(tutorialCount);
+        }
+        else
+        {
+            dialog.dismiss();
         }
     }
 

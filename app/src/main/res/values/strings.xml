@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name" translatable="false">Logic Gallery</string>
+    <string name="app_name">Logic Gallery</string>
     <string name="app_logo">LogicGallery</string>
     <string name="app_logo_upper">plus+</string>
 
@@ -9,7 +9,6 @@
 
     <string name="admob_app_id" translatable="false">ca-app-pub-9444386713531243~4932680796</string>
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-9444386713531243/8680354114</string>
-    <string name="popup_ad_unit_id" translatable="false">ca-app-pub-9444386713531243/6098809845</string>
     <string name="banner_ad_unit_id_for_test" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="str_level">Level</string>
     <string name="str_accept">Accept</string>
@@ -32,26 +31,33 @@
     <string name="str_next">Next</string>
     <string name="str_prev">Prev</string>
     <string name="str_option">Option</string>
-    <string name="str_tutorial0">This tutorial will show you how to play this game.\nPress Next button to go to next page.</string>
+
     <string name="str_puzzlesize">Input Puzzle Size:</string>
     <string name="str_inputname">Input Puzzle Name:</string>
     <string name="str_puzzlenum">Input Puzzle Count:</string>
     <string name="str_loading">"      Loading…"</string>
-    <string name="str_tutorial1">The number 3 at right upper side of the board shows you that the right column contains three continuous check.\nFortunately there are only three cells in the column so every cell should be checked to satisfy three continuous chekced cell.</string>
-    <string name="str_tutorial2">ㅇ</string>
-    <string name="str_tutorial3">d</string>
-    <string name="str_tutorial4">d</string>
-    <string name="str_tutorial5">d</string>
-    <string name="str_tutorial6">d</string>
-    <string name="str_tutorial7">d</string>
-    <string name="str_tutorial8">d</string>
-    <string name="str_tutorial9">d</string>
-    <string name="str_tutorial10">d</string>
+
+
     <string name="search_artist">Artist:</string>
     <string name="search_size">Game Size:</string>
     <string name="search_progress">Progress:</string>
     <string name="str_input_a_name">Input Artist Name:</string>
     <string name="str_a_name">Artist Name</string>
     <string name="load_sorry">First playing after install, update can take a minute</string>
+    <string name="todays_reward">Today\'s Reward</string>
+    <string name="hint_added">You received a hint</string>
 
+    <string name="tutorial_0">This tutorial will show you how to play this game.\nPress Next button to go to next page.</string>
+    <string name="tutorial_1">The number 3 at right upper side of the board shows you that the right column contains three continuous filled cell.</string>
+    <string name="tutorial_2">We clicked three cells so they were filled.\nYou can see the number 3 changed to gray color.\nIt means that the number is completed.</string>
+    <string name="tutorial_3">Now we will complete the number 2 at the left upper side.\nLikewise, it means two continuous cells should be filled.</string>
+    <string name="tutorial_4">To fill who continuous cells, the middle cell should be filled.\nWe filled the middle cell and completed the number 2.</string>
+    <string name="tutorial_5">We will check the middle column.\nThere are two numbers whose value is 1. It means we should fill one cell and make margin between the next filled cell.\nTop cell is already filled so the middle cell shouldn\'t be filled.\nTo indicate that the cell shouldn\'t be filled, click the \'O\' button so the button was changed to \'X\' button.</string>
+    <string name="tutorial_6">We clicked the middle cell and so the cell now shows \'X\'.\nYou don\'t have to fill that X sign.\nBut you can check that X sign for your convenience.</string>
+    <string name="tutorial_7">I checked \'X\' sign at the bottom cell for mistake.\nIf you make mistake, you can get back by pressing \'prev\' button.</string>
+    <string name="tutorial_8">After we press the button, it got back and the number on that button was changed.\nYou can get back or go next again by pressing \'prev\' button or \'next\' button.</string>
+    <string name="tutorial_9">You can use hint by pressing \'hint\' button.\nBy pressing the \'hint\' button at the right side, the \'toggle\' button at the center shows hint icon.\nIf you click the cells on the board at this status, you can get the correct result of that cell.</string>
+    <string name="tutorial_10">After clicking the bottom cell, it was filled. The cell was to be filled.\nIn game, if you use hint, it is saved and won\'t be changed for any clicking.\nUse hint carefully because you can get only one hint per day.</string>
+    <string name="tutorial_11">The tutorial is ended.\nSelect a puzzle and enjoy the game.</string>
+    <string name="popup_ad_unit_id" translatable="false">ca-app-pub-9444386713531243/6098809845</string>
 </resources>

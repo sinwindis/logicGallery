@@ -37,7 +37,7 @@
 
         ads:adSize="BANNER"
 
-        ads:adUnitId="@string/banner_ad_unit_id_for_test">
+        ads:adUnitId="@string/banner_ad_unit_id">
 
 
 
