@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -28,8 +31,10 @@ import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.data.StringGetter;
 import com.example.nemologic.mainactivity.MainActivity;
+import com.example.nemologic.mainactivity.RewardDialog;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class GalleryFragment extends Fragment {
 
@@ -51,7 +56,7 @@ public class GalleryFragment extends Fragment {
     private TextView tv_puzzleSize;
     private ImageView iv_thumbnail;
     private TextView tv_levelSize;
-    private Button btn_delete;
+    private ImageView btn_delete;
 
     private Cursor bigPuzzleCursor;
     private Cursor customBigPuzzleCursor;
@@ -75,10 +80,12 @@ public class GalleryFragment extends Fragment {
         tv_puzzleSize = fragmentView.findViewById(R.id.tv_gallery_item_progress);
         iv_thumbnail = fragmentView.findViewById(R.id.iv_thumbnail);
         tv_levelSize = fragmentView.findViewById(R.id.tv_gallery_item_level_size);
-        btn_delete = fragmentView.findViewById(R.id.btn_delete);
+        btn_delete = fragmentView.findViewById(R.id.img_delete);
         ConstraintLayout cl_touchBox = fragmentView.findViewById(R.id.cl_touchbox);
 
         tv_level_num = fragmentView.findViewById(R.id.tv_level_num);
+
+
 
         mDbOpenHelper = new DbOpenHelper(ctx);
         try {
@@ -90,31 +97,31 @@ public class GalleryFragment extends Fragment {
         loadCursor();
 
         //클릭 애니메이션 설정
-//        @SuppressLint("UseCompatLoadingForDrawables")
-//        final Drawable press = ctx.getResources().getDrawable(R.drawable.background_gallery_image_press);
-//        @SuppressLint("UseCompatLoadingForDrawables")
-//        final Drawable up = ctx.getResources().getDrawable(R.drawable.background_gallery_image);
+        @SuppressLint("UseCompatLoadingForDrawables")
+        final Drawable press = ctx.getResources().getDrawable(R.drawable.background_btn_round_press);
+        @SuppressLint("UseCompatLoadingForDrawables")
+        final Drawable up = ctx.getResources().getDrawable(R.drawable.background_btn_round_normal);
         cl_touchBox.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
                 if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-//                    if(view != null)
-//                    {
-//                        cl_frame.setBackground(press);
-//
-//                    }
-                    cl_frame.setElevation(0F);
+                    if(view != null)
+                    {
+                        cl_frame.setBackground(press);
+
+                    }
+                    //cl_frame.setElevation(0F);
 
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_POINTER_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL){
 
-//                    if(view != null)
-//                    {
-//                        cl_frame.setBackground(up);
-//                    }
-                    cl_frame.setElevation(20F);
+                    if(view != null)
+                    {
+                        cl_frame.setBackground(up);
+                    }
+                    //cl_frame.setElevation(20F);
                 }
                 return false;
             }
@@ -138,7 +145,7 @@ public class GalleryFragment extends Fragment {
         //프래그먼트 버튼 이벤트 셋
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
 
-        ButtonAnimation.setOvalButtonAnimationNormal(img_back);
+        ButtonAnimation.setOvalButtonAnimationBlack(img_back);
 
         img_back.setOnClickListener(new View.OnClickListener() {
 
@@ -167,7 +174,7 @@ public class GalleryFragment extends Fragment {
 
         ImageView img_prev = fragmentView.findViewById(R.id.img_prev);
 
-        ButtonAnimation.setRoundButtonAnimationNormal(img_prev);
+        ButtonAnimation.setRoundButtonAnimationShadow(img_prev);
 
         img_prev.setOnClickListener(new View.OnClickListener() {
 
@@ -186,7 +193,7 @@ public class GalleryFragment extends Fragment {
 
         ImageView img_next = fragmentView.findViewById(R.id.img_next);
 
-        ButtonAnimation.setRoundButtonAnimationNormal(img_next);
+        ButtonAnimation.setRoundButtonAnimationShadow(img_next);
 
         img_next.setOnClickListener(new View.OnClickListener() {
 
@@ -204,21 +211,52 @@ public class GalleryFragment extends Fragment {
         });
 
         //레벨 지우기 버튼
+        ButtonAnimation.setOvalButtonAnimationBlack(btn_delete);
+
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDbOpenHelper.deleteCustomBigPuzzle(bigPuzzleDataTemp.id);
-                loadCursor();
 
-                if(puzzlePosition == puzzleNum + customPuzzleNum)
-                    puzzlePosition--;
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                View dialogView = inflater.inflate(R.layout.dialog_delete, null);
+                builder.setView(dialogView);
 
-                getPuzzle(puzzlePosition);
-                showPuzzleData();
+                final AlertDialog dialog = builder.create();
+
+                Button btn_accept = dialogView.findViewById(R.id.btn_accept);
+                Button btn_cancel = dialogView.findViewById(R.id.btn_cancel);
+
+                btn_accept.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        deletePuzzle();
+                    }
+                });
+
+                btn_cancel.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+                Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             }
         });
 
         return fragmentView;
+    }
+
+    private void deletePuzzle()
+    {
+        mDbOpenHelper.deleteCustomBigPuzzle(bigPuzzleDataTemp.id);
+        loadCursor();
+
+        if(puzzlePosition == puzzleNum + customPuzzleNum)
+            puzzlePosition--;
+
+        getPuzzle(puzzlePosition);
+        showPuzzleData();
     }
 
     @Override
@@ -348,11 +386,11 @@ public class GalleryFragment extends Fragment {
 
         if(bigPuzzleDataTemp.custom)
         {
-            btn_delete.setAlpha(1.0F);
+            btn_delete.setVisibility(View.VISIBLE);
         }
         else
         {
-            btn_delete.setAlpha(0F);
+            btn_delete.setVisibility(View.GONE);
         }
     }
 }

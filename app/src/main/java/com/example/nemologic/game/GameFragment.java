@@ -232,7 +232,7 @@ public class GameFragment extends Fragment {
         //튜토리얼 버튼
         ImageView img_tutorial = fragmentView.findViewById(R.id.img_tutorial);
 
-        ButtonAnimation.setOvalButtonAnimationNormal(img_tutorial);
+        ButtonAnimation.setOvalButtonAnimationBlack(img_tutorial);
         img_tutorial.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -248,7 +248,7 @@ public class GameFragment extends Fragment {
 
         //옵션 버튼
         ImageView img_option = fragmentView.findViewById(R.id.img_option);
-        ButtonAnimation.setOvalButtonAnimationNormal(img_option);
+        ButtonAnimation.setOvalButtonAnimationBlack(img_option);
 
         img_option.setOnClickListener(new View.OnClickListener() {
 
@@ -271,7 +271,7 @@ public class GameFragment extends Fragment {
 
         //뒤로가기 버튼
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
-        ButtonAnimation.setOvalButtonAnimationNormal(img_back);
+        ButtonAnimation.setOvalButtonAnimationBlack(img_back);
 
         img_back.setOnClickListener(new View.OnClickListener() {
 

@@ -48,7 +48,7 @@ public class ButtonAnimation {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static void setOvalButtonAnimationNormal(ImageView iv)
+    public static void setOvalButtonAnimationBlack(ImageView iv)
     {
 
         @SuppressLint("UseCompatLoadingForDrawables") final Drawable press = iv.getResources().getDrawable(R.drawable.background_btn_oval_shadow);
@@ -82,7 +82,7 @@ public class ButtonAnimation {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static void setRoundButtonAnimationNormal(ImageView iv)
+    public static void setRoundButtonAnimationShadow(ImageView iv)
     {
         @SuppressLint("UseCompatLoadingForDrawables") final Drawable press = iv.getResources().getDrawable(R.drawable.background_btn_round_press);
         @SuppressLint("UseCompatLoadingForDrawables") final Drawable up = iv.getResources().getDrawable(R.drawable.background_btn_round_normal);

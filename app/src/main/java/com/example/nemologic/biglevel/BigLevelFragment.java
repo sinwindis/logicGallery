@@ -173,7 +173,7 @@ public class BigLevelFragment extends Fragment {
 
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
 
-        ButtonAnimation.setOvalButtonAnimationNormal(img_back);
+        ButtonAnimation.setOvalButtonAnimationBlack(img_back);
 
         img_back.setOnClickListener(new View.OnClickListener() {
 

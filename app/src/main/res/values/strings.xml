@@ -60,4 +60,7 @@
     <string name="tutorial_10">After clicking the bottom cell, it was filled. The cell was to be filled.\nIn game, if you use hint, it is saved and won\'t be changed for any clicking.\nUse hint carefully because you can get only one hint per day.</string>
     <string name="tutorial_11">The tutorial is ended.\nSelect a puzzle and enjoy the game.</string>
     <string name="popup_ad_unit_id" translatable="false">ca-app-pub-9444386713531243/6098809845</string>
+
+    <string name="dialog_delete_title">Delete Puzzle</string>
+    <string name="dialog_delete_text">Will you really delete this puzzle?\nDeleted data cannot be restored.</string>
 </resources>

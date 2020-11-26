@@ -2,7 +2,6 @@ package com.example.nemologic.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.nemologic.R;
@@ -51,7 +49,7 @@ public class SearchFragment extends Fragment {
 
 
         //뒤로가기 버튼
-        ButtonAnimation.setOvalButtonAnimationNormal(this.img_back);
+        ButtonAnimation.setOvalButtonAnimationBlack(this.img_back);
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

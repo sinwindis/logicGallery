@@ -166,6 +166,7 @@ public class LevelCreateFragment extends Fragment {
         //recyclerView 내부 아이템 비우기
 
         et_p_name.setText("");
+        et_a_name.setText("");
         et_width.setText("");
         et_height.setText("");
         et_puzzle_width.setText("");
