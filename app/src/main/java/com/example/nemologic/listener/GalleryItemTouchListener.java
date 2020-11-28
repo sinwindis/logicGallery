@@ -7,10 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.nemologic.R;
 
 
@@ -21,8 +17,8 @@ public class GalleryItemTouchListener implements ImageView.OnTouchListener {
     @SuppressLint("UseCompatLoadingForDrawables")
     public GalleryItemTouchListener(Context ctx){
 
-        press = ctx.getResources().getDrawable(R.drawable.background_gallery_image_press);
-        up = ctx.getResources().getDrawable(R.drawable.background_gallery_image);
+        press = ctx.getResources().getDrawable(R.drawable.background_frame_press);
+        up = ctx.getResources().getDrawable(R.drawable.background_frame);
     }
 
     @Override

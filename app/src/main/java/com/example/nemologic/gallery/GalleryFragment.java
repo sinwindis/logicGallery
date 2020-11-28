@@ -31,7 +31,6 @@ import com.example.nemologic.data.DbOpenHelper;
 import com.example.nemologic.data.SqlManager;
 import com.example.nemologic.data.StringGetter;
 import com.example.nemologic.mainactivity.MainActivity;
-import com.example.nemologic.mainactivity.RewardDialog;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -81,7 +80,7 @@ public class GalleryFragment extends Fragment {
         iv_thumbnail = fragmentView.findViewById(R.id.iv_thumbnail);
         tv_levelSize = fragmentView.findViewById(R.id.tv_gallery_item_level_size);
         btn_delete = fragmentView.findViewById(R.id.img_delete);
-        ConstraintLayout cl_touchBox = fragmentView.findViewById(R.id.cl_touchbox);
+        ConstraintLayout cl_touchBox = fragmentView.findViewById(R.id.cl_touch);
 
         tv_level_num = fragmentView.findViewById(R.id.tv_level_num);
 
@@ -98,9 +97,9 @@ public class GalleryFragment extends Fragment {
 
         //클릭 애니메이션 설정
         @SuppressLint("UseCompatLoadingForDrawables")
-        final Drawable press = ctx.getResources().getDrawable(R.drawable.background_btn_round_press);
+        final Drawable press = ctx.getResources().getDrawable(R.drawable.background_frame_press);
         @SuppressLint("UseCompatLoadingForDrawables")
-        final Drawable up = ctx.getResources().getDrawable(R.drawable.background_btn_round_normal);
+        final Drawable up = ctx.getResources().getDrawable(R.drawable.background_frame);
         cl_touchBox.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -110,9 +109,7 @@ public class GalleryFragment extends Fragment {
                     if(view != null)
                     {
                         cl_frame.setBackground(press);
-
                     }
-                    //cl_frame.setElevation(0F);
 
                 }
                 else if(motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_POINTER_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL){
@@ -121,7 +118,6 @@ public class GalleryFragment extends Fragment {
                     {
                         cl_frame.setBackground(up);
                     }
-                    //cl_frame.setElevation(20F);
                 }
                 return false;
             }
@@ -174,7 +170,7 @@ public class GalleryFragment extends Fragment {
 
         ImageView img_prev = fragmentView.findViewById(R.id.img_prev);
 
-        ButtonAnimation.setRoundButtonAnimationShadow(img_prev);
+        ButtonAnimation.setOvalButtonAnimationShadow(img_prev);
 
         img_prev.setOnClickListener(new View.OnClickListener() {
 
@@ -193,7 +189,7 @@ public class GalleryFragment extends Fragment {
 
         ImageView img_next = fragmentView.findViewById(R.id.img_next);
 
-        ButtonAnimation.setRoundButtonAnimationShadow(img_next);
+        ButtonAnimation.setOvalButtonAnimationShadow(img_next);
 
         img_next.setOnClickListener(new View.OnClickListener() {
 

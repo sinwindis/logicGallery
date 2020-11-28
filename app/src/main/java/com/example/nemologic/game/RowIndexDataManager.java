@@ -88,6 +88,8 @@ public class RowIndexDataManager {
         int sumTemp = 0;
         int checkIdx = 0;
 
+        int lastCheckIdx = 0;
+
         if(idxDataSet[rowNum][0] == 0)
         {
             //해당 줄의 첫 인덱스가 0이라면 (체크해야 할 칸이 없다면)
@@ -103,6 +105,7 @@ public class RowIndexDataManager {
         forOut = false;
         for(int i = 0; i < lpm.width; i++)
         {
+            lastCheckIdx = i;
             int targetIdx = i + rowNum * lpm.width;
             switch (lpm.checkedSet[targetIdx])
             {
@@ -186,7 +189,7 @@ public class RowIndexDataManager {
         checkIdx = idxNum - 1;
         forOut = false;
 
-        for(int i = lpm.width - 1; i >= 0; i--)
+        for(int i = lpm.width - 1; i > lastCheckIdx; i--)
         {
             int targetIdx = i + rowNum * lpm.width;
             switch (lpm.checkedSet[targetIdx])

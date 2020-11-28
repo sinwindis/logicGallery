@@ -10,7 +10,7 @@
         android:id="@+id/cl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_topboard"
+        android:background="@drawable/background_top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -58,12 +58,8 @@
         android:id="@+id/cl_frame"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
-        android:padding="10dp"
-        android:background="@drawable/background_btn_round_normal"
+        android:layout_margin="10dp"
+        android:background="@drawable/background_frame"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_top"
@@ -72,113 +68,123 @@
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:background="@drawable/background_frame_inner">
 
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_delete"
-            app:layout_constraintBottom_toTopOf="@id/cl_summary">
-
-            <ImageView
-                android:id="@+id/iv_thumbnail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:background="@drawable/background_gallery_item_shadow_round"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="10dp"
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-            </ImageView>
+                app:layout_constraintTop_toBottomOf="@id/img_delete"
+                app:layout_constraintBottom_toTopOf="@id/cl_summary">
 
+                <ImageView
+                    android:id="@+id/iv_thumbnail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/background_item_big_level_normal"
+
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_item_big_level_normal"
+                android:layout_margin="10dp"
+                android:padding="20dp"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+
+                <TextView
+                    style="@style/StyleFontLarge"
+
+                    android:id="@+id/tv_gallery_item_puzzle_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Puzzle Name"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    style="@style/StyleFontMedium"
+
+                    android:id="@+id/tv_gallery_item_artist_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Artist Name"
+                    app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_puzzle_name"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+
+
+                <TextView
+                    style="@style/StyleFontSmall"
+
+                    android:id="@+id/tv_gallery_item_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Progress"
+                    app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_artist_name"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <TextView
+                    style="@style/StyleFontSmall"
+
+                    android:id="@+id/tv_gallery_item_level_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Level Size"
+                    app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_artist_name"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_touch"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/img_delete"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
+                android:layout_margin="16dp"
+                android:src="@drawable/background_x"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_summary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_gallery_item_shadow_round"
-            android:padding="24dp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            >
-
-            <TextView
-                style="@style/StyleFontLarge"
-
-                android:id="@+id/tv_gallery_item_puzzle_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Puzzle Name"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <TextView
-                style="@style/StyleFontMedium"
-
-                android:id="@+id/tv_gallery_item_artist_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Artist Name"
-                app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_puzzle_name"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-
-
-            <TextView
-                style="@style/StyleFontSmall"
-
-                android:id="@+id/tv_gallery_item_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Progress"
-                app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_artist_name"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-            <TextView
-                style="@style/StyleFontSmall"
-
-                android:id="@+id/tv_gallery_item_level_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Level Size"
-                app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_artist_name"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_touchbox"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <ImageView
-            android:id="@+id/img_delete"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:padding="5dp"
-            android:layout_margin="16dp"
-            android:src="@drawable/background_x"
-
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -186,10 +192,11 @@
         android:id="@+id/cl_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
+        android:paddingTop="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/background_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -207,11 +214,11 @@
 
         <ImageView
             android:id="@+id/img_prev"
-            android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:padding="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="15dp"
             android:src="@drawable/ic_prev"
-            android:background="@drawable/background_btn_round_normal"
+            android:background="@drawable/background_btn_oval_normal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -219,11 +226,11 @@
 
         <ImageView
             android:id="@+id/img_next"
-            android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:padding="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="15dp"
             android:src="@drawable/ic_next"
-            android:background="@drawable/background_btn_round_normal"
+            android:background="@drawable/background_btn_oval_normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"

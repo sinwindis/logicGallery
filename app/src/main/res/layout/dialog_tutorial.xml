@@ -220,7 +220,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/board"
-        android:background="@drawable/background_touchboard"
+        android:background="@drawable/background_bottom"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout

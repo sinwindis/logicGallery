@@ -10,7 +10,7 @@
         android:id="@+id/cl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_topboard"
+        android:background="@drawable/background_top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -90,7 +90,7 @@
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_gallery_item_shadow_round"
+                android:background="@drawable/background_item_big_level_normal"
 
 
                 app:layout_constraintEnd_toEndOf="parent"

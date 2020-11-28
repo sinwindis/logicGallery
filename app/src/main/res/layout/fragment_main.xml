@@ -62,8 +62,7 @@
         android:id="@+id/cl_frame"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/background_btn_round_normal"
-        android:elevation="20dp"
+        android:background="@drawable/background_frame"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,13 +77,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="15dp">
+            android:layout_margin="20dp"
+            android:background="@drawable/background_frame_inner">
 
             <ImageView
                 android:id="@+id/iv_level_board"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="15dp"
+                android:src="@drawable/ic_launcher"
 
 
                 app:layout_constraintEnd_toEndOf="parent"

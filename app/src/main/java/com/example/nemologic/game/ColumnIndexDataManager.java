@@ -74,18 +74,17 @@ public class ColumnIndexDataManager {
 
     public boolean[] getIdxMatch(int columnNum)
     {
+        Log.d("ColumnIdx", "column " + columnNum);
         isIdxComplete[columnNum] = false;
         int idxNum = idxNumSet[columnNum];
 
         boolean[] idxMatch = new boolean[idxNum];
 
-        for(int i = 0; i < idxNum; i++)
-        {
-            idxMatch[i] = false;
-        }
+        Arrays.fill(idxMatch, false);
 
         int sumTemp = 0;
         int checkIdx = 0;
+        int lastCheckIdx = 0;
         boolean forOut;
 
         if(idxDataSet[columnNum][0] == 0)
@@ -96,6 +95,7 @@ public class ColumnIndexDataManager {
             idxMatch = new boolean[1];
             idxMatch[0] = true;
             isIdxComplete[columnNum] = true;
+            Log.d("ColumnIdx", "null idx");
             return idxMatch;
         }
 
@@ -103,6 +103,7 @@ public class ColumnIndexDataManager {
         //해당 세로줄의 맨 처음부터 끝까지 순서대로 확인
         for(int i = 0; i < lpm.height; i++)
         {
+            lastCheckIdx = i;
             int targetIdx = i * lpm.width + columnNum;
             switch (lpm.checkedSet[targetIdx])
             {
@@ -161,15 +162,15 @@ public class ColumnIndexDataManager {
                         //모든 idxMatch 를 false 해주고 리턴한다.
                         Arrays.fill(idxMatch, false);
                         isIdxComplete[columnNum] = false;
+                        Log.d("ColumnIdx", "over idx");
                         return idxMatch;
                     }
 
                 }
                 //체크된 부분이 없었다면
                 //인덱스가 완료되었다 보고 complete 시켜준다.
-                //모든 idxMatch 를 true 해주고 리턴한다.
-                Arrays.fill(idxMatch, true);
                 isIdxComplete[columnNum] = true;
+                Log.d("ColumnIdx", "full idx");
                 return idxMatch;
             }
 
@@ -182,7 +183,7 @@ public class ColumnIndexDataManager {
         checkIdx = idxNum - 1;
         forOut = false;
 
-        for(int i = lpm.height - 1; i >= 0; i--)
+        for(int i = lpm.height - 1; i > lastCheckIdx; i--)
         {
             int targetIdx = i * lpm.width + columnNum;
             switch (lpm.checkedSet[targetIdx])
@@ -242,6 +243,7 @@ public class ColumnIndexDataManager {
                         //모든 idxMatch 를 false 해주고 리턴한다.
                         Arrays.fill(idxMatch, false);
                         isIdxComplete[columnNum] = false;
+                        Log.d("ColumnIdx", "reverse over idx");
                         return idxMatch;
                     }
 
@@ -251,6 +253,7 @@ public class ColumnIndexDataManager {
                 //모든 idxMatch 를 true 해주고 리턴한다.
                 Arrays.fill(idxMatch, true);
                 isIdxComplete[columnNum] = true;
+                Log.d("ColumnIdx", "reverse full idx");
                 return idxMatch;
             }
 
@@ -298,11 +301,13 @@ public class ColumnIndexDataManager {
                     {
                         Arrays.fill(idxMatch, false);
                         isIdxComplete[columnNum] = false;
+                        Log.d("ColumnIdx", "overall over idx");
                         return idxMatch;
                     }
                 }
                 isIdxComplete[columnNum] = true;
                 Arrays.fill(idxMatch, true);
+                Log.d("ColumnIdx", "overall full idx");
                 return idxMatch;
             }
         }

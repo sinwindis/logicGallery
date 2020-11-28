@@ -10,7 +10,7 @@
         android:id="@+id/cl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_topboard"
+        android:background="@drawable/background_top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -69,9 +69,11 @@
         android:id="@+id/board"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/cl_button"
@@ -95,8 +97,7 @@
             android:paddingBottom="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintBottom_toTopOf="@id/ll_board"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.8"
             android:overScrollMode="never">
@@ -111,8 +112,7 @@
             android:paddingStart="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.8"
+            app:layout_constraintTop_toTopOf="@id/ll_board"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.2"
             android:textAlignment="viewEnd"
@@ -121,13 +121,13 @@
         </androidx.recyclerview.widget.RecyclerView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ll_board"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.8"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.8">
 
@@ -188,7 +188,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/background_touchboard"
+        android:background="@drawable/background_bottom"
         >
         
         <androidx.constraintlayout.widget.ConstraintLayout
