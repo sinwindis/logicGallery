@@ -5,7 +5,7 @@ android {
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        applicationId "com.example.nemologic"
+        applicationId "com.sinwindis.nemologic"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
