@@ -35,7 +35,7 @@ public class TutorialDialog {
     private ImageView[] iv_borders;
 
     private ImageView iv_toggle;
-    
+
     private TextView[] tv_row;
     private TextView[] tv_column;
     private TextView tv_stack;
@@ -43,18 +43,16 @@ public class TutorialDialog {
 
     int tutorialCount;
     final int MAX_TUTORIAL = 12;
-    
+
     private TutorialScene[] tutorialScenes;
 
-    public TutorialDialog()
-    {
+    public TutorialDialog() {
 
     }
-    
-    private void showTutorialScene(int index)
-    {
+
+    private void showTutorialScene(int index) {
         TutorialScene targetScene = tutorialScenes[index];
-        
+
         setIndexNumber(targetScene.checkedSet);
         updateBoardView(targetScene.checkedSet);
         setIndexAccent(targetScene.accentArray);
@@ -63,10 +61,9 @@ public class TutorialDialog {
         setHintNum(targetScene.tutorialHintNum);
         tv_tutorial.setText(targetScene.tutorialText);
     }
-    private void setToggleButton(int type)
-    {
-        switch (type)
-        {
+
+    private void setToggleButton(int type) {
+        switch (type) {
             case 0:
                 iv_toggle.setImageResource(R.drawable.ic_o);
                 break;
@@ -81,21 +78,17 @@ public class TutorialDialog {
     }
 
     @SuppressLint("SetTextI18n")
-    private void setStackNum(int currentStackNum, int maxStackNum)
-    {
+    private void setStackNum(int currentStackNum, int maxStackNum) {
         tv_stack.setText(currentStackNum + "/" + maxStackNum);
     }
 
-    private void setHintNum(int hintNum)
-    {
+    private void setHintNum(int hintNum) {
         tv_hint.setText(String.valueOf(hintNum));
     }
 
-    private void setIndexNumber(byte[][] checkedSet)
-    {
+    private void setIndexNumber(byte[][] checkedSet) {
         //row0 check
-        if(checkedSet[0][0] != 1 && checkedSet[0][1] == 1 && checkedSet[0][2] == 1)
-        {
+        if (checkedSet[0][0] != 1 && checkedSet[0][1] == 1 && checkedSet[0][2] == 1) {
             //row0 index number 색상을 맞춰준다.
             SpannableStringBuilder strTemp;
             strTemp = new SpannableStringBuilder("2");
@@ -103,15 +96,12 @@ public class TutorialDialog {
 
             tv_row[0].setText(null);
             tv_row[0].append(strTemp);
-        }
-        else
-        {
+        } else {
             tv_row[0].setText("2");
         }
 
         //row1 check
-        if(checkedSet[1][0] != 1 && checkedSet[1][1] != 1 && checkedSet[1][2] == 1)
-        {
+        if (checkedSet[1][0] != 1 && checkedSet[1][1] != 1 && checkedSet[1][2] == 1) {
             //row0 index number 색상을 맞춰준다.
             SpannableStringBuilder strTemp;
             strTemp = new SpannableStringBuilder("1");
@@ -119,15 +109,12 @@ public class TutorialDialog {
 
             tv_row[1].setText(null);
             tv_row[1].append(strTemp);
-        }
-        else
-        {
+        } else {
             tv_row[1].setText("1");
         }
 
         //row2 check
-        if(checkedSet[2][0] != 1 && checkedSet[2][1] == 1 && checkedSet[2][2] == 1)
-        {
+        if (checkedSet[2][0] != 1 && checkedSet[2][1] == 1 && checkedSet[2][2] == 1) {
             //row0 index number 색상을 맞춰준다.
             SpannableStringBuilder strTemp;
             strTemp = new SpannableStringBuilder("2");
@@ -135,15 +122,12 @@ public class TutorialDialog {
 
             tv_row[2].setText(null);
             tv_row[2].append(strTemp);
-        }
-        else
-        {
+        } else {
             tv_row[2].setText("2");
         }
 
         //column0 check
-        if(checkedSet[0][0] != 1 && checkedSet[1][0] != 1 && checkedSet[2][0] != 1)
-        {
+        if (checkedSet[0][0] != 1 && checkedSet[1][0] != 1 && checkedSet[2][0] != 1) {
             //row0 index number 색상을 맞춰준다.
             SpannableStringBuilder strTemp;
             strTemp = new SpannableStringBuilder("0");
@@ -151,15 +135,12 @@ public class TutorialDialog {
 
             tv_column[0].setText(null);
             tv_column[0].append(strTemp);
-        }
-        else
-        {
+        } else {
             tv_column[0].setText("0");
         }
 
         //column1 check
-        if(checkedSet[0][1] == 1)
-        {
+        if (checkedSet[0][1] == 1) {
             //row0 index number 색상을 맞춰준다.
             SpannableStringBuilder strTemp;
             strTemp = new SpannableStringBuilder("1\n");
@@ -167,13 +148,10 @@ public class TutorialDialog {
 
             tv_column[1].setText(null);
             tv_column[1].append(strTemp);
-        }
-        else
-        {
+        } else {
             tv_column[1].setText("1\n");
         }
-        if(checkedSet[2][1] == 1)
-        {
+        if (checkedSet[2][1] == 1) {
             //row0 index number 색상을 맞춰준다.
             SpannableStringBuilder strTemp;
             strTemp = new SpannableStringBuilder("1");
@@ -181,15 +159,12 @@ public class TutorialDialog {
 
             tv_column[1].setText(null);
             tv_column[1].append(strTemp);
-        }
-        else
-        {
+        } else {
             tv_column[1].append("1");
         }
 
         //column2 check
-        if(checkedSet[0][2] == 1 && checkedSet[1][2] == 1 && checkedSet[2][2] == 1)
-        {
+        if (checkedSet[0][2] == 1 && checkedSet[1][2] == 1 && checkedSet[2][2] == 1) {
             //row0 index number 색상을 맞춰준다.
             SpannableStringBuilder strTemp;
             strTemp = new SpannableStringBuilder("3");
@@ -197,38 +172,29 @@ public class TutorialDialog {
 
             tv_column[2].setText(null);
             tv_column[2].append(strTemp);
-        }
-        else
-        {
+        } else {
             tv_column[2].setText("3");
         }
     }
 
-    private void setIndexAccent(boolean[] accentCode)
-    {
-        for(int i = 0; i < accentCode.length; i++)
-        {
-            if(accentCode[i])
-            {
+    private void setIndexAccent(boolean[] accentCode) {
+        for (int i = 0; i < accentCode.length; i++) {
+            if (accentCode[i]) {
                 iv_borders[i].setAlpha(1F);
-            }
-            else
-            {
+            } else {
                 iv_borders[i].setAlpha(0F);
             }
         }
     }
-    
-    public void makeDialog(Activity activity)
-    {
+
+    public void makeDialog(Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = activity.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_tutorial, null);
         builder.setView(view);
-        
+
         tutorialScenes = new TutorialScene[MAX_TUTORIAL];
-        for(int i = 0; i < MAX_TUTORIAL; i++)
-        {
+        for (int i = 0; i < MAX_TUTORIAL; i++) {
             tutorialScenes[i] = new TutorialScene();
         }
         res = view.getResources();
@@ -251,8 +217,8 @@ public class TutorialDialog {
         iv_borders[7] = view.findViewById(R.id.border_prev);
         iv_borders[8] = view.findViewById(R.id.border_next);
         iv_borders[9] = view.findViewById(R.id.border_hint);
-                
-                
+
+
         iv_toggle = view.findViewById(R.id.img_toggle);
 
         tv_stack = view.findViewById(R.id.tv_stack);
@@ -300,8 +266,7 @@ public class TutorialDialog {
         dialog = builder.create();
     }
 
-    private void setTutorialScenes()
-    {
+    private void setTutorialScenes() {
         TutorialScene targetScene;
 
         //tutorial0
@@ -316,7 +281,7 @@ public class TutorialDialog {
         //tutorial2
         targetScene = tutorialScenes[2];
         targetScene.tutorialText = res.getString(R.string.tutorial_2);
-        targetScene.checkedSet = new byte[][] {{0, 0, 1}, {0, 0, 1}, {0, 0, 1}};
+        targetScene.checkedSet = new byte[][]{{0, 0, 1}, {0, 0, 1}, {0, 0, 1}};
         targetScene.accentArray[1] = true;
         targetScene.accentArray[3] = true;
         targetScene.accentArray[5] = true;
@@ -326,20 +291,20 @@ public class TutorialDialog {
         //tutorial3
         targetScene = tutorialScenes[3];
         targetScene.tutorialText = res.getString(R.string.tutorial_3);
-        targetScene.checkedSet = new byte[][] {{0, 0, 1}, {0, 0, 1}, {0, 0, 1}};
+        targetScene.checkedSet = new byte[][]{{0, 0, 1}, {0, 0, 1}, {0, 0, 1}};
         targetScene.accentArray[0] = true;
 
         //tutorial4
         targetScene = tutorialScenes[4];
         targetScene.tutorialText = res.getString(R.string.tutorial_4);
-        targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 0, 1}, {0, 0, 1}};
+        targetScene.checkedSet = new byte[][]{{0, 1, 1}, {0, 0, 1}, {0, 0, 1}};
         targetScene.tutorialCurrentStackNum = 2;
         targetScene.tutorialMaxStackNum = 2;
 
         //tutorial5
         targetScene = tutorialScenes[5];
         targetScene.tutorialText = res.getString(R.string.tutorial_5);
-        targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 0, 1}, {0, 0, 1}};
+        targetScene.checkedSet = new byte[][]{{0, 1, 1}, {0, 0, 1}, {0, 0, 1}};
         targetScene.accentArray[4] = true;
         targetScene.accentArray[6] = true;
         targetScene.btnToggleStatus = 1;
@@ -347,15 +312,15 @@ public class TutorialDialog {
         //tutorial6
         targetScene = tutorialScenes[6];
         targetScene.tutorialText = res.getString(R.string.tutorial_6);
-        targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 2, 1}, {0, 0, 1}};
+        targetScene.checkedSet = new byte[][]{{0, 1, 1}, {0, 2, 1}, {0, 0, 1}};
         targetScene.btnToggleStatus = 1;
         targetScene.tutorialCurrentStackNum = 3;
         targetScene.tutorialMaxStackNum = 3;
 
         //tutorial7
         targetScene = tutorialScenes[7];
-        targetScene.tutorialText= res.getString(R.string.tutorial_7);
-        targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 2, 1}, {0, 2, 1}};
+        targetScene.tutorialText = res.getString(R.string.tutorial_7);
+        targetScene.checkedSet = new byte[][]{{0, 1, 1}, {0, 2, 1}, {0, 2, 1}};
         targetScene.btnToggleStatus = 1;
         targetScene.accentArray[7] = true;
         targetScene.tutorialCurrentStackNum = 4;
@@ -364,7 +329,7 @@ public class TutorialDialog {
         //tutorial8
         targetScene = tutorialScenes[8];
         targetScene.tutorialText = res.getString(R.string.tutorial_8);
-        targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 2, 1}, {0, 0, 1}};
+        targetScene.checkedSet = new byte[][]{{0, 1, 1}, {0, 2, 1}, {0, 0, 1}};
         targetScene.btnToggleStatus = 1;
         targetScene.accentArray[7] = true;
         targetScene.accentArray[8] = true;
@@ -374,7 +339,7 @@ public class TutorialDialog {
         //tutorial9
         targetScene = tutorialScenes[9];
         targetScene.tutorialText = res.getString(R.string.tutorial_9);
-        targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 2, 1}, {0, 0, 1}};
+        targetScene.checkedSet = new byte[][]{{0, 1, 1}, {0, 2, 1}, {0, 0, 1}};
         targetScene.btnToggleStatus = 2;
         targetScene.accentArray[6] = true;
         targetScene.accentArray[9] = true;
@@ -384,7 +349,7 @@ public class TutorialDialog {
         //tutorial10
         targetScene = tutorialScenes[10];
         targetScene.tutorialText = res.getString(R.string.tutorial_10);
-        targetScene.checkedSet = new byte[][] {{0, 1, 1}, {0, 2, 1}, {0, 1, 1}};
+        targetScene.checkedSet = new byte[][]{{0, 1, 1}, {0, 2, 1}, {0, 1, 1}};
         targetScene.btnToggleStatus = 2;
         targetScene.tutorialCurrentStackNum = 4;
         targetScene.tutorialMaxStackNum = 4;
@@ -393,23 +358,19 @@ public class TutorialDialog {
         //tutorial11
         targetScene = tutorialScenes[11];
         targetScene.tutorialText = res.getString(R.string.tutorial_11);
-        targetScene.checkedSet = new byte[][] {{2, 1, 1}, {2, 2, 1}, {2, 1, 1}};
+        targetScene.checkedSet = new byte[][]{{2, 1, 1}, {2, 2, 1}, {2, 1, 1}};
         targetScene.btnToggleStatus = 0;
         targetScene.tutorialCurrentStackNum = 4;
         targetScene.tutorialMaxStackNum = 4;
         targetScene.tutorialHintNum = 0;
     }
 
-    private void updateBoardView(byte[][] dataSet)
-    {
-        for(int y = 0; y < 3; y++)
-        {
-            for(int x = 0; x< 3; x++)
-            {
-                ImageView view = (ImageView) glm.findViewByPosition(y*3 + x);
+    private void updateBoardView(byte[][] dataSet) {
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                ImageView view = (ImageView) glm.findViewByPosition(y * 3 + x);
                 assert view != null;
-                switch (dataSet[y][x])
-                {
+                switch (dataSet[y][x]) {
                     case 0:
                         view.setImageDrawable(null);
                         view.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -427,23 +388,17 @@ public class TutorialDialog {
         }
     }
 
-    public void showNextTutorial()
-    {
-        if(tutorialCount < MAX_TUTORIAL - 1)
-        {
+    public void showNextTutorial() {
+        if (tutorialCount < MAX_TUTORIAL - 1) {
             tutorialCount++;
             showTutorialScene(tutorialCount);
-        }
-        else
-        {
+        } else {
             dialog.dismiss();
         }
     }
 
-    public void showPrevTutorial()
-    {
-        if(tutorialCount > 0)
-        {
+    public void showPrevTutorial() {
+        if (tutorialCount > 0) {
             tutorialCount--;
             showTutorialScene(tutorialCount);
         }

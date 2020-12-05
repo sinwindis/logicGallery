@@ -79,7 +79,7 @@ public class EndFragment extends Fragment {
         }
 
         //bundle 로 받은 category 와 level 의 이름을 String 으로 저장한다.
-        if(getArguments() != null){
+        if (getArguments() != null) {
             id = getArguments().getInt("id");
         }
 
@@ -88,7 +88,7 @@ public class EndFragment extends Fragment {
         byte[] colorSet;
 
         //빅 레벨
-        Cursor bigLevelCursor =  mDbOpenHelper.getBigLevelCursorById(id);
+        Cursor bigLevelCursor = mDbOpenHelper.getBigLevelCursorById(id);
         bigLevelCursor.moveToNext();
 
         p_id = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
@@ -127,33 +127,27 @@ public class EndFragment extends Fragment {
         return fragmentView;
     }
 
-    private void showTileSlowly(final int pos, final int count)
-    {
+    private void showTileSlowly(final int pos, final int count) {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                for(int i = 0; i <= pos; i++)
-                {
+                for (int i = 0; i <= pos; i++) {
                     ImageView iv = (ImageView) rv_board.getChildAt(pos - i + (width * i));
-                    if(pos - i < width && i < height)
-                    {
-                        iv.setAlpha(1.0F/(10-count));
+                    if (pos - i < width && i < height) {
+                        iv.setAlpha(1.0F / (10 - count));
                     }
                 }
 
-                if(count == 9)
-                {
+                if (count == 9) {
                     return;
                 }
-                showTileSlowly(pos, count+1);
+                showTileSlowly(pos, count + 1);
             }
         }, 20);
     }
 
-    private void delayedSetBackgroundColor(final int pos)
-    {
-        if(pos == maxLength*2)
-        {
+    private void delayedSetBackgroundColor(final int pos) {
+        if (pos == maxLength * 2) {
             //애니메이션 종료시
             return;
         }
@@ -161,12 +155,10 @@ public class EndFragment extends Fragment {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                for(int i = 0; i <= pos; i++)
-                {
+                for (int i = 0; i <= pos; i++) {
                     ImageView iv = (ImageView) rv_board.getChildAt(pos - i + (width * i));
-                    if(pos - i < width && i < height)
-                    {
-                        int color = colorBitmap.getPixel(pos-i, i);
+                    if (pos - i < width && i < height) {
+                        int color = colorBitmap.getPixel(pos - i, i);
 
                         iv.setAlpha(0F);
                         iv.setBackgroundColor(color);
@@ -174,13 +166,12 @@ public class EndFragment extends Fragment {
                     }
                 }
 
-                delayedSetBackgroundColor(pos+1);
+                delayedSetBackgroundColor(pos + 1);
             }
         }, timeDelay);
     }
 
-    private void showGameEndAnimation()
-    {
+    private void showGameEndAnimation() {
         delayedSetBackgroundColor(0);
     }
 }

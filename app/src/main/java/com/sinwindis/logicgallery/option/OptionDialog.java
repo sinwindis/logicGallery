@@ -17,13 +17,11 @@ public class OptionDialog {
 
     public AlertDialog dialog;
 
-    public OptionDialog()
-    {
+    public OptionDialog() {
 
     }
 
-    public void makeDialog(Activity activity)
-    {
+    public void makeDialog(Activity activity) {
         final Activity finalActivity = activity;
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = activity.getLayoutInflater();

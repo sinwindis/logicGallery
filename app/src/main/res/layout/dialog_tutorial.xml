@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,8 +14,7 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             style="@style/StyleFontSmall"
@@ -33,8 +31,7 @@
             app:layout_constraintHeight_percent="0.2"
 
             android:text="0"
-            android:background="@drawable/background_index_column"
-            />
+            android:background="@drawable/background_index_column" />
 
         <ImageView
             android:id="@+id/border_column0"
@@ -64,7 +61,7 @@
             app:layout_constraintHeight_percent="0.2"
 
             android:text="1\n1"
-            android:background="@drawable/background_index_column"/>
+            android:background="@drawable/background_index_column" />
 
         <ImageView
             android:id="@+id/border_column1"
@@ -123,8 +120,7 @@
             app:layout_constraintWidth_percent="0.2"
 
             android:text="2"
-            android:background="@drawable/background_index_row"
-            />
+            android:background="@drawable/background_index_row" />
 
         <ImageView
             android:id="@+id/border_row0"
@@ -154,7 +150,7 @@
             app:layout_constraintWidth_percent="0.2"
 
             android:text="1"
-            android:background="@drawable/background_index_row"/>
+            android:background="@drawable/background_index_row" />
 
         <ImageView
             android:id="@+id/border_row1"
@@ -183,7 +179,7 @@
             app:layout_constraintWidth_percent="0.2"
 
             android:text="2"
-            android:background="@drawable/background_index_row"/>
+            android:background="@drawable/background_index_row" />
 
         <ImageView
             android:id="@+id/border_row2"
@@ -220,8 +216,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/board"
-        android:background="@drawable/background_bottom"
-        >
+        android:background="@drawable/background_bottom">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_stack"
@@ -244,7 +239,7 @@
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/img_prevstack"/>
+                app:layout_constraintBottom_toTopOf="@id/img_prevstack" />
 
             <ImageView
                 android:id="@+id/img_nextstack"
@@ -257,8 +252,7 @@
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/img_prevstack"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <ImageView
                 android:id="@+id/border_next"
@@ -281,8 +275,7 @@
                 android:background="@drawable/background_btn_oval_normal"
                 app:layout_constraintEnd_toStartOf="@id/img_nextstack"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <ImageView
                 android:id="@+id/border_prev"
@@ -309,8 +302,7 @@
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 
         <ImageView
@@ -331,8 +323,7 @@
             android:background="@drawable/background_cl_hint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/img_toggle"
-            app:layout_constraintBottom_toBottomOf="@id/img_toggle"
-            >
+            app:layout_constraintBottom_toBottomOf="@id/img_toggle">
 
             <TextView
                 style="@style/StyleFontMedium"
@@ -343,7 +334,7 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/img_hint"
@@ -357,7 +348,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_hint"/>
+                app:layout_constraintTop_toBottomOf="@id/tv_hint" />
 
             <ImageView
                 android:id="@+id/border_hint"
@@ -373,11 +364,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
     <TextView
@@ -389,7 +376,7 @@
         android:layout_margin="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_button_board"/>
+        app:layout_constraintTop_toBottomOf="@id/cl_button_board" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -412,7 +399,7 @@
             app:layout_constraintEnd_toStartOf="@id/btn_next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/str_prev"/>
+            android:text="@string/str_prev" />
 
         <Button
             style="@style/StyleFontSmall"
@@ -426,13 +413,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/str_next"/>
+            android:text="@string/str_next" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

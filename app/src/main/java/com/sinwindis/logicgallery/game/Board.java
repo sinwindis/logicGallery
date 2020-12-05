@@ -11,24 +11,21 @@ public class Board {
     private int stackMax = 0;
     private int stackIdx = 0;
 
-    public Board(int height, int width)
-    {
+    public Board(int height, int width) {
         this.height = height;
         this.width = width;
 
         this.cells = new Cell[height][width];
     }
 
-    public Cell getCell(int y, int x)
-    {
-        if(y < this.height && x < this.width)
+    public Cell getCell(int y, int x) {
+        if (y < this.height && x < this.width)
             return cells[y][x];
         else
             return null;
     }
 
-    public Cell[][] getCells()
-    {
+    public Cell[][] getCells() {
         return cells;
     }
 
@@ -36,52 +33,48 @@ public class Board {
 
         //correctValue 를 초기화해주는 작업
 
-        if(values.length != this.height*this.width) {
+        if (values.length != this.height * this.width) {
             return false;
         }
 
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++)
-            {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 cells[y][x] = new Cell(values[x + y * this.width]);
             }
         }
         return true;
     }
 
-    public boolean pushValues(byte[][] values)
-    {
-        if(values.length != height || values[0].length != width) {
+    public boolean pushValues(byte[][] values) {
+        if (values.length != height || values[0].length != width) {
             return false;
         }
 
         boolean isValueChanged = false;
 
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++)
-            {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 //만약 셀의 값이 하나라도 바뀌면 isValueChanged 를 true 로 바꿔준다.
-                if(cells[y][x].push(values[y][x]))
+                if (cells[y][x].push(values[y][x]))
                     isValueChanged = true;
             }
         }
         return isValueChanged;
     }
 
-    public boolean pushValues(byte[] values)
-    {
-        if(values.length != this.height*this.width) {
+    public boolean pushValues(byte[] values) {
+        if (values.length != this.height * this.width) {
             return false;
         }
 
         boolean isValueChanged = false;
 
-        for(int i = 0; i < values.length; i++) {
-            int y = i/this.width;
-            int x = i%this.width;
+        for (int i = 0; i < values.length; i++) {
+            int y = i / this.width;
+            int x = i % this.width;
 
             //만약 셀의 값이 하나라도 바뀌면 isValueChanged 를 true 로 바꿔준다.
-            if(cells[y][x].push(values[i]))
+            if (cells[y][x].push(values[i]))
                 isValueChanged = true;
         }
 
@@ -90,11 +83,11 @@ public class Board {
 
     public boolean moveToNext() {
 
-        if(width == 0 || height == 0)
+        if (width == 0 || height == 0)
             return false;
 
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 cells[y][x].moveToNext();
             }
         }
@@ -106,11 +99,11 @@ public class Board {
     }
 
     public boolean moveToPrev() {
-        if(width == 0 || height == 0)
+        if (width == 0 || height == 0)
             return false;
 
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 cells[y][x].moveToPrev();
             }
         }
@@ -121,16 +114,14 @@ public class Board {
         return true;
     }
 
-    public byte[] getParsedCells()
-    {
-        byte[] parsedCells = new byte[this.height*this.width];
+    public byte[] getParsedCells() {
+        byte[] parsedCells = new byte[this.height * this.width];
 
-        for(int i = 0; i < parsedCells.length; i++)
-        {
-            int y = i/this.width;
-            int x = i%this.width;
+        for (int i = 0; i < parsedCells.length; i++) {
+            int y = i / this.width;
+            int x = i % this.width;
             byte cellValue = cells[y][x].getCurrentValue();
-            if(cells[y][x].isHintUsed())
+            if (cells[y][x].isHintUsed())
                 cellValue *= -1;
             parsedCells[i] = cellValue;
         }
@@ -138,15 +129,19 @@ public class Board {
         return parsedCells;
     }
 
-    public int getStackMax() { return this.stackMax; }
-    public int getStackIdx() { return this.stackIdx; }
+    public int getStackMax() {
+        return this.stackMax;
+    }
+
+    public int getStackIdx() {
+        return this.stackIdx;
+    }
+
     public boolean isBoardComplete() {
-        for(int y = 0; y < this.height; y++)
-        {
-            for(int x = 0; x < this.width; x++)
-            {
+        for (int y = 0; y < this.height; y++) {
+            for (int x = 0; x < this.width; x++) {
                 //셀에 하나라도 오답이 있으면 false 리턴
-                if(!cells[y][x].isCorrect()) {
+                if (!cells[y][x].isCorrect()) {
                     return false;
                 }
             }

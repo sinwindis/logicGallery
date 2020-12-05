@@ -27,7 +27,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ViewHolder(View itemView) {
-            super(itemView) ;
+            super(itemView);
             // 뷰 객체에 대한 참조. (hold strong reference)
         }
     }
@@ -42,20 +42,19 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     @NonNull
     @Override
     public RvRowAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext() ;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
+        Context context = parent.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.item_row, parent, false) ;
+        View view = inflater.inflate(R.layout.item_row, parent, false);
 
-        heightUnder += parent.getMeasuredHeight()%length/((float)length);
+        heightUnder += parent.getMeasuredHeight() % length / ((float) length);
 
-        if(heightUnder >= 1)
-        {
+        if (heightUnder >= 1) {
             heightOffset = 1;
             heightUnder--;
         }
 
-        view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, parent.getMeasuredHeight()/length + heightOffset));
+        view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, parent.getMeasuredHeight() / length + heightOffset));
 
         return new ViewHolder(view);
     }
@@ -63,7 +62,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(RvRowAdapter.ViewHolder holder, int position) {
-        tvList.add((TextView)  holder.itemView.findViewById(R.id.tv_item_row));
+        tvList.add((TextView) holder.itemView.findViewById(R.id.tv_item_row));
 
         tvList.get(position).setText(dataSet[position]);
     }
@@ -75,11 +74,9 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     }
 
 
-    public void refreshView(String[] dataSet)
-    {
+    public void refreshView(String[] dataSet) {
         this.dataSet = dataSet;
-        for(int i = 0; i < this.length; i++)
-        {
+        for (int i = 0; i < this.length; i++) {
             tvList.get(i).setText(dataSet[i]);
         }
     }

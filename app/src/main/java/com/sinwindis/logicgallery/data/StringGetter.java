@@ -19,12 +19,10 @@ public class StringGetter {
     public static ArrayList<String> a_name;
     public static ArrayList<String> p_name;
 
-    public StringGetter()
-    {
+    public StringGetter() {
     }
 
-    public static void loadData(Context ctx)
-    {
+    public static void loadData(Context ctx) {
 
         a_name = new ArrayList<>();
         p_name = new ArrayList<>();
@@ -39,12 +37,10 @@ public class StringGetter {
             parser.setInput(new InputStreamReader(levelInputStream, "UTF-8"));
             int eventType = parser.getEventType();
 
-            while(eventType != XmlPullParser.END_DOCUMENT)
-            {
+            while (eventType != XmlPullParser.END_DOCUMENT) {
                 if (eventType == XmlPullParser.START_TAG) {
                     String startTag = parser.getName();
-                    if(startTag.equals("name"))
-                    {
+                    if (startTag.equals("name")) {
                         a_name.add(parser.nextText());
                     }
                 }
@@ -52,7 +48,7 @@ public class StringGetter {
             }
 
 
-        } catch(XmlPullParserException | IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
 
@@ -64,12 +60,10 @@ public class StringGetter {
             parser.setInput(new InputStreamReader(levelInputStream, "UTF-8"));
             int eventType = parser.getEventType();
 
-            while(eventType != XmlPullParser.END_DOCUMENT)
-            {
+            while (eventType != XmlPullParser.END_DOCUMENT) {
                 if (eventType == XmlPullParser.START_TAG) {
                     String startTag = parser.getName();
-                    if(startTag.equals("name"))
-                    {
+                    if (startTag.equals("name")) {
                         p_name.add(parser.nextText());
                     }
                 }
@@ -77,7 +71,7 @@ public class StringGetter {
             }
 
 
-        } catch(XmlPullParserException | IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
 

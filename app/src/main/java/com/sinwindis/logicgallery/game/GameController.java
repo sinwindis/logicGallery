@@ -274,7 +274,7 @@ public class GameController {
         for (int y = 0; y < lpm.getHeight(); y++) {
             for (int x = 0; x < lpm.getWidth(); x++) {
 
-                if(!dragTemp[y][x])
+                if (!dragTemp[y][x])
                     continue;
                 Cell targetCell = lpm.getCell(y, x);
 

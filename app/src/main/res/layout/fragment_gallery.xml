@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,8 +12,7 @@
         android:background="@drawable/background_top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             style="@style/StyleFontLarge"
@@ -27,7 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/img_back"
-            app:layout_constraintBottom_toBottomOf="@id/img_back"/>
+            app:layout_constraintBottom_toBottomOf="@id/img_back" />
 
         <ImageView
             android:id="@+id/img_back"
@@ -37,20 +35,19 @@
             android:layout_margin="15dp"
             android:src="@drawable/ic_prev"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <ImageView-->
-<!--            android:id="@+id/img_open_search"-->
-<!--            android:layout_width="30dp"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:padding="5dp"-->
-<!--            android:layout_margin="15dp"-->
-<!--            android:src="@drawable/ic_hint"-->
+        <!--        <ImageView-->
+        <!--            android:id="@+id/img_open_search"-->
+        <!--            android:layout_width="30dp"-->
+        <!--            android:layout_height="30dp"-->
+        <!--            android:padding="5dp"-->
+        <!--            android:layout_margin="15dp"-->
+        <!--            android:src="@drawable/ic_hint"-->
 
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            />-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -64,8 +61,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_top"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cl_progress"
-        >
+        app:layout_constraintBottom_toTopOf="@id/cl_progress">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -93,11 +89,10 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -110,8 +105,7 @@
 
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                >
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
                     style="@style/StyleFontLarge"
@@ -121,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:text="Puzzle Name"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     style="@style/StyleFontMedium"
@@ -132,8 +126,7 @@
 
                     android:text="Artist Name"
                     app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_puzzle_name"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
+                    app:layout_constraintStart_toStartOf="parent" />
 
 
                 <TextView
@@ -145,7 +138,7 @@
 
                     android:text="Progress"
                     app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_artist_name"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     style="@style/StyleFontSmall"
@@ -156,7 +149,7 @@
 
                     android:text="Level Size"
                     app:layout_constraintTop_toBottomOf="@id/tv_gallery_item_artist_name"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -168,7 +161,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <ImageView
                 android:id="@+id/img_delete"
@@ -179,11 +172,9 @@
                 android:src="@drawable/background_x"
 
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -210,7 +201,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
             android:id="@+id/img_prev"
@@ -221,8 +212,7 @@
             android:background="@drawable/background_btn_oval_normal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/img_next"
@@ -233,8 +223,7 @@
             android:background="@drawable/background_btn_oval_normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

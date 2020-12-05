@@ -31,7 +31,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ViewHolder(View itemView) {
-            super(itemView) ;
+            super(itemView);
             // 뷰 객체에 대한 참조. (hold strong reference)
         }
     }
@@ -46,20 +46,19 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     @NonNull
     @Override
     public RvRowAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext() ;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
+        Context context = parent.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.item_row, parent, false) ;
+        View view = inflater.inflate(R.layout.item_row, parent, false);
 
-        heightUnder += parent.getMeasuredHeight()%length/((float)length);
+        heightUnder += parent.getMeasuredHeight() % length / ((float) length);
 
-        if(heightUnder >= 1)
-        {
+        if (heightUnder >= 1) {
             heightOffset = 1;
             heightUnder--;
         }
 
-        view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, parent.getMeasuredHeight()/length + heightOffset));
+        view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, parent.getMeasuredHeight() / length + heightOffset));
 
         heightOffset = 0;
 
@@ -74,7 +73,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
         tv.post(new Runnable() {
             @Override
             public void run() {
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, tv.getMeasuredHeight()/2);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, tv.getMeasuredHeight() / 2);
             }
         });
 
@@ -91,8 +90,7 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     }
 
 
-    public void refreshView(int rowNum)
-    {
+    public void refreshView(int rowNum) {
         //숫자가 다 채워질 경우 색 바꾸기
 
         int[] idxNumSet = rowIndexDataManager.getIdxNumSet();
@@ -101,15 +99,11 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
 
         tvList.get(rowNum).setText("");
         SpannableStringBuilder numStr;
-        for(int i = 0; i < idxNumSet[rowNum]; i++)
-        {
+        for (int i = 0; i < idxNumSet[rowNum]; i++) {
             numStr = new SpannableStringBuilder(' ' + String.valueOf(dataSet[rowNum][i]));
-            if(completeIdx[i])
-            {
+            if (completeIdx[i]) {
                 numStr.setSpan(new ForegroundColorSpan(Color.parseColor("#a0a0a0")), 0, numStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-            else
-            {
+            } else {
                 numStr.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), 0, numStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             tvList.get(rowNum).append(numStr);

@@ -3,26 +3,31 @@
 
     <item>   <!-- adjust borders width here -->
         <shape android:shape="rectangle">
-            <padding android:left="12dp" android:top="12dp" android:right="12dp" android:bottom="12dp" />
-            <solid
-                android:color="#00000000"/>  <!-- background color -->
+            <padding
+                android:left="12dp"
+                android:top="12dp"
+                android:right="12dp"
+                android:bottom="12dp" />
+            <solid android:color="#00000000" />  <!-- background color -->
         </shape>
     </item>
 
     <item>   <!-- adjust borders width here -->
         <shape android:shape="rectangle">
-            <corners android:radius="10dp"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
-            <solid
-                android:color="#10404040"/>  <!-- background color -->
+            <corners android:radius="10dp" />
+            <padding
+                android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp" />
+            <solid android:color="#10404040" />  <!-- background color -->
         </shape>
     </item>
 
     <item>   <!-- adjust borders width here -->
         <shape android:shape="rectangle">
-            <corners android:radius="10dp"/>
-            <solid
-                android:color="@color/colorWhite"/>  <!-- background color -->
+            <corners android:radius="10dp" />
+            <solid android:color="@color/colorWhite" />  <!-- background color -->
         </shape>
     </item>
 </layer-list>

@@ -25,7 +25,7 @@ public class RvLevelCreateBoardAdapter extends RecyclerView.Adapter<RvLevelCreat
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ViewHolder(View itemView) {
-            super(itemView) ;
+            super(itemView);
 
             // 뷰 객체에 대한 참조. (hold strong reference)
         }
@@ -42,26 +42,24 @@ public class RvLevelCreateBoardAdapter extends RecyclerView.Adapter<RvLevelCreat
     @NonNull
     @Override
     public RvLevelCreateBoardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext() ;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
+        Context context = parent.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.item_board, parent, false) ;
+        View view = inflater.inflate(R.layout.item_board, parent, false);
 
-        if(widthCount % this.width == 0)
-        {
+        if (widthCount % this.width == 0) {
             //매 줄의 첫 칸일 때
 
             //height 는 여기서 한 번만 계산
-            heightUnder += parent.getMeasuredHeight()%this.height/((float)this.height);
+            heightUnder += parent.getMeasuredHeight() % this.height / ((float) this.height);
 
-            if(heightUnder >= 1)
-            {
+            if (heightUnder >= 1) {
                 heightOffset = 1;
                 heightUnder--;
             }
         }
 
-        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.width + 1, parent.getMeasuredHeight()/this.height + heightOffset));
+        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth() / this.width + 1, parent.getMeasuredHeight() / this.height + heightOffset));
 
         heightOffset = 0;
         widthCount++;
@@ -95,10 +93,9 @@ public class RvLevelCreateBoardAdapter extends RecyclerView.Adapter<RvLevelCreat
 
         ImageView iv = (ImageView) holder.itemView;
 
-        int color = dataSet[position/width][position% width];
+        int color = dataSet[position / width][position % width];
         String colorStr = Integer.toHexString(color);
-        while(colorStr.length() < 6)
-        {
+        while (colorStr.length() < 6) {
             colorStr = "0" + colorStr;
         }
 

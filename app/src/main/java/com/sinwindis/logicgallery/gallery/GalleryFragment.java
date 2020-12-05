@@ -85,7 +85,6 @@ public class GalleryFragment extends Fragment {
         tv_level_num = fragmentView.findViewById(R.id.tv_level_num);
 
 
-
         mDbOpenHelper = new DbOpenHelper(ctx);
         try {
             mDbOpenHelper.open();
@@ -96,26 +95,21 @@ public class GalleryFragment extends Fragment {
         loadCursor();
 
         //클릭 애니메이션 설정
-        @SuppressLint("UseCompatLoadingForDrawables")
-        final Drawable press = ctx.getResources().getDrawable(R.drawable.background_frame_press);
-        @SuppressLint("UseCompatLoadingForDrawables")
-        final Drawable up = ctx.getResources().getDrawable(R.drawable.background_frame);
+        @SuppressLint("UseCompatLoadingForDrawables") final Drawable press = ctx.getResources().getDrawable(R.drawable.background_frame_press);
+        @SuppressLint("UseCompatLoadingForDrawables") final Drawable up = ctx.getResources().getDrawable(R.drawable.background_frame);
         cl_touchBox.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-                    if(view != null)
-                    {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (view != null) {
                         cl_frame.setBackground(press);
                     }
 
-                }
-                else if(motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_POINTER_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL){
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_POINTER_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
 
-                    if(view != null)
-                    {
+                    if (view != null) {
                         cl_frame.setBackground(up);
                     }
                 }
@@ -134,7 +128,7 @@ public class GalleryFragment extends Fragment {
                 bundle.putBoolean("custom", puzzleDataTemp.custom);
                 Log.d("galleryFrag", "p_id: " + puzzleDataTemp.id + " custom: " + puzzleDataTemp.custom);
                 dest.setArguments(bundle);
-                ((MainActivity)ctx).fragmentMove(dest);
+                ((MainActivity) ctx).fragmentMove(dest);
             }
         });
 
@@ -177,7 +171,7 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //이전 레벨
-                if(puzzlePosition == 0)
+                if (puzzlePosition == 0)
                     puzzlePosition = puzzleNum + customPuzzleNum - 1;
                 else
                     puzzlePosition--;
@@ -196,7 +190,7 @@ public class GalleryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //다음 레벨
-                if(puzzlePosition == puzzleNum + customPuzzleNum - 1)
+                if (puzzlePosition == puzzleNum + customPuzzleNum - 1)
                     puzzlePosition = 0;
                 else
                     puzzlePosition++;
@@ -243,12 +237,11 @@ public class GalleryFragment extends Fragment {
         return fragmentView;
     }
 
-    private void deletePuzzle()
-    {
+    private void deletePuzzle() {
         mDbOpenHelper.deleteCustomBigPuzzle(puzzleDataTemp.id);
         loadCursor();
 
-        if(puzzlePosition == puzzleNum + customPuzzleNum)
+        if (puzzlePosition == puzzleNum + customPuzzleNum)
             puzzlePosition--;
 
         getPuzzle(puzzlePosition);
@@ -256,8 +249,7 @@ public class GalleryFragment extends Fragment {
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         getPuzzle(puzzlePosition);
         showPuzzleData();
@@ -265,35 +257,28 @@ public class GalleryFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
 
         mDbOpenHelper.close();
     }
 
-    private void loadCursor()
-    {
+    private void loadCursor() {
         bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursor();
         customBigPuzzleCursor = mDbOpenHelper.getCustomBigPuzzleCursor();
         puzzleNum = bigPuzzleCursor.getCount();
         customPuzzleNum = customBigPuzzleCursor.getCount();
     }
 
-    private void getPuzzle(int position)
-    {
-        if(position > puzzleNum - 1)
-        {
+    private void getPuzzle(int position) {
+        if (position > puzzleNum - 1) {
             loadCustomPuzzle(position - puzzleNum);
-        }
-        else
-        {
+        } else {
             loadPuzzle(position);
         }
     }
 
-    private void loadPuzzle(int position)
-    {
+    private void loadPuzzle(int position) {
         bigPuzzleCursor.moveToPosition(position);
 
         int id = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.ID));
@@ -308,13 +293,12 @@ public class GalleryFragment extends Fragment {
 
         byte[] colorSet = bigPuzzleCursor.getBlob(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.COLORSET));
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray( colorSet, 0, colorSet.length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(colorSet, 0, colorSet.length);
 
         puzzleDataTemp = new PuzzleData(id, a_name, p_name, bitmap, width, height, l_width, l_height, progress, false);
     }
 
-    private void loadCustomPuzzle(int position)
-    {
+    private void loadCustomPuzzle(int position) {
         customBigPuzzleCursor.moveToPosition(position);
 
         int id = customBigPuzzleCursor.getInt(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.ID));
@@ -328,7 +312,7 @@ public class GalleryFragment extends Fragment {
 
         byte[] colorSet = customBigPuzzleCursor.getBlob(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.COLORSET));
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray( colorSet, 0, colorSet.length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(colorSet, 0, colorSet.length);
 
         puzzleDataTemp = new PuzzleData(id, a_name, p_name, bitmap, width, height, l_width, l_height, progress, true);
     }
@@ -351,7 +335,7 @@ public class GalleryFragment extends Fragment {
         int puzzleWidth = puzzleDataTemp.width;
         int puzzleHeight = puzzleDataTemp.height;
 
-        String strPuzzleProgress = puzzleDataTemp.progress + "/" + puzzleHeight*puzzleWidth;
+        String strPuzzleProgress = puzzleDataTemp.progress + "/" + puzzleHeight * puzzleWidth;
 
         tv_puzzleSize.setText(strPuzzleProgress);
 
@@ -363,29 +347,23 @@ public class GalleryFragment extends Fragment {
 
         tv_levelSize.setText(strLevelSize);
 
-        tv_level_num.setText((puzzlePosition+1) + "/" + (puzzleNum+customPuzzleNum));
+        tv_level_num.setText((puzzlePosition + 1) + "/" + (puzzleNum + customPuzzleNum));
 
 
         //퍼즐 썸네일 표시
-        if(puzzleDataTemp.progress == puzzleDataTemp.width* puzzleDataTemp.height)
-        {
+        if (puzzleDataTemp.progress == puzzleDataTemp.width * puzzleDataTemp.height) {
             //완료한 게임이면
             //컬러셋을 가져온다
             iv_thumbnail.setImageBitmap(puzzleDataTemp.bitmap);
-        }
-        else
-        {
+        } else {
             //완료되지 않은 게임이면
             //물음표 이미지를 띄워준다.
             iv_thumbnail.setImageResource(R.drawable.ic_unknown);
         }
 
-        if(puzzleDataTemp.custom)
-        {
+        if (puzzleDataTemp.custom) {
             btn_delete.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             btn_delete.setVisibility(View.GONE);
         }
     }

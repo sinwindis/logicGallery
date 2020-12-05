@@ -25,27 +25,27 @@ abstract public class BoardItemTouchListener implements RecyclerView.OnItemTouch
 
     private boolean isTouchDownAtTouchableView; // If touch down event is in a touchable view.
 
-    public BoardItemTouchListener(String tagTouchableView){
+    public BoardItemTouchListener(String tagTouchableView) {
         this.tagTouchableView = tagTouchableView;
     }
 
     @Override
     public boolean onInterceptTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
 
-        if(motionEvent.getPointerCount() > 1){
+        if (motionEvent.getPointerCount() > 1) {
 
             // Touch with many fingers, don't handle.
             return false;
         }
 
         int action = motionEvent.getAction();
-        if(action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP || action == MotionEvent.ACTION_CANCEL){
+        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP || action == MotionEvent.ACTION_CANCEL) {
 
             View v = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
             RecyclerView.ViewHolder holder = null;
             endPos = -1;
 
-            if(v != null) {
+            if (v != null) {
 
                 View vTouchable = v.findViewWithTag(tagTouchableView);
 
@@ -58,17 +58,17 @@ abstract public class BoardItemTouchListener implements RecyclerView.OnItemTouch
             }
 
             // If touch down/ move only in one item.
-            if(countIn == 1 && isTouchDownAtTouchableView){
-                if(holder != null && endPos != -1) {
+            if (countIn == 1 && isTouchDownAtTouchableView) {
+                if (holder != null && endPos != -1) {
                     if (isPossiblyClick()) {
                         onClickUp(endPos, holder);
                     } else {
                         onLongClickUp(endPos, holder);
                     }
                 }
-            }else if (countIn > 1){
+            } else if (countIn > 1) {
                 onDragMultiUp(lastPos, holder);
-            }else {
+            } else {
                 onUp();
             }
 
@@ -82,16 +82,16 @@ abstract public class BoardItemTouchListener implements RecyclerView.OnItemTouch
 
         View v = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
-        if(v != null) {
+        if (v != null) {
 
             View vTouchable = v.findViewWithTag(tagTouchableView);
 
-            if(vTouchable != null && isInView(motionEvent, vTouchable)) {
+            if (vTouchable != null && isInView(motionEvent, vTouchable)) {
 
                 RecyclerView.ViewHolder holder = recyclerView.getChildViewHolder(v);
                 int pos = holder.getAdapterPosition();
 
-                if(isIn && pos == lastPos || pos == -1){
+                if (isIn && pos == lastPos || pos == -1) {
                     // Still in the same pos or can not determine what the pos is.
                     return false;
                 }
@@ -100,26 +100,26 @@ abstract public class BoardItemTouchListener implements RecyclerView.OnItemTouch
 
                 isIn = true;
 
-                if(action == MotionEvent.ACTION_DOWN){
+                if (action == MotionEvent.ACTION_DOWN) {
                     onDownTouchableView(pos);
                     isTouchDownAtTouchableView = true;
-                }else if(isTouchDownAtTouchableView && action == MotionEvent.ACTION_MOVE){
+                } else if (isTouchDownAtTouchableView && action == MotionEvent.ACTION_MOVE) {
                     onMoveTouchableView(pos);
                 }
 
                 onInItemAndInTouchableView(motionEvent, pos);
 
-                if(countIn == 0){
+                if (countIn == 0) {
                     startPos = pos;
                 }
 
                 lastPos = pos;
-                countIn ++;
-            }else {
+                countIn++;
+            } else {
                 isIn = false;
                 onInItemButNotInTouchable();
             }
-        }else {
+        } else {
             isIn = false;
             onOutItem();
         }
@@ -128,10 +128,12 @@ abstract public class BoardItemTouchListener implements RecyclerView.OnItemTouch
     }
 
     @Override
-    public void onTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) { }
+    public void onTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
+    }
 
     @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean b) { }
+    public void onRequestDisallowInterceptTouchEvent(boolean b) {
+    }
 
     private boolean isPossiblyClick() {
         long clickDuration = Calendar.getInstance().getTimeInMillis() - timeDown;
@@ -142,7 +144,7 @@ abstract public class BoardItemTouchListener implements RecyclerView.OnItemTouch
         Rect rect = new Rect();
         for (View v : views) {
             v.getGlobalVisibleRect(rect);
-            Log.d("","");
+            Log.d("", "");
 
             if (rect.contains((int) ev.getRawX(), (int) ev.getRawY()))
                 return true;
@@ -150,15 +152,30 @@ abstract public class BoardItemTouchListener implements RecyclerView.OnItemTouch
         return false;
     }
 
-    public void onInItemAndInTouchableView(MotionEvent motionEvent, int pos){}
+    public void onInItemAndInTouchableView(MotionEvent motionEvent, int pos) {
+    }
+
     abstract public void onDownTouchableView(int pos);
+
     abstract public void onMoveTouchableView(int pos);
-    public void onUp(){}
-    public void onClickUp(int pos, RecyclerView.ViewHolder holder){}
-    public void onLongClickUp(int pos, RecyclerView.ViewHolder holder){}
-    public void onDragMultiUp(int endPos, RecyclerView.ViewHolder holder){}
-    public void onInItemButNotInTouchable(){}
-    public void onOutItem(){}
+
+    public void onUp() {
+    }
+
+    public void onClickUp(int pos, RecyclerView.ViewHolder holder) {
+    }
+
+    public void onLongClickUp(int pos, RecyclerView.ViewHolder holder) {
+    }
+
+    public void onDragMultiUp(int endPos, RecyclerView.ViewHolder holder) {
+    }
+
+    public void onInItemButNotInTouchable() {
+    }
+
+    public void onOutItem() {
+    }
 
     public int getStartPos() {
         return startPos;

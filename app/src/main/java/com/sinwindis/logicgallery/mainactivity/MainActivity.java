@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
 //        mIntersisialAd.loadAd(new AdRequest.Builder().build());
     }
 
-    public void fragmentMove(Fragment dest)
-    {
+    public void fragmentMove(Fragment dest) {
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
         t.addToBackStack(null);
         t.setCustomAnimations(R.anim.anim_fade_in, R.anim.anim_fade_out, R.anim.anim_fade_in, R.anim.anim_fade_out);
@@ -58,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
         t.commit();
     }
 
-    public void fragmentMoveNoStack(Fragment dest)
-    {
+    public void fragmentMoveNoStack(Fragment dest) {
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
         getSupportFragmentManager().popBackStack();
         t.addToBackStack(null);

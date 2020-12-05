@@ -3,99 +3,163 @@
 
     <item>
         <shape>
-            <solid android:color="#10404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#10404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#20404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#20404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#30404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#30404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#40404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#40404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#50404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#50404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#60404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#60404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#70404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#70404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#80404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#80404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#90404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#90404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#a0404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#a0404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#b0404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#b0404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#c0404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#c0404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#d0404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#d0404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#e0404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#e0404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#f0404040"/>
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
+            <solid android:color="#f0404040" />
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
         </shape>
     </item>
 
     <item>
         <shape>
-            <solid android:color="@color/colorBlack"/>
-            <padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp" />
+            <solid android:color="@color/colorBlack" />
+            <padding
+                android:bottom="0dp"
+                android:left="0dp"
+                android:right="0dp"
+                android:top="0dp" />
         </shape>
     </item>
 

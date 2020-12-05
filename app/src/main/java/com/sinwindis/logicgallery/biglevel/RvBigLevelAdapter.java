@@ -28,7 +28,7 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ViewHolder(View itemView) {
-            super(itemView) ;
+            super(itemView);
             // 뷰 객체에 대한 참조. (hold strong reference)
         }
     }
@@ -50,7 +50,7 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
     @NonNull
     @Override
     public RvBigLevelAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext() ;
+        Context context = parent.getContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.item_biglevel, parent, false);
@@ -67,8 +67,7 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
         ImageView iv = holder.itemView.findViewById(R.id.iv_item_level);
         Bitmap bitmap;
 
-        switch (data[position].getProgress())
-        {
+        switch (data[position].getProgress()) {
             case 0:
                 //한번도 안했으면
                 //물음표 이미지 띄우기
@@ -98,7 +97,7 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
                 bundle.putBoolean("custom", data[position].getCustom());
                 bundle.putInt("id", data[position].getLevelId());
                 dest.setArguments(bundle);
-                ((MainActivity)ctx).fragmentMove(dest);
+                ((MainActivity) ctx).fragmentMove(dest);
             }
         });
     }

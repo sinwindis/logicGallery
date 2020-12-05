@@ -42,7 +42,6 @@ public class MainFragment extends Fragment {
     View fragmentView;
 
 
-
     ImageView iv_thumbnail;
 
     public MainFragment(Context ctx) {
@@ -68,8 +67,7 @@ public class MainFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                switch (motionEvent.getActionMasked())
-                {
+                switch (motionEvent.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
                         view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_oval_shadow));
                         break;
@@ -103,8 +101,7 @@ public class MainFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                switch (motionEvent.getActionMasked())
-                {
+                switch (motionEvent.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
                         view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_oval_shadow));
                         break;
@@ -135,7 +132,7 @@ public class MainFragment extends Fragment {
             public void onClick(View view) {
                 GalleryFragment dest = new GalleryFragment(ctx);
 
-                ((MainActivity)ctx).fragmentMove(dest);
+                ((MainActivity) ctx).fragmentMove(dest);
             }
         });
 
@@ -145,14 +142,12 @@ public class MainFragment extends Fragment {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
 
         //가장 최근에 플레이한 레벨 데이터 받아오기
         SharedPreferences tutorialPref = ctx.getSharedPreferences("TUTORIAL", MODE_PRIVATE);
-        if(!tutorialPref.getBoolean("tutorial", false))
-        {
+        if (!tutorialPref.getBoolean("tutorial", false)) {
             TutorialDialog tutorialDialog = new TutorialDialog();
 
             tutorialDialog.makeDialog(getActivity());
@@ -174,8 +169,7 @@ public class MainFragment extends Fragment {
         Log.d("lastPlayData", "id: " + lastPlayId + " custom: " + custom);
 
         //날짜가 하루 이상 지났으면
-        if(isDateChanged())
-        {
+        if (isDateChanged()) {
             //hint 1개 추가
             addHint();
             RewardDialog rewardDialog = new RewardDialog();
@@ -195,23 +189,17 @@ public class MainFragment extends Fragment {
 
         boolean dataLoad = false;
 
-        if(custom)
-        {
-            if(lastPlayId != 0)
-            {
-                if(lastPlayId > 0)
-                {
-                    cursor =  mDbOpenHelper.getCustomBigLevelCursorById(lastPlayId);
+        if (custom) {
+            if (lastPlayId != 0) {
+                if (lastPlayId > 0) {
+                    cursor = mDbOpenHelper.getCustomBigLevelCursorById(lastPlayId);
                     dataLoad = true;
-                }
-                else
-                {
-                    cursor =  mDbOpenHelper.getCustomBigLevelCursorById(-1*lastPlayId);
+                } else {
+                    cursor = mDbOpenHelper.getCustomBigLevelCursorById(-1 * lastPlayId);
                 }
 
 
-                if(cursor.getCount() > 0)
-                {
+                if (cursor.getCount() > 0) {
 
                     cursor.moveToNext();
                     int id = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.ID));
@@ -235,13 +223,10 @@ public class MainFragment extends Fragment {
                         public void run() {
                             Bitmap scaledBitmap;
 
-                            if(lastPlayId > 0)
-                            {
+                            if (lastPlayId > 0) {
                                 Log.d("iv_thumbnail", "custom, saved");
                                 scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getSaveBitmap(), 400, 400, false);
-                            }
-                            else
-                            {
+                            } else {
                                 Log.d("iv_thumbnail", "custom, completed");
                                 scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getColorBitmap(), 400, 400, false);
                             }
@@ -254,24 +239,17 @@ public class MainFragment extends Fragment {
                 }
 
             }
-        }
-        else
-        {
-            if(lastPlayId != 0)
-            {
-                if(lastPlayId > 0)
-                {
-                    cursor =  mDbOpenHelper.getBigLevelCursorById(lastPlayId);
+        } else {
+            if (lastPlayId != 0) {
+                if (lastPlayId > 0) {
+                    cursor = mDbOpenHelper.getBigLevelCursorById(lastPlayId);
                     dataLoad = true;
-                }
-                else
-                {
-                    cursor =  mDbOpenHelper.getBigLevelCursorById(-1*lastPlayId);
+                } else {
+                    cursor = mDbOpenHelper.getBigLevelCursorById(-1 * lastPlayId);
                 }
 
 
-                if(cursor.getCount() > 0)
-                {
+                if (cursor.getCount() > 0) {
 
                     cursor.moveToNext();
                     int id = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.ID));
@@ -295,13 +273,10 @@ public class MainFragment extends Fragment {
                         public void run() {
                             Bitmap scaledBitmap;
 
-                            if(lastPlayId > 0)
-                            {
+                            if (lastPlayId > 0) {
                                 Log.d("iv_thumbnail", "standard, saved");
                                 scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getSaveBitmap(), 400, 400, false);
-                            }
-                            else
-                            {
+                            } else {
                                 Log.d("iv_thumbnail", "standard, completed");
                                 scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getColorBitmap(), 400, 400, false);
                             }
@@ -320,8 +295,7 @@ public class MainFragment extends Fragment {
 
         //이어하기 버튼
         Button btn_continue = fragmentView.findViewById(R.id.btn_continue);
-        if(!isContinue)
-        {
+        if (!isContinue) {
 
             btn_continue.setVisibility(View.INVISIBLE);
         }
@@ -330,23 +304,21 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                if(isContinue)
-                {
+                if (isContinue) {
                     GameFragment gameFragment = new GameFragment(ctx);
 
                     Bundle bundle = new Bundle();
                     bundle.putInt("id", lastPlayId);
                     gameFragment.setArguments(bundle);
 
-                    ((MainActivity)ctx).fragmentMove(gameFragment);
+                    ((MainActivity) ctx).fragmentMove(gameFragment);
                 }
             }
         });
     }
 
 
-    private void addHint()
-    {
+    private void addHint() {
         SharedPreferences hintPref = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
         SharedPreferences.Editor editor = hintPref.edit();
 
@@ -355,8 +327,7 @@ public class MainFragment extends Fragment {
         editor.apply();
     }
 
-    private boolean isDateChanged()
-    {
+    private boolean isDateChanged() {
         //현재 날짜 확인
         Date c = Calendar.getInstance().getTime();
 

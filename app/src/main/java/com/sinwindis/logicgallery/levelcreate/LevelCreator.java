@@ -26,8 +26,7 @@ public class LevelCreator {
 
     Thread bigLevelDataMakerThread;
 
-    public LevelCreator()
-    {
+    public LevelCreator() {
 
     }
 
@@ -43,8 +42,7 @@ public class LevelCreator {
 //        dataBlobs = null;
 //    }
 
-    private void calcAverageColor(Bitmap bitmap)
-    {
+    private void calcAverageColor(Bitmap bitmap) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 
@@ -59,8 +57,7 @@ public class LevelCreator {
         }
     }
 
-    private float getColorAverageNum(int color)
-    {
+    private float getColorAverageNum(int color) {
         String hexColor = String.format("#%08X", color);
 
         String red = hexColor.substring(3, 5);
@@ -71,13 +68,12 @@ public class LevelCreator {
         int intGreen = Integer.parseInt(green, 16);
         int intBlue = Integer.parseInt(blue, 16);
 
-        float ret = ((float) (intRed + intBlue + intGreen)) / (float)3.0;
+        float ret = ((float) (intRed + intBlue + intGreen)) / (float) 3.0;
 
         return ret;
     }
 
-    private void reduceImageSize(int height, int width)
-    {
+    private void reduceImageSize(int height, int width) {
         smallBitmap = Bitmap.createScaledBitmap(srcBitmap, width, height, false);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -86,21 +82,18 @@ public class LevelCreator {
 
         colorBlob = stream.toByteArray();
 
-        float widthPerHeight = width/ (float)height;
+        float widthPerHeight = width / (float) height;
 
         int widthSize;
         int heightSize;
 
-        if(width > height)
-        {
+        if (width > height) {
             //가로가 더 긴 경우
             widthSize = 400;
-            heightSize = (int)((float)400 / widthPerHeight);
-        }
-        else
-        {
+            heightSize = (int) ((float) 400 / widthPerHeight);
+        } else {
             //세로가 더 긴 경우
-            widthSize = (int)((float)400 * widthPerHeight);
+            widthSize = (int) ((float) 400 * widthPerHeight);
             heightSize = 400;
         }
 
@@ -111,29 +104,24 @@ public class LevelCreator {
         scaledBitmap = Bitmap.createScaledBitmap(smallBitmap, widthSize, heightSize, false);
     }
 
-    public void loadFile(Context ctx, Uri uri)
-    {
+    public void loadFile(Context ctx, Uri uri) {
         try {
             srcBitmap = BitmapFactory.decodeStream(ctx.getContentResolver().openInputStream(uri));
 
-            float widthPerHeight = srcBitmap.getWidth()/ (float)srcBitmap.getHeight();
+            float widthPerHeight = srcBitmap.getWidth() / (float) srcBitmap.getHeight();
 
             int widthSize;
             int heightSize;
 
-            if(srcBitmap.getWidth() > srcBitmap.getHeight())
-            {
+            if (srcBitmap.getWidth() > srcBitmap.getHeight()) {
                 //가로가 더 긴 경우
                 widthSize = 1000;
-                heightSize = (int)((float)1000 / widthPerHeight);
-            }
-            else
-            {
+                heightSize = (int) ((float) 1000 / widthPerHeight);
+            } else {
                 //세로가 더 긴 경우
-                widthSize = (int)((float)1000 * widthPerHeight);
+                widthSize = (int) ((float) 1000 * widthPerHeight);
                 heightSize = 1000;
             }
-
 
 
             srcBitmap = Bitmap.createScaledBitmap(srcBitmap, widthSize, heightSize, true);
@@ -167,13 +155,11 @@ public class LevelCreator {
 //        }
 //    }
 
-    public void stopMakeBigLevel()
-    {
+    public void stopMakeBigLevel() {
         bigLevelDataMakerThread.interrupt();
     }
 
-    public boolean makeBigLevelDataSet(final int puzzleHeight, final int puzzleWidth, final int height, final int width)
-    {
+    public boolean makeBigLevelDataSet(final int puzzleHeight, final int puzzleWidth, final int height, final int width) {
         bigLevelDataMakerThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -182,18 +168,16 @@ public class LevelCreator {
         });
         bigLevelDataMakerThread.start();
 
-        reduceImageSize(puzzleHeight*height, puzzleWidth*width);
+        reduceImageSize(puzzleHeight * height, puzzleWidth * width);
 
         Bitmap bitmapFrag;
 
-        dataBlobs = new byte[puzzleHeight*puzzleWidth][width*height];
-        colorBlobs = new byte[puzzleHeight*puzzleWidth][];
+        dataBlobs = new byte[puzzleHeight * puzzleWidth][width * height];
+        colorBlobs = new byte[puzzleHeight * puzzleWidth][];
 
-        for(int y = 0; y < puzzleHeight; y++)
-        {
-            for(int x = 0; x < puzzleWidth; x++)
-            {
-                bitmapFrag = Bitmap.createBitmap(smallBitmap, x*width, y*height, width, height);
+        for (int y = 0; y < puzzleHeight; y++) {
+            for (int x = 0; x < puzzleWidth; x++) {
+                bitmapFrag = Bitmap.createBitmap(smallBitmap, x * width, y * height, width, height);
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -203,18 +187,14 @@ public class LevelCreator {
 
                 calcAverageColor(bitmapFrag);
 
-                int[] pixels = new int[height*width];
+                int[] pixels = new int[height * width];
 
                 bitmapFrag.getPixels(pixels, 0, width, 0, 0, width, height);
 
-                for(int i = 0; i < height*width; i++)
-                {
-                    if(averageColor > getColorAverageNum(pixels[i]) )
-                    {
+                for (int i = 0; i < height * width; i++) {
+                    if (averageColor > getColorAverageNum(pixels[i])) {
                         dataBlobs[y * puzzleWidth + x][i] = 1;
-                    }
-                    else
-                    {
+                    } else {
                         dataBlobs[y * puzzleWidth + x][i] = 0;
                     }
                 }
@@ -266,25 +246,31 @@ public class LevelCreator {
 //        Log.d("dataBlob", log);
 //    }
 
-    public Bitmap getSrcBitmap()
-    {
+    public Bitmap getSrcBitmap() {
         return srcBitmap;
     }
-    public Bitmap getSmallBitmap()
-    {
+
+    public Bitmap getSmallBitmap() {
         return smallBitmap;
     }
 
-    public Bitmap getScaledBitmap()
-    {
+    public Bitmap getScaledBitmap() {
         return scaledBitmap;
     }
 
-    public byte[] getColorBlob() {return colorBlob;}
+    public byte[] getColorBlob() {
+        return colorBlob;
+    }
 
-    public byte[] getDataBlob() {return dataBlob;}
+    public byte[] getDataBlob() {
+        return dataBlob;
+    }
 
-    public byte[][] getColorBlobs() {return colorBlobs;}
+    public byte[][] getColorBlobs() {
+        return colorBlobs;
+    }
 
-    public byte[][] getDataBlobs() {return dataBlobs;}
+    public byte[][] getDataBlobs() {
+        return dataBlobs;
+    }
 }

@@ -15,8 +15,7 @@ public class PuzzleData {
     public int progress;
     public boolean custom;
 
-    public PuzzleData(int id, String a_name, String p_name, Bitmap bitmap, int width, int height, int l_width, int l_height, int progress, boolean custom)
-    {
+    public PuzzleData(int id, String a_name, String p_name, Bitmap bitmap, int width, int height, int l_width, int l_height, int progress, boolean custom) {
         this.id = id;
         this.a_name = a_name;
         this.p_name = p_name;

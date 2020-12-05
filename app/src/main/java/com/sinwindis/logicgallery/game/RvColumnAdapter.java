@@ -34,7 +34,7 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ViewHolder(View itemView) {
-            super(itemView) ;
+            super(itemView);
 
             // 뷰 객체에 대한 참조. (hold strong reference)
         }
@@ -57,15 +57,14 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
         View view = inflater.inflate(R.layout.item_column, parent, false);
 
 
-        widthUnder += parent.getMeasuredWidth()%this.length/((float)this.length);
+        widthUnder += parent.getMeasuredWidth() % this.length / ((float) this.length);
 
-        if(widthUnder >= 1)
-        {
+        if (widthUnder >= 1) {
             widthOffset = 1;
             widthUnder--;
         }
 
-        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth()/this.length + widthOffset, ViewGroup.LayoutParams.MATCH_PARENT));
+        view.setLayoutParams(new RecyclerView.LayoutParams(parent.getMeasuredWidth() / this.length + widthOffset, ViewGroup.LayoutParams.MATCH_PARENT));
 
         widthOffset = 0;
 
@@ -79,7 +78,7 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
         tv.post(new Runnable() {
             @Override
             public void run() {
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, tv.getMeasuredWidth()/2);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, tv.getMeasuredWidth() / 2);
             }
         });
 
@@ -93,8 +92,7 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
         return this.length;
     }
 
-    public void refreshView(int columnNum)
-    {
+    public void refreshView(int columnNum) {
         boolean[] completeIdx = columnIndexDataManager.getIdxMatch(columnNum);
         Log.d("getIdxMatch", Arrays.toString(completeIdx));
         int[] idxNumSet = columnIndexDataManager.getIdxNumSet();
@@ -102,23 +100,16 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
 
         tvList.get(columnNum).setText("");
         SpannableStringBuilder numStr;
-        for(int i = 0; i < idxNumSet[columnNum]; i++)
-        {
-            if(i == 0)
-            {
+        for (int i = 0; i < idxNumSet[columnNum]; i++) {
+            if (i == 0) {
                 numStr = new SpannableStringBuilder(String.valueOf(dataSet[columnNum][i]));
-            }
-            else
-            {
+            } else {
                 numStr = new SpannableStringBuilder('\n' + String.valueOf(dataSet[columnNum][i]));
             }
 
-            if(completeIdx[i])
-            {
+            if (completeIdx[i]) {
                 numStr.setSpan(new ForegroundColorSpan(Color.parseColor("#a0a0a0")), 0, numStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-            else
-            {
+            } else {
                 numStr.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), 0, numStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             tvList.get(columnNum).append(numStr);

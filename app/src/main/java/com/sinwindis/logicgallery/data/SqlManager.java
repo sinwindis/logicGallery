@@ -4,8 +4,7 @@ import android.provider.BaseColumns;
 
 public class SqlManager {
 
-    public SqlManager()
-    {
+    public SqlManager() {
 
     }
 
@@ -22,17 +21,17 @@ public class SqlManager {
         public static final String CUSTOM = "custom";
         public static final String _TABLENAME = "Level";
         public static final String _CREATE =
-                "create table if not exists "+ _TABLENAME + " ("
-                        + ID +" integer primary key autoincrement, "
-                        + NAME +" text not null, "
-                        + CATEGORY +" text not null, "
-                        + WIDTH +" integer not null , "
-                        + HEIGHT +" integer not null , "
-                        + PROGRESS +" integer not null , "
-                        + DATASET +" BLOB not null, "
-                        + COLORSET +" BLOB not null, "
-                        + SAVEDATA +" BLOB, "
-                        + CUSTOM +" integer not null);";
+                "create table if not exists " + _TABLENAME + " ("
+                        + ID + " integer primary key autoincrement, "
+                        + NAME + " text not null, "
+                        + CATEGORY + " text not null, "
+                        + WIDTH + " integer not null , "
+                        + HEIGHT + " integer not null , "
+                        + PROGRESS + " integer not null , "
+                        + DATASET + " BLOB not null, "
+                        + COLORSET + " BLOB not null, "
+                        + SAVEDATA + " BLOB, "
+                        + CUSTOM + " integer not null);";
     }
 
     public static final class CategoryDBSql implements BaseColumns {
@@ -40,9 +39,9 @@ public class SqlManager {
         public static final String PROGRESS = "progress";
         public static final String _TABLENAME = "Category";
         public static final String _CREATE =
-                "create table if not exists "+ _TABLENAME + " ("
-                        + PROGRESS +" integer not null , "
-                        + NAME +" text primary key );";
+                "create table if not exists " + _TABLENAME + " ("
+                        + PROGRESS + " integer not null , "
+                        + NAME + " text primary key );";
     }
 
     public static final class BigPuzzleDBSql implements BaseColumns {
@@ -56,15 +55,15 @@ public class SqlManager {
         public static final String COLORSET = "colorSet";
         public static final String _TABLENAME = "BigPuzzle";
         public static final String _CREATE =
-                "create table if not exists "+ _TABLENAME + " ("
-                        + ID +" integer primary key autoincrement, "
-                        + A_ID +" integer not null, "
-                        + P_WIDTH +" integer not null , "
-                        + P_HEIGHT +" integer not null , "
-                        + L_WIDTH +" integer not null , "
-                        + L_HEIGHT +" integer not null , "
-                        + PROGRESS +" integer not null , "
-                        + COLORSET +" BLOB not null );";
+                "create table if not exists " + _TABLENAME + " ("
+                        + ID + " integer primary key autoincrement, "
+                        + A_ID + " integer not null, "
+                        + P_WIDTH + " integer not null , "
+                        + P_HEIGHT + " integer not null , "
+                        + L_WIDTH + " integer not null , "
+                        + L_HEIGHT + " integer not null , "
+                        + PROGRESS + " integer not null , "
+                        + COLORSET + " BLOB not null );";
     }
 
     public static final class BigLevelDBSql implements BaseColumns {
@@ -79,16 +78,16 @@ public class SqlManager {
         public static final String COLORSET = "colorSet";
         public static final String _TABLENAME = "BigLevel";
         public static final String _CREATE =
-                "create table if not exists "+ _TABLENAME + " ("
-                        + ID +" integer primary key autoincrement, "
-                        + P_ID +" integer not null, "
-                        + NUMBER +" integer not null, "
-                        + WIDTH +" integer not null , "
-                        + HEIGHT +" integer not null , "
-                        + PROGRESS +" integer not null , "
-                        + DATASET +" BLOB not null, "
-                        + COLORSET +" BLOB not null, "
-                        + SAVEDATA +" BLOB);";
+                "create table if not exists " + _TABLENAME + " ("
+                        + ID + " integer primary key autoincrement, "
+                        + P_ID + " integer not null, "
+                        + NUMBER + " integer not null, "
+                        + WIDTH + " integer not null , "
+                        + HEIGHT + " integer not null , "
+                        + PROGRESS + " integer not null , "
+                        + DATASET + " BLOB not null, "
+                        + COLORSET + " BLOB not null, "
+                        + SAVEDATA + " BLOB);";
     }
 
     public static final class CustomBigPuzzleDBSql implements BaseColumns {
@@ -103,16 +102,16 @@ public class SqlManager {
         public static final String COLORSET = "colorSet";
         public static final String _TABLENAME = "CustomBigPuzzle";
         public static final String _CREATE =
-                "create table if not exists "+ _TABLENAME + " ("
-                        + ID +" integer primary key autoincrement, "
-                        + A_NAME +" text not null , "
-                        + P_NAME +" text not null , "
-                        + P_WIDTH +" integer not null , "
-                        + P_HEIGHT +" integer not null , "
-                        + L_WIDTH +" integer not null , "
-                        + L_HEIGHT +" integer not null , "
-                        + PROGRESS +" integer not null , "
-                        + COLORSET +" BLOB not null );";
+                "create table if not exists " + _TABLENAME + " ("
+                        + ID + " integer primary key autoincrement, "
+                        + A_NAME + " text not null , "
+                        + P_NAME + " text not null , "
+                        + P_WIDTH + " integer not null , "
+                        + P_HEIGHT + " integer not null , "
+                        + L_WIDTH + " integer not null , "
+                        + L_HEIGHT + " integer not null , "
+                        + PROGRESS + " integer not null , "
+                        + COLORSET + " BLOB not null );";
     }
 
     public static final class CustomBigLevelDBSql implements BaseColumns {
@@ -127,15 +126,15 @@ public class SqlManager {
         public static final String COLORSET = "colorSet";
         public static final String _TABLENAME = "CustomBigLevel";
         public static final String _CREATE =
-                "create table if not exists "+ _TABLENAME + " ("
-                        + ID +" integer primary key autoincrement, "
-                        + P_ID +" integer not null, "
-                        + NUMBER +" integer not null, "
-                        + WIDTH +" integer not null , "
-                        + HEIGHT +" integer not null , "
-                        + PROGRESS +" integer not null , "
-                        + DATASET +" BLOB not null, "
-                        + COLORSET +" BLOB not null, "
-                        + SAVEDATA +" BLOB);";
+                "create table if not exists " + _TABLENAME + " ("
+                        + ID + " integer primary key autoincrement, "
+                        + P_ID + " integer not null, "
+                        + NUMBER + " integer not null, "
+                        + WIDTH + " integer not null , "
+                        + HEIGHT + " integer not null , "
+                        + PROGRESS + " integer not null , "
+                        + DATASET + " BLOB not null, "
+                        + COLORSET + " BLOB not null, "
+                        + SAVEDATA + " BLOB);";
     }
 }

@@ -13,12 +13,11 @@ public class RewardDialog {
 
     public AlertDialog dialog;
 
-    public RewardDialog()
-    {
+    public RewardDialog() {
 
     }
-    public void makeDialog(Activity activity)
-    {
+
+    public void makeDialog(Activity activity) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = activity.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_reward, null);

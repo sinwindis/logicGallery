@@ -27,8 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            >
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
                 style="@style/StyleFontMedium"
@@ -47,7 +46,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/rv_board"/>
+                app:layout_constraintBottom_toTopOf="@id/rv_board" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_board"
@@ -60,17 +59,13 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_name"/>
+                app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
     <Button

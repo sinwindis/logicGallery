@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,8 +12,7 @@
         android:background="@drawable/background_top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             style="@style/StyleFontLarge"
@@ -27,7 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/img_back"
-            app:layout_constraintBottom_toBottomOf="@id/img_back"/>
+            app:layout_constraintBottom_toBottomOf="@id/img_back" />
 
         <ImageView
             android:id="@+id/img_back"
@@ -37,8 +35,7 @@
             android:layout_margin="15dp"
             android:src="@drawable/ic_up"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -52,9 +49,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_top"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-
+        app:layout_constraintBottom_toBottomOf="parent">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,8 +67,7 @@
                 android:layout_margin="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                >
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
                     style="@style/StyleFontLarge"
@@ -87,8 +81,7 @@
                     app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent="0.4"
 
-                    android:text="@string/search_artist"
-                    />
+                    android:text="@string/search_artist" />
 
                 <Spinner
                     android:id="@+id/sp_search_artist"
@@ -97,8 +90,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_search_artist"
-                    />
+                    app:layout_constraintStart_toEndOf="@id/tv_search_artist" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -109,8 +101,7 @@
                 android:layout_margin="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_search_artist"
-                app:layout_constraintEnd_toEndOf="parent"
-                >
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
                     style="@style/StyleFontLarge"
@@ -124,8 +115,7 @@
                     app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent="0.4"
 
-                    android:text="Puzzle name:"
-                    />
+                    android:text="Puzzle name:" />
 
                 <Spinner
                     android:id="@+id/sp_search_puzzle"
@@ -134,8 +124,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_search_puzzle"
-                    />
+                    app:layout_constraintStart_toEndOf="@id/tv_search_puzzle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -146,8 +135,7 @@
                 android:layout_margin="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_search_puzzle"
-                app:layout_constraintEnd_toEndOf="parent"
-                >
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
                     style="@style/StyleFontLarge"
@@ -161,8 +149,7 @@
                     app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent="0.4"
 
-                    android:text="@string/search_size"
-                    />
+                    android:text="@string/search_size" />
 
                 <Spinner
                     android:id="@+id/sp_search_size"
@@ -171,8 +158,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_search_size"
-                    />
+                    app:layout_constraintStart_toEndOf="@id/tv_search_size" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -183,8 +169,7 @@
                 android:layout_margin="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_search_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                >
+                app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
                     style="@style/StyleFontLarge"
@@ -198,8 +183,7 @@
                     app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent="0.4"
 
-                    android:text="@string/search_progress"
-                    />
+                    android:text="@string/search_progress" />
 
                 <Spinner
                     android:id="@+id/sp_search_progress"
@@ -208,18 +192,14 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_search_progress"
-                    />
+                    app:layout_constraintStart_toEndOf="@id/tv_search_progress" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

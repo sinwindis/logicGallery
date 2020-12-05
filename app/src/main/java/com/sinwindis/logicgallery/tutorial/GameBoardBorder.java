@@ -30,10 +30,9 @@ public class GameBoardBorder extends RecyclerView.ItemDecoration {
         for (int i = 0; i < childCount; i++) {
 
             View child = parent.getChildAt(i);
-            int positionX = i%width;
+            int positionX = i % width;
 
-            if(i < childCount - width)
-            {
+            if (i < childCount - width) {
                 int left = child.getLeft();
                 int right = child.getRight();
                 int top = child.getBottom() - normalBorder.getIntrinsicHeight();
@@ -44,8 +43,7 @@ public class GameBoardBorder extends RecyclerView.ItemDecoration {
             }
 
 
-            if(positionX < width - 1)
-            {
+            if (positionX < width - 1) {
                 //그 외에는 일반 줄을 그린다.
                 int left = child.getRight() - normalBorder.getIntrinsicWidth();
                 int right = child.getRight();
@@ -56,10 +54,7 @@ public class GameBoardBorder extends RecyclerView.ItemDecoration {
                 normalBorder.draw(c);
             }
 
-            
-            
 
-            
         }
     }
 }

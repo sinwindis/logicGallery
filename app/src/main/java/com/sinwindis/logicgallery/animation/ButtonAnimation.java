@@ -10,14 +10,12 @@ import com.sinwindis.logicgallery.R;
 
 public class ButtonAnimation {
 
-    public ButtonAnimation()
-    {
+    public ButtonAnimation() {
 
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static void setOvalButtonAnimationShadow(ImageView iv)
-    {
+    public static void setOvalButtonAnimationShadow(ImageView iv) {
 
         iv.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("UseCompatLoadingForDrawables")
@@ -29,8 +27,7 @@ public class ButtonAnimation {
                 int paddingTop = view.getPaddingTop();
                 int paddingBottom = view.getPaddingBottom();
 
-                switch (motionEvent.getActionMasked())
-                {
+                switch (motionEvent.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
                         view.setBackground(view.getResources().getDrawable(R.drawable.background_btn_oval_press));
                         break;
@@ -48,8 +45,7 @@ public class ButtonAnimation {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static void setOvalButtonAnimationBlack(ImageView iv)
-    {
+    public static void setOvalButtonAnimationBlack(ImageView iv) {
 
         @SuppressLint("UseCompatLoadingForDrawables") final Drawable press = iv.getResources().getDrawable(R.drawable.background_btn_oval_shadow);
 
@@ -63,8 +59,7 @@ public class ButtonAnimation {
                 int paddingTop = view.getPaddingTop();
                 int paddingBottom = view.getPaddingBottom();
 
-                switch (motionEvent.getActionMasked())
-                {
+                switch (motionEvent.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
                         view.setBackground(press);
                         break;
@@ -82,8 +77,7 @@ public class ButtonAnimation {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static void setRoundButtonAnimationShadow(ImageView iv)
-    {
+    public static void setRoundButtonAnimationShadow(ImageView iv) {
         @SuppressLint("UseCompatLoadingForDrawables") final Drawable press = iv.getResources().getDrawable(R.drawable.background_btn_round_press);
         @SuppressLint("UseCompatLoadingForDrawables") final Drawable up = iv.getResources().getDrawable(R.drawable.background_btn_round_normal);
 
@@ -97,8 +91,7 @@ public class ButtonAnimation {
                 int paddingTop = view.getPaddingTop();
                 int paddingBottom = view.getPaddingBottom();
 
-                switch (motionEvent.getActionMasked())
-                {
+                switch (motionEvent.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
                         view.setBackground(press);
                         break;

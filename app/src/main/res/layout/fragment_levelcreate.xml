@@ -12,8 +12,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/background_top"
-        >
+        android:background="@drawable/background_top">
 
         <TextView
             style="@style/StyleFontLarge"
@@ -25,7 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/img_back"
-            app:layout_constraintBottom_toBottomOf="@id/img_back"/>
+            app:layout_constraintBottom_toBottomOf="@id/img_back" />
 
         <ImageView
             android:id="@+id/img_back"
@@ -35,10 +34,9 @@
             android:layout_margin="15dp"
             android:src="@drawable/ic_prev"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_board"
@@ -47,8 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/cl_input_name"
-        app:layout_constraintTop_toBottomOf="@id/cl_top"
-        >
+        app:layout_constraintTop_toBottomOf="@id/cl_top">
 
         <ImageView
             android:id="@+id/iv_input"
@@ -61,7 +58,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"/>
+            app:layout_constraintDimensionRatio="1:1" />
 
         <ImageView
             android:id="@+id/iv_result"
@@ -74,8 +71,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_input"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
-            />
+            app:layout_constraintDimensionRatio="1:1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -89,8 +85,7 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cl_input_a_name"
-        >
+        app:layout_constraintBottom_toTopOf="@id/cl_input_a_name">
 
         <TextView
             style="@style/StyleFontSmall"
@@ -102,8 +97,7 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <EditText
             style="@style/StyleEditText"
@@ -116,7 +110,7 @@
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -129,8 +123,7 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cl_input_size"
-        >
+        app:layout_constraintBottom_toTopOf="@id/cl_input_size">
 
         <TextView
             style="@style/StyleFontSmall"
@@ -142,8 +135,7 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <EditText
             style="@style/StyleEditText"
@@ -156,7 +148,7 @@
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -169,8 +161,7 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cl_input_bigsize"
-        >
+        app:layout_constraintBottom_toTopOf="@id/cl_input_bigsize">
 
         <TextView
             style="@style/StyleFontSmall"
@@ -181,8 +172,7 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <EditText
             style="@style/StyleEditText"
@@ -195,7 +185,7 @@
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <EditText
             style="@style/StyleEditText"
@@ -210,12 +200,10 @@
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@id/et_height"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -228,20 +216,19 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cl_buttons"
-        >
+        app:layout_constraintBottom_toTopOf="@id/cl_buttons">
 
-<!--        <CheckBox-->
-<!--            style="@style/StyleEditText"-->
+        <!--        <CheckBox-->
+        <!--            style="@style/StyleEditText"-->
 
-<!--            android:id="@+id/cb_bigpuzzle"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:buttonTint="@color/colorGray"-->
+        <!--            android:id="@+id/cb_bigpuzzle"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:buttonTint="@color/colorGray"-->
 
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
 
         <TextView
             style="@style/StyleFontSmall"
@@ -252,9 +239,7 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
-
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 
         <EditText
@@ -268,8 +253,7 @@
             android:hint="@string/str_height"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <EditText
             style="@style/StyleEditText"
@@ -282,8 +266,7 @@
             android:layout_marginEnd="10dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@id/et_row"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -298,7 +281,6 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
 
-
         <Button
             android:id="@+id/btn_make"
             android:layout_width="150dp"
@@ -310,8 +292,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/background_btn_accent"
             android:text="@string/str_loadimage"
-            android:textColor="@color/colorBlack"
-            />
+            android:textColor="@color/colorBlack" />
 
         <Button
             android:id="@+id/btn_cancel"
@@ -324,13 +305,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/background_btn"
             android:text="@string/str_cancel"
-            android:textColor="@color/colorBlack"
-            />
+            android:textColor="@color/colorBlack" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

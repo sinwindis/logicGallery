@@ -6,9 +6,11 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.sinwindis.logicgallery.R;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,20 +27,18 @@ public class DbManager {
 
     Context ctx;
 
-    public DbManager(Context ctx)
-    {
+    public DbManager(Context ctx) {
         this.ctx = ctx;
     }
 
-    private String getLatestVersion(XmlPullParser parser)
-    {
+    private String getLatestVersion(XmlPullParser parser) {
         int eventType;
         String latestVersion;
         try {
             eventType = parser.getEventType();
 
             //최신 버전 체크
-            while(eventType != XmlPullParser.END_DOCUMENT) {
+            while (eventType != XmlPullParser.END_DOCUMENT) {
                 if (eventType == XmlPullParser.START_TAG) {
                     String startTag = parser.getName();
                     if (startTag.equals("lastv")) {
@@ -87,7 +87,7 @@ public class DbManager {
         }
         //puzzle
         parser.nextTag();
-        
+
         //p_id
         int p_id = Integer.parseInt(parser.nextText());
         Log.d("loadPuzzle", "p_id: " + p_id);
@@ -118,11 +118,11 @@ public class DbManager {
 
         //해당 퍼즐의 데이터를 db 에 추가한다.
         int insertId = (int) mDbOpenHelper.insertBigPuzzle(p_id, a_id, p_width, p_height, l_width, l_height, p_colorSetByteArray);
-        
+
         Log.d("loadPuzzle", "insert ID: " + insertId);
 
         mDbOpenHelper.close();
-        
+
         return insertId;
     }
 
@@ -158,7 +158,7 @@ public class DbManager {
         //모든 데이터를 받아왔으면 해당 레벨을 db 에 insert 해준다.
 
         byte[] colorSetByteArray = Base64.decode(colorSet, Base64.DEFAULT);
-        
+
         LevelData levelData = new LevelData(-1, p_id, number, width, height, 0, CustomParser.parseDataSetStringToByteArray(dataSet), null, colorSetByteArray, false);
         int insertId = levelData.saveData(ctx);
 
@@ -174,23 +174,20 @@ public class DbManager {
         parser.nextTag();
 
         Log.d("loadLevel", "parser ended at : " + parser.getLineNumber());
-        
+
         return insertId;
     }
 
-    private int getParsingPosition(XmlPullParser parser, String currentVersion)
-    {
+    private int getParsingPosition(XmlPullParser parser, String currentVersion) {
         int eventType;
 
         try {
             eventType = parser.getEventType();
-            while(eventType != XmlPullParser.END_DOCUMENT) {
+            while (eventType != XmlPullParser.END_DOCUMENT) {
                 if (eventType == XmlPullParser.START_TAG) {
                     String startTag = parser.getName();
-                    if (startTag.equals("version"))
-                    {
-                        if(parser.nextText().equals(currentVersion))
-                        {
+                    if (startTag.equals("version")) {
+                        if (parser.nextText().equals(currentVersion)) {
                             //현재 버전과 일치한다면
                             //해당 위치 이후부터 파싱을 시작한다.
                             Log.d("getParsingPosition", "found current version, parsing start");
@@ -210,8 +207,7 @@ public class DbManager {
         return 0;
     }
 
-    public String loadData()
-    {
+    public String loadData() {
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
             mDbOpenHelper.open();
@@ -244,41 +240,32 @@ public class DbManager {
 
             //최신 버전 체크
             latestVersion = getLatestVersion(parser);
-            if(latestVersion == null)
-            {
+            if (latestVersion == null) {
                 //최신 버전의 확인이 안되는 상태
                 Log.d("DbManager", "latest version check error...");
                 return null;
-            }
-            else if(latestVersion.equals(currentVersion))
-            {
+            } else if (latestVersion.equals(currentVersion)) {
                 //현재 버전과 최신 버전이 일치한다면
                 Log.d("DbManager", "latest version. no need to update DB");
                 return currentVersion;
-            }
-            else
-            {
+            } else {
                 //일치하지 않으면 파싱을 시작한다.
                 Log.d("DbManager", "current version: " + currentVersion + " latest version: " + latestVersion);
             }
 
             //현재 버전 이후부터 파싱을 해야 하기 때문에 현재 버전을 나타내는 xml 위치까지 파서 이동
-            if(getParsingPosition(parser, currentVersion) == 0)
-            {
+            if (getParsingPosition(parser, currentVersion) == 0) {
                 //현재 버전의 데이터를 찾을 수 없는 상태
                 Log.d("DbManager", "current version data check error...");
                 return null;
             }
 
-            while(eventType != XmlPullParser.END_DOCUMENT)
-            {
-                if (eventType == XmlPullParser.START_TAG)
-                {
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                if (eventType == XmlPullParser.START_TAG) {
                     String startTag = parser.getName();
 
                     Log.d("DbManager", "startTag: " + startTag);
-                    switch (startTag)
-                    {
+                    switch (startTag) {
                         //버전 체크를 계속해서 해준다
                         case "version":
                             //로드가 완료된 버전으로 버전 넘버를 업데이트 해준다.
@@ -297,13 +284,11 @@ public class DbManager {
 
                             //이제 퍼즐이 반복해서 나옴
                             //아티스트 엔드 태그가 나올 때까지 파싱함
-                            while (parser.getEventType() != XmlPullParser.END_TAG || !parser.getName().equals("artist"))
-                            {
+                            while (parser.getEventType() != XmlPullParser.END_TAG || !parser.getName().equals("artist")) {
                                 //퍼즐을 인서트한 후 해당 인서트 id 를 반환한다.
                                 p_id = loadPuzzle(parser, a_id);
                                 //퍼즐 엔드 태그가 나올 때까지 해당 퍼즐 내의 레벨을 파싱함
-                                while(parser.getEventType() != XmlPullParser.END_TAG || !parser.getName().equals("puzzle"))
-                                {
+                                while (parser.getEventType() != XmlPullParser.END_TAG || !parser.getName().equals("puzzle")) {
                                     Log.d("DbManager", "getEventType(): " + parser.getEventType());
                                     Log.d("DbManager", "getName(): " + parser.getName());
                                     Log.d("DbManager", "getLineNumber(): " + parser.getLineNumber());
@@ -320,12 +305,11 @@ public class DbManager {
             }
 
 
-        } catch(XmlPullParserException | IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
 
         mDbOpenHelper.close();
-
 
 
         Log.d("DBManager", "loadData end");

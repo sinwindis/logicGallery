@@ -19,8 +19,7 @@ public class TutorialScene {
 
     public int tutorialHintNum;
 
-    public TutorialScene()
-    {
+    public TutorialScene() {
         checkedSet = new byte[3][3];
         accentArray = new boolean[10];
         Arrays.fill(accentArray, false);

@@ -4,73 +4,96 @@
     <item>
         <shape android:shape="rectangle">
 
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
-            <solid
-                android:color="#10ffffff"/>
+            <padding
+                android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp" />
+            <solid android:color="#10ffffff" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
 
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
-            <solid
-                android:color="#30ffffff"/>
+            <padding
+                android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp" />
+            <solid android:color="#30ffffff" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
 
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
-            <solid
-                android:color="#50ffffff"/>
+            <padding
+                android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp" />
+            <solid android:color="#50ffffff" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
 
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
-            <solid
-                android:color="#70ffffff"/>
+            <padding
+                android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp" />
+            <solid android:color="#70ffffff" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
 
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
-            <solid
-                android:color="#90ffffff"/>
+            <padding
+                android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp" />
+            <solid android:color="#90ffffff" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
 
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
-            <solid
-                android:color="#b0ffffff"/>
+            <padding
+                android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp" />
+            <solid android:color="#b0ffffff" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
 
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
-            <solid
-                android:color="#d0ffffff"/>
+            <padding
+                android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp" />
+            <solid android:color="#d0ffffff" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
 
-            <padding android:left="1dp" android:top="1dp" android:right="1dp" android:bottom="1dp" />
-            <solid
-                android:color="#f0ffffff"/>
+            <padding
+                android:left="1dp"
+                android:top="1dp"
+                android:right="1dp"
+                android:bottom="1dp" />
+            <solid android:color="#f0ffffff" />
         </shape>
     </item>
 
     <item>   <!-- adjust borders width here -->
         <shape android:shape="rectangle">
 
-            <solid
-                android:color="@color/colorWhite"/>  <!-- background color -->
+            <solid android:color="@color/colorWhite" />  <!-- background color -->
         </shape>
     </item>
 </layer-list>

@@ -25,7 +25,6 @@ public class LoadActivity extends AppCompatActivity {
         final Handler intentHandler = new Handler();
 
 
-
         Thread loadThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -52,10 +51,9 @@ public class LoadActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                intentHandler.post(new Runnable(){
+                intentHandler.post(new Runnable() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         // UI 작업 수행 O
                         Intent intent = new Intent(LoadActivity.this, MainActivity.class);
                         startActivity(intent);

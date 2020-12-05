@@ -19,7 +19,7 @@ public class BigLevelItemTouchListener implements RecyclerView.OnItemTouchListen
     View v;
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public BigLevelItemTouchListener(Context ctx){
+    public BigLevelItemTouchListener(Context ctx) {
 
         press = ctx.getResources().getDrawable(R.drawable.background_item_big_level_press);
         up = ctx.getResources().getDrawable(R.drawable.background_item_big_level_normal);
@@ -28,28 +28,25 @@ public class BigLevelItemTouchListener implements RecyclerView.OnItemTouchListen
     @Override
     public boolean onInterceptTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
 
-        if(motionEvent.getPointerCount() > 1){
+        if (motionEvent.getPointerCount() > 1) {
 
             return false;
         }
 
         int action = motionEvent.getAction();
 
-        if(action == MotionEvent.ACTION_DOWN){
+        if (action == MotionEvent.ACTION_DOWN) {
 
             v = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
-            if(v != null)
-            {
+            if (v != null) {
                 v.setBackground(press);
             }
 
 
-        }
-        else if(action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP || action == MotionEvent.ACTION_CANCEL){
+        } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP || action == MotionEvent.ACTION_CANCEL) {
 
-            if(v != null)
-            {
+            if (v != null) {
                 v.setBackground(up);
             }
 
@@ -57,13 +54,14 @@ public class BigLevelItemTouchListener implements RecyclerView.OnItemTouchListen
         }
 
 
-
         return false;
     }
 
     @Override
-    public void onTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) { }
+    public void onTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
+    }
 
     @Override
-    public void onRequestDisallowInterceptTouchEvent(boolean b) { }
+    public void onRequestDisallowInterceptTouchEvent(boolean b) {
+    }
 }

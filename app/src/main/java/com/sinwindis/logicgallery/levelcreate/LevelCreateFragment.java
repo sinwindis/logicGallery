@@ -110,8 +110,7 @@ public class LevelCreateFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                switch (motionEvent.getActionMasked())
-                {
+                switch (motionEvent.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
                         view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_oval_shadow));
                         break;
@@ -134,12 +133,10 @@ public class LevelCreateFragment extends Fragment {
         });
 
 
-
         return fragmentView;
     }
-    
-    private void setEditable(boolean b)
-    {
+
+    private void setEditable(boolean b) {
         et_height.setClickable(b);
         et_height.setFocusable(b);
         et_height.setFocusableInTouchMode(b);
@@ -154,8 +151,7 @@ public class LevelCreateFragment extends Fragment {
         et_puzzle_width.setClickable(b);
     }
 
-    private void removePrevData()
-    {
+    private void removePrevData() {
         levelCreator.stopMakeBigLevel();
 
         actionType = 0;
@@ -176,10 +172,8 @@ public class LevelCreateFragment extends Fragment {
     }
 
     @SuppressLint("SetTextI18n")
-    private void buttonAction()
-    {
-        switch (actionType)
-        {
+    private void buttonAction() {
+        switch (actionType) {
             case 0:
                 //load image
                 openFile();
@@ -188,44 +182,32 @@ public class LevelCreateFragment extends Fragment {
                 //make bitmap puzzle
                 setEditable(false);
 
-                if(et_height.getText().toString().length() == 0)
-                {
+                if (et_height.getText().toString().length() == 0) {
                     l_height = 10;
                     et_height.setText("10");
-                }
-                else
-                {
+                } else {
                     l_height = Integer.parseInt(et_height.getText().toString());
                 }
 
-                if(et_width.getText().toString().length() == 0)
-                {
+                if (et_width.getText().toString().length() == 0) {
                     l_width = 10;
                     et_width.setText("10");
-                }
-                else
-                {
+                } else {
                     l_width = Integer.parseInt(et_width.getText().toString());
                 }
 
                 //big level 크기도 기본값을 설정해 준다.
-                if(et_puzzle_height.getText().toString().length() == 0)
-                {
+                if (et_puzzle_height.getText().toString().length() == 0) {
                     p_height = 5;
                     et_puzzle_height.setText("5");
-                }
-                else
-                {
+                } else {
                     p_height = Integer.parseInt(et_puzzle_height.getText().toString());
                 }
 
-                if(et_puzzle_width.getText().toString().length() == 0)
-                {
+                if (et_puzzle_width.getText().toString().length() == 0) {
                     p_width = 5;
                     et_puzzle_width.setText("5");
-                }
-                else
-                {
+                } else {
                     p_width = Integer.parseInt(et_puzzle_width.getText().toString());
                 }
 
@@ -236,15 +218,11 @@ public class LevelCreateFragment extends Fragment {
                 break;
             case 2:
                 //save bitmap
-                if(et_p_name.length() > 0)
-                {
+                if (et_p_name.length() > 0) {
                     p_name = et_p_name.getText().toString();
-                    if(et_a_name.length() > 0)
-                    {
+                    if (et_a_name.length() > 0) {
                         a_name = et_p_name.getText().toString();
-                    }
-                    else
-                    {
+                    } else {
                         a_name = getString(R.string.str_custom);
                     }
 
@@ -256,9 +234,7 @@ public class LevelCreateFragment extends Fragment {
 
                     String alert = getResources().getString(R.string.str_levelsaved);
                     Toast.makeText(ctx, p_name + alert, Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                } else {
                     String alert = getResources().getString(R.string.str_reqname);
                     Toast.makeText(ctx, alert, Toast.LENGTH_SHORT).show();
                 }
@@ -281,8 +257,7 @@ public class LevelCreateFragment extends Fragment {
         startActivityForResult(intent, REQ_LOAD_IMAGE);
     }
 
-    private void makeLevel()
-    {
+    private void makeLevel() {
         final Handler setImageHandler = new Handler();
 
         iv_result.setImageResource(R.drawable.ic_unknown);
@@ -294,10 +269,9 @@ public class LevelCreateFragment extends Fragment {
                 levelCreator.makeBigLevelDataSet(p_height, p_width, l_height, l_width);
 
                 // UI 작업 수행 X
-                setImageHandler.post(new Runnable(){
+                setImageHandler.post(new Runnable() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         // UI 작업 수행 O
                         iv_result.setImageBitmap(levelCreator.getScaledBitmap());
                     }
@@ -308,8 +282,7 @@ public class LevelCreateFragment extends Fragment {
         makeImageThread.start();
     }
 
-    private void saveBigLevel()
-    {
+    private void saveBigLevel() {
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
             mDbOpenHelper.open();
@@ -318,15 +291,14 @@ public class LevelCreateFragment extends Fragment {
         }
 
         byte[] colorBlob = levelCreator.getColorBlob();
-        int p_id = (int)mDbOpenHelper.insertCustomBigPuzzle(a_name, p_name, p_width, p_height, l_width, l_height, colorBlob);
+        int p_id = (int) mDbOpenHelper.insertCustomBigPuzzle(a_name, p_name, p_width, p_height, l_width, l_height, colorBlob);
 
         Log.d("levelCreateFragment", "p_id: " + p_id);
 
         byte[][] dataBlobs = levelCreator.getDataBlobs();
         byte[][] colorBlobs = levelCreator.getColorBlobs();
 
-        for(int i = 0; i < p_width * p_height; i++)
-        {
+        for (int i = 0; i < p_width * p_height; i++) {
             mDbOpenHelper.insertCustomBigLevel(p_id, i, l_width, l_height, dataBlobs[i], colorBlobs[i]);
         }
 
@@ -338,8 +310,7 @@ public class LevelCreateFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQ_LOAD_IMAGE) {
-            if (resultCode == RESULT_OK)
-            {
+            if (resultCode == RESULT_OK) {
                 Uri uri;
                 if (data != null) {
                     uri = data.getData();

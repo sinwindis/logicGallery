@@ -15,7 +15,7 @@ public class GalleryItemTouchListener implements ImageView.OnTouchListener {
     Drawable up;
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public GalleryItemTouchListener(Context ctx){
+    public GalleryItemTouchListener(Context ctx) {
 
         press = ctx.getResources().getDrawable(R.drawable.background_frame_press);
         up = ctx.getResources().getDrawable(R.drawable.background_frame);
@@ -25,18 +25,15 @@ public class GalleryItemTouchListener implements ImageView.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
 
-        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-            if(view != null)
-            {
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            if (view != null) {
                 view.setBackground(press);
             }
 
 
-        }
-        else if(motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_POINTER_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL){
+        } else if (motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_POINTER_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
 
-            if(view != null)
-            {
+            if (view != null) {
                 view.setBackground(up);
             }
         }

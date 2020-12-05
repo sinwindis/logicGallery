@@ -1,32 +1,35 @@
 <resources>
 
-    <style name = "StyleFontExtraSmall">
-        <item name = "android:textSize">10sp</item>
-        <item name = "android:textColor">@color/colorBlack</item>
-        <item name = "android:fontFamily">@font/noto_regular</item>
-    </style>
-    <style name = "StyleFontSmall">
-        <item name = "android:textSize">12sp</item>
-        <item name = "android:textColor">@color/colorBlack</item>
-        <item name = "android:fontFamily">@font/noto_regular</item>
-    </style>
-    <style name = "StyleFontMedium">
-        <item name = "android:textSize">15sp</item>
-        <item name = "android:textColor">@color/colorBlack</item>
-        <item name = "android:fontFamily">@font/noto_regular</item>
-    </style>
-    <style name = "StyleFontLarge">
-        <item name = "android:textSize">20sp</item>
-        <item name = "android:textColor">@color/colorBlack</item>
-        <item name = "android:fontFamily">@font/noto_regular</item>
+    <style name="StyleFontExtraSmall">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:fontFamily">@font/noto_regular</item>
     </style>
 
-    <style name = "StyleEditText">
-        <item name = "android:textSize">12sp</item>
-        <item name = "android:textColor">@color/colorBlack</item>
-        <item name = "android:fontFamily">@font/paybooc_bold</item>
-        <item name = "android:textColorHint">@color/colorGray</item>
-        <item name = "android:textAlignment">center</item>
+    <style name="StyleFontSmall">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:fontFamily">@font/noto_regular</item>
+    </style>
+
+    <style name="StyleFontMedium">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:fontFamily">@font/noto_regular</item>
+    </style>
+
+    <style name="StyleFontLarge">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:fontFamily">@font/noto_regular</item>
+    </style>
+
+    <style name="StyleEditText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:fontFamily">@font/paybooc_bold</item>
+        <item name="android:textColorHint">@color/colorGray</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
 </resources>
