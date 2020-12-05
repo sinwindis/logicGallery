@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import com.sinwindis.logicgallery.R;
 import com.sinwindis.logicgallery.animation.ButtonAnimation;
 import com.sinwindis.logicgallery.data.DbOpenHelper;
-import com.sinwindis.logicgallery.data.LevelPlayManager;
 import com.sinwindis.logicgallery.data.SqlManager;
 import com.sinwindis.logicgallery.data.StringGetter;
 import com.sinwindis.logicgallery.option.OptionDialog;
@@ -35,8 +34,8 @@ public class GameFragment extends Fragment {
 
     View fragmentView;
 
-    GameBoard gameBoard;
-    
+    GameController gameController;
+
     private TextView tv_title;
 
     private int id;
@@ -47,7 +46,7 @@ public class GameFragment extends Fragment {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +64,7 @@ public class GameFragment extends Fragment {
         }
 
         //bundle 로 받은 id 를 저장한다.
-        if(getArguments() != null){
+        if (getArguments() != null) {
             id = getArguments().getInt("id");
             custom = getArguments().getBoolean("custom");
 
@@ -79,11 +78,10 @@ public class GameFragment extends Fragment {
         int progress;
         byte[] dataSet;
         byte[] saveData;
-        
+
         Cursor levelCursor;
-        
-        if(custom)
-        {
+
+        if (custom) {
             levelCursor = mDbOpenHelper.getCustomBigLevelCursorById(id);
             levelCursor.moveToNext();
 
@@ -100,8 +98,7 @@ public class GameFragment extends Fragment {
             dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.DATASET));
 
             saveData = new byte[0];
-            switch (progress)
-            {
+            switch (progress) {
                 case 0:
                     progress = 1;
                     break;
@@ -113,9 +110,7 @@ public class GameFragment extends Fragment {
                     progress = 3;
                     break;
             }
-        }
-        else
-        {
+        } else {
             levelCursor = mDbOpenHelper.getBigLevelCursorById(id);
             levelCursor.moveToNext();
 
@@ -132,8 +127,7 @@ public class GameFragment extends Fragment {
             dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
 
             saveData = new byte[0];
-            switch (progress)
-            {
+            switch (progress) {
                 case 0:
                     progress = 1;
                     break;
@@ -148,10 +142,8 @@ public class GameFragment extends Fragment {
         }
 
 
-
         lpm = new LevelPlayManager(id, p_id, name, progress, width, height, dataSet, saveData, custom);
 
-        
 
         mDbOpenHelper.close();
 
@@ -159,9 +151,9 @@ public class GameFragment extends Fragment {
         tv_title.setText(name);
 
         //gameBoard 를 제작한다.
-        gameBoard = new GameBoard(mainActivityContext, fragmentView, lpm);
+        gameController = new GameController(mainActivityContext, fragmentView, lpm);
 
-        gameBoard.makeGameBoard();
+        gameController.makeGameBoard();
 
         setButtonListeners();
 
@@ -169,8 +161,7 @@ public class GameFragment extends Fragment {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setButtonListeners()
-    {
+    private void setButtonListeners() {
 
         //버튼 이벤트
         //토글 버튼
@@ -181,17 +172,14 @@ public class GameFragment extends Fragment {
         img_toggle.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int touchMode = gameBoard.func_toggle();
+                int touchMode = gameController.func_toggle();
 
-                if(touchMode == 1)
-                {
-                    ((ImageView)view).setImageResource(R.drawable.ic_x);
+                if (touchMode == 1) {
+                    ((ImageView) view).setImageResource(R.drawable.ic_x);
+                } else {
+                    ((ImageView) view).setImageResource(R.drawable.ic_o);
                 }
-                else
-                {
-                    ((ImageView)view).setImageResource(R.drawable.ic_o);
-                }
-                
+
             }
         });
 
@@ -203,7 +191,7 @@ public class GameFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                gameBoard.func_nextStack();
+                gameController.moveToNext();
             }
         });
 
@@ -213,7 +201,7 @@ public class GameFragment extends Fragment {
         img_prev.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameBoard.func_prevStack();
+                gameController.moveToPrev();
             }
         });
 
@@ -224,7 +212,7 @@ public class GameFragment extends Fragment {
         img_hint.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameBoard.func_hint();
+                gameController.func_hint();
                 img_toggle.setImageResource(R.drawable.ic_hint);
             }
         });
@@ -261,7 +249,7 @@ public class GameFragment extends Fragment {
                 optionDialog.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
-                        gameBoard.loadPref();
+                        gameController.loadPref();
                     }
                 });
                 optionDialog.dialog.show();
@@ -286,16 +274,14 @@ public class GameFragment extends Fragment {
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
     }
 
     @Override
-    public void onStop()
-    {
+    public void onStop() {
         super.onStop();
 
-        gameBoard.saveGame();
+        gameController.saveGame();
     }
 }
