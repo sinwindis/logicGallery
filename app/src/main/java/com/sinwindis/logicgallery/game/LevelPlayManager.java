@@ -37,14 +37,13 @@ public class LevelPlayManager {
         this.width = width;
 
         //cell correct value initialization
-        this.board.setData(dataSet);
+        this.board.setCorrectValues(dataSet);
 
         //저장 데이터가 있으면 해당 데이터를 파싱해서 저장
         this.progress = progress;
         this.custom = custom;
         if (saveData != null)
-            this.board.pushValues(saveData);
-
+            this.board.setSaveData(new SaveData(saveData, height, width));
     }
 
     public void saveToDb(Context ctx) {
@@ -57,7 +56,7 @@ public class LevelPlayManager {
             //레벨 데이터 저장
             if (progress != 2) {
                 //완성된 게임이 아니므로 현재 진행 상황을 저장
-                byte[] saveData = board.getParsedCells();
+                byte[] saveData = SaveData.getBlob(board);
 
                 if (custom) {
                     mDbOpenHelper.updateCustomBigLevel(levelId, progress, saveData);
@@ -91,21 +90,11 @@ public class LevelPlayManager {
     }
 
     public boolean moveToPrev() {
-        if (board.moveToPrev()) {
-            stackIdx = board.getStackIdx();
-            return true;
-        }
-
-        return false;
+        return board.moveToPrev();
     }
 
     public boolean moveToNext() {
-        if (board.moveToNext()) {
-            stackIdx = board.getStackIdx();
-            stackIdx = board.getStackMax();
-            return true;
-        }
-        return false;
+        return board.moveToNext();
     }
 
     public boolean isGameEnd() {
@@ -113,30 +102,15 @@ public class LevelPlayManager {
     }
 
     public int getStackIdx() {
-        return stackIdx;
+        return board.getStackIdx();
     }
 
     public int getStackMax() {
-        return stackMax;
-    }
-
-    public boolean pushValues(byte[] values) {
-        return this.board.pushValues(values);
-    }
-
-    public byte[] getCurrentValues() {
-
-        byte[] currentValues = new byte[10];
-
-        return currentValues;
+        return board.getStackMax();
     }
 
     public Cell getCell(int y, int x) {
         return board.getCell(y, x);
-    }
-
-    public Cell[][] getCells() {
-        return board.getCells();
     }
 
     public int getHeight() {

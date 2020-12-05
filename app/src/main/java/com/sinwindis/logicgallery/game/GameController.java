@@ -274,25 +274,33 @@ public class GameController {
         for (int y = 0; y < lpm.getHeight(); y++) {
             for (int x = 0; x < lpm.getWidth(); x++) {
 
-                if (!dragTemp[y][x])
-                    continue;
                 Cell targetCell = lpm.getCell(y, x);
 
-                switch (macroMode) {
-                    case 0:
-                    case 1:
-                    case 2:
-                        //입력된 값을 그대로 push
-                        targetCell.push((byte) macroMode);
-                        break;
-                    case 3:
-                        //해당 셀의 힌트 사용
-                        if (targetCell.useHint()) {
-                            //힌트를 사용했으면 힌트 카운트를 줄여준다.
-                            hintCount--;
-                        }
+                if (dragTemp[y][x]) {
 
+
+                    switch (macroMode) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            //입력된 값을 그대로 push
+                            targetCell.push((byte) macroMode);
+                            break;
+                        case 3:
+                            //해당 셀의 힌트 사용
+                            if(hintCount < 1)
+                                break;
+                            if (targetCell.useHint()) {
+                                //힌트를 사용했으면 힌트 카운트를 줄여준다.
+                                hintCount--;
+                            }
+
+                    }
                 }
+                else {
+                    targetCell.push(targetCell.getCurrentValue());
+                }
+
             }
         }
     }
@@ -447,7 +455,7 @@ public class GameController {
 
                 Cell targetCell = lpm.getCell(y, x);
 
-                if (targetCell.isHintUsed()) {
+                if (targetCell.isHinted()) {
                     switch (targetCell.getCurrentValue()) {
                         case 0:
                         case 2:

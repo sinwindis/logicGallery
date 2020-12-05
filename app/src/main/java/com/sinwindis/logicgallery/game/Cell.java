@@ -6,7 +6,7 @@ public class Cell {
     private byte correctValue;
     private byte currentValue;
 
-    private boolean isHintUsed;
+    private boolean isHinted;
     private boolean isFixed;
 
     private CellStack stack;
@@ -14,7 +14,7 @@ public class Cell {
     public Cell(byte correctValue) {
         this.correctValue = correctValue;
 
-        isHintUsed = false;
+        isHinted = false;
         isFixed = false;
 
         stack = new CellStack();
@@ -59,14 +59,14 @@ public class Cell {
     }
 
     public boolean useHint() {
-        if (isHintUsed) {
+        if (isHinted) {
             //만약 이미 힌트를 사용한 칸이면 false 를 반환한다.
             return false;
         }
         //현재 값을 정답으로 수정해 주고 힌트 사용, 값 고정을 체크해 준다.
 
         currentValue = correctValue;
-        isHintUsed = true;
+        isHinted = true;
         isFixed = true;
 
         return true;
@@ -88,8 +88,8 @@ public class Cell {
         return false;
     }
 
-    public void setHintUsed(boolean isHintUsed) {
-        this.isHintUsed = isHintUsed;
+    public void setHinted(boolean isHintUsed) {
+        this.isHinted = isHintUsed;
     }
 
     public void setFixed(boolean isFixed) {
@@ -112,8 +112,8 @@ public class Cell {
         return this.correctValue;
     }
 
-    public boolean isHintUsed() {
-        return this.isHintUsed;
+    public boolean isHinted() {
+        return this.isHinted;
     }
 
     public boolean isFixed() {
@@ -144,7 +144,9 @@ class CellStack {
     }
 
     public void push(byte value) {
+
         stackIdx++;
+
         stackMax = stackIdx;
 
         if (stackIdx == stackSize) {

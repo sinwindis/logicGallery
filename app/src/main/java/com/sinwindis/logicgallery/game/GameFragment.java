@@ -126,7 +126,7 @@ public class GameFragment extends Fragment {
             progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
             dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
 
-            saveData = new byte[0];
+            saveData = null;
             switch (progress) {
                 case 0:
                     progress = 1;

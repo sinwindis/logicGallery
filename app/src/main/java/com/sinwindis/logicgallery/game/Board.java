@@ -8,9 +8,6 @@ public class Board {
     private int height;
     private int width;
 
-    private int stackMax = 0;
-    private int stackIdx = 0;
-
     public Board(int height, int width) {
         this.height = height;
         this.width = width;
@@ -25,11 +22,7 @@ public class Board {
             return null;
     }
 
-    public Cell[][] getCells() {
-        return cells;
-    }
-
-    public boolean setData(byte[] values) {
+    public boolean setCorrectValues(byte[] values) {
 
         //correctValue 를 초기화해주는 작업
 
@@ -45,8 +38,34 @@ public class Board {
         return true;
     }
 
-    public boolean pushValues(byte[][] values) {
-        if (values.length != height || values[0].length != width) {
+    public boolean setSaveData(SaveData saveData) {
+
+        if (saveData.getHeight() != this.height || saveData.getWidth() != this.width) {
+            return false;
+        }
+
+        byte[][] saveValues = saveData.getValues();
+        boolean[][] saveFixes = saveData.getFixes();
+        boolean[][] saveHints = saveData.getHints();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                cells[y][x].push(saveValues[y][x]);
+                cells[y][x].setFixed(saveFixes[y][x]);
+                cells[y][x].setHinted(saveHints[y][x]);
+            }
+        }
+
+        return true;
+    }
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+
+    public boolean pushValues(boolean[][] mat, byte value) {
+        if (mat.length != height || mat[0].length != width) {
             return false;
         }
 
@@ -55,7 +74,7 @@ public class Board {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 //만약 셀의 값이 하나라도 바뀌면 isValueChanged 를 true 로 바꿔준다.
-                if (cells[y][x].push(values[y][x]))
+                if (cells[y][x].push(value))
                     isValueChanged = true;
             }
         }
@@ -92,9 +111,6 @@ public class Board {
             }
         }
 
-        stackIdx = cells[0][0].getStackIdx();
-        stackMax = cells[0][0].getStackMax();
-
         return true;
     }
 
@@ -108,9 +124,6 @@ public class Board {
             }
         }
 
-        stackIdx = cells[0][0].getStackIdx();
-        stackMax = cells[0][0].getStackMax();
-
         return true;
     }
 
@@ -121,20 +134,12 @@ public class Board {
             int y = i / this.width;
             int x = i % this.width;
             byte cellValue = cells[y][x].getCurrentValue();
-            if (cells[y][x].isHintUsed())
+            if (cells[y][x].isHinted())
                 cellValue *= -1;
             parsedCells[i] = cellValue;
         }
 
         return parsedCells;
-    }
-
-    public int getStackMax() {
-        return this.stackMax;
-    }
-
-    public int getStackIdx() {
-        return this.stackIdx;
     }
 
     public boolean isBoardComplete() {
@@ -150,5 +155,22 @@ public class Board {
         //오답이 하나도 없으면 true 리턴;
         return true;
     }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getStackMax() {
+        return this.cells[0][0].getStackMax();
+    }
+
+    public int getStackIdx() {
+        return this.cells[0][0].getStackIdx();
+    }
+
 
 }
