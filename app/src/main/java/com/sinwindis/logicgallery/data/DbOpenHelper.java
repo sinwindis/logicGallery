@@ -175,15 +175,9 @@ public class DbOpenHelper {
 
         byte[] saveData = null;
         switch (progress) {
-            case 0:
-                progress = 1;
-                break;
             case 1:
             case 3:
                 saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
-                break;
-            case 2:
-                progress = 3;
                 break;
         }
 
@@ -207,15 +201,10 @@ public class DbOpenHelper {
 
         byte[] saveData = new byte[0];
         switch (progress) {
-            case 0:
-                progress = 1;
-                break;
             case 1:
             case 3:
+                //저장된 게임이 있을 때
                 saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.SAVEDATA));
-                break;
-            case 2:
-                progress = 3;
                 break;
         }
 
@@ -276,8 +265,9 @@ public class DbOpenHelper {
 
     public void saveLevelDto(LevelDto levelDto) {
 
+        Log.d("DbOpenHelper", "saveLevelDto parameter: " + levelDto.toString());
         //레벨 데이터 저장
-        if (levelDto.getProgress() != 2) {
+        if (levelDto.getProgress() != 2 && levelDto.getProgress() != 4) {
             //완성된 게임이 아니므로 현재 진행 상황을 저장
 
             if (levelDto.isCustom()) {
@@ -305,9 +295,8 @@ public class DbOpenHelper {
                 //해당 레벨의 퍼즐에 해당하는 db 의 progress 값 늘려주기
                 increaseBigPuzzleProgress(levelDto.getPuzzleId());
             }
-
-
         }
+
     }
 
 

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sinwindis.logicgallery.R;
 import com.sinwindis.logicgallery.data.DbOpenHelper;
 import com.sinwindis.logicgallery.data.LevelDto;
+import com.sinwindis.logicgallery.data.Progress;
 import com.sinwindis.logicgallery.data.SaveData;
 import com.sinwindis.logicgallery.end.EndFragment;
 import com.sinwindis.logicgallery.listener.BoardItemTouchListener;
@@ -30,13 +31,6 @@ import java.util.Objects;
 import static android.content.Context.MODE_PRIVATE;
 
 public class GameController {
-
-    //const
-    private final int PROGRESS_FIRST = 0;
-    private final int PROGRESS_PLAYING = 1;
-    private final int PROGRESS_COMPLETE = 2;
-    private final int PROGRESS_REPLAYING = 3;
-    private final int PROGRESS_RECOMPLETE = 4;
 
     //property
     private boolean smartDrag;
@@ -614,7 +608,7 @@ public class GameController {
 
     //saving methods
     public void onDestroy() {
-        if (progress != PROGRESS_COMPLETE && progress != PROGRESS_RECOMPLETE) {
+        if (progress != Progress.PROGRESS_COMPLETE && progress != Progress.PROGRESS_RECOMPLETE) {
             saveGame();
         }
     }
@@ -635,18 +629,20 @@ public class GameController {
 
     private void setProgressComplete() {
         //한 번이라도 완료한 기록이 있으면 reComplete 로 저장, 처음 완료하는거면 complete 로 저장
+        Log.d("GameController", "setProgressComplete called");
+
         Log.d("GameController", "before setProgressComplete progress: " + progress);
         switch (progress) {
-            case PROGRESS_COMPLETE:
-            case PROGRESS_REPLAYING:
-            case PROGRESS_RECOMPLETE:
+            case Progress.PROGRESS_COMPLETE:
+            case Progress.PROGRESS_REPLAYING:
+            case Progress.PROGRESS_RECOMPLETE:
                 Log.d("GameController", "setProgressComplete case upper");
-                progress = PROGRESS_RECOMPLETE;
+                progress = Progress.PROGRESS_RECOMPLETE;
                 break;
-            case PROGRESS_FIRST:
-            case PROGRESS_PLAYING:
+            case Progress.PROGRESS_FIRST:
+            case Progress.PROGRESS_PLAYING:
                 Log.d("GameController", "setProgressComplete case lower");
-                progress = PROGRESS_COMPLETE;
+                progress = Progress.PROGRESS_COMPLETE;
                 break;
         }
 
@@ -655,15 +651,16 @@ public class GameController {
 
     private void setProgressPlaying() {
         //한 번이라도 완료한 기록이 있으면 replaying 으로 저장, 처음이면 playing 으로 저장
+        Log.d("GameController", "setProgressPlaying called");
         switch (levelDto.getProgress()) {
-            case PROGRESS_COMPLETE:
-            case PROGRESS_REPLAYING:
-            case PROGRESS_RECOMPLETE:
-                progress = PROGRESS_REPLAYING;
+            case Progress.PROGRESS_COMPLETE:
+            case Progress.PROGRESS_REPLAYING:
+            case Progress.PROGRESS_RECOMPLETE:
+                progress = Progress.PROGRESS_REPLAYING;
                 break;
-            case PROGRESS_FIRST:
-            case PROGRESS_PLAYING:
-                progress = PROGRESS_PLAYING;
+            case Progress.PROGRESS_FIRST:
+            case Progress.PROGRESS_PLAYING:
+                progress = Progress.PROGRESS_PLAYING;
                 break;
         }
     }
@@ -688,10 +685,12 @@ public class GameController {
 
     private void saveSaveLevelDto() {
 
+        Log.d("GameController", "saveSaveLevelDto called");
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
             mDbOpenHelper.open();
 
+            Log.d("GameController", "saveSaveLevelDto: " + saveLevelDto.toString());
             mDbOpenHelper.saveLevelDto(saveLevelDto);
 
             mDbOpenHelper.close();

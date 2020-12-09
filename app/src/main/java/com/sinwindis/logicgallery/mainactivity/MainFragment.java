@@ -182,6 +182,8 @@ public class MainFragment extends Fragment {
             lastPlayLevelDto = mDbOpenHelper.getLevelDto(lastPlayId);
         }
 
+        mDbOpenHelper.close();
+
 
         Log.d("MainFragment", "LevelDto: " + lastPlayLevelDto.toString());
 

@@ -86,6 +86,23 @@ public class EndFragment extends Fragment {
 
         mainHandler.postDelayed(animationRun, 300);
 
+        Log.d("EndFragment", "bundle: " + endLevelDto.toString());
+
+        DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
+        try {
+            mDbOpenHelper.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        final LevelDto lastPlayLevelDto;
+
+        lastPlayLevelDto = mDbOpenHelper.getLevelDto(endLevelDto.getLevelId());
+
+        mDbOpenHelper.close();
+
+        Log.d("EndFragment", "db: " + lastPlayLevelDto.toString());
+
         return fragmentView;
     }
 
