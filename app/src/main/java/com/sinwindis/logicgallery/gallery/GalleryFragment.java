@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -26,7 +24,7 @@ import androidx.fragment.app.Fragment;
 import com.sinwindis.logicgallery.R;
 import com.sinwindis.logicgallery.animation.ButtonAnimation;
 import com.sinwindis.logicgallery.biglevel.BigLevelFragment;
-import com.sinwindis.logicgallery.data.PuzzleData;
+import com.sinwindis.logicgallery.data.PuzzleDto;
 import com.sinwindis.logicgallery.data.DbOpenHelper;
 import com.sinwindis.logicgallery.data.SqlManager;
 import com.sinwindis.logicgallery.data.StringGetter;
@@ -37,11 +35,11 @@ import java.util.Objects;
 
 public class GalleryFragment extends Fragment {
 
-    private Context ctx;
+    private final Context ctx;
 
     private TextView tv_level_num;
 
-    private PuzzleData puzzleDataTemp;
+    private PuzzleDto puzzleDto;
 
     private DbOpenHelper mDbOpenHelper;
 
@@ -97,39 +95,32 @@ public class GalleryFragment extends Fragment {
         //클릭 애니메이션 설정
         @SuppressLint("UseCompatLoadingForDrawables") final Drawable press = ctx.getResources().getDrawable(R.drawable.background_frame_press);
         @SuppressLint("UseCompatLoadingForDrawables") final Drawable up = ctx.getResources().getDrawable(R.drawable.background_frame);
-        cl_touchBox.setOnTouchListener(new View.OnTouchListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+        cl_touchBox.setOnTouchListener((view, motionEvent) -> {
 
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (view != null) {
-                        cl_frame.setBackground(press);
-                    }
-
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_POINTER_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
-
-                    if (view != null) {
-                        cl_frame.setBackground(up);
-                    }
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                if (view != null) {
+                    cl_frame.setBackground(press);
                 }
-                return false;
+
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_POINTER_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+
+                if (view != null) {
+                    cl_frame.setBackground(up);
+                }
             }
+            return false;
         });
 
-        cl_touchBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //클릭 시 해당 퍼즐의 레벨들을 보여주는 BigLevelFragment 로 이동한다.
-                Fragment dest = new BigLevelFragment(ctx);
-                // Fragment 생성
-                Bundle bundle = new Bundle();
-                bundle.putInt("p_id", puzzleDataTemp.id);
-                bundle.putBoolean("custom", puzzleDataTemp.custom);
-                Log.d("galleryFrag", "p_id: " + puzzleDataTemp.id + " custom: " + puzzleDataTemp.custom);
-                dest.setArguments(bundle);
-                ((MainActivity) ctx).fragmentMove(dest);
-            }
+        cl_touchBox.setOnClickListener(view -> {
+            //클릭 시 해당 퍼즐의 레벨들을 보여주는 BigLevelFragment 로 이동한다.
+            Fragment dest = new BigLevelFragment(ctx);
+            // Fragment 생성
+            Bundle bundle = new Bundle();
+            bundle.putInt("p_id", puzzleDto.getPuzzleId());
+            bundle.putBoolean("custom", puzzleDto.isCustom());
+            Log.d("galleryFrag", "p_id: " + puzzleDto.getPuzzleId() + " custom: " + puzzleDto.isCustom());
+            dest.setArguments(bundle);
+            ((MainActivity) ctx).fragmentMove(dest);
         });
 
         //프래그먼트 버튼 이벤트 셋
@@ -137,13 +128,9 @@ public class GalleryFragment extends Fragment {
 
         ButtonAnimation.setOvalButtonAnimationBlack(img_back);
 
-        img_back.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                assert getFragmentManager() != null;
-                getFragmentManager().popBackStackImmediate();
-            }
+        img_back.setOnClickListener(view -> {
+            assert getFragmentManager() != null;
+            getFragmentManager().popBackStackImmediate();
         });
 
         //검색 버튼
@@ -166,79 +153,62 @@ public class GalleryFragment extends Fragment {
 
         ButtonAnimation.setOvalButtonAnimationShadow(img_prev);
 
-        img_prev.setOnClickListener(new View.OnClickListener() {
+        img_prev.setOnClickListener(view -> {
+            //이전 레벨
+            if (puzzlePosition == 0)
+                puzzlePosition = puzzleNum + customPuzzleNum - 1;
+            else
+                puzzlePosition--;
 
-            @Override
-            public void onClick(View view) {
-                //이전 레벨
-                if (puzzlePosition == 0)
-                    puzzlePosition = puzzleNum + customPuzzleNum - 1;
-                else
-                    puzzlePosition--;
-
-                getPuzzle(puzzlePosition);
-                showPuzzleData();
-            }
+            getPuzzle(puzzlePosition);
+            showPuzzleData();
         });
 
         ImageView img_next = fragmentView.findViewById(R.id.img_next);
 
         ButtonAnimation.setOvalButtonAnimationShadow(img_next);
 
-        img_next.setOnClickListener(new View.OnClickListener() {
+        img_next.setOnClickListener(view -> {
+            //다음 레벨
+            if (puzzlePosition == puzzleNum + customPuzzleNum - 1)
+                puzzlePosition = 0;
+            else
+                puzzlePosition++;
 
-            @Override
-            public void onClick(View view) {
-                //다음 레벨
-                if (puzzlePosition == puzzleNum + customPuzzleNum - 1)
-                    puzzlePosition = 0;
-                else
-                    puzzlePosition++;
-
-                getPuzzle(puzzlePosition);
-                showPuzzleData();
-            }
+            getPuzzle(puzzlePosition);
+            showPuzzleData();
         });
 
         //레벨 지우기 버튼
         ButtonAnimation.setOvalButtonAnimationBlack(btn_delete);
 
-        btn_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btn_delete.setOnClickListener(view -> {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                LayoutInflater inflater = getActivity().getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.dialog_delete, null);
-                builder.setView(dialogView);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            LayoutInflater inflater1 = getActivity().getLayoutInflater();
+            View dialogView = inflater1.inflate(R.layout.dialog_delete, null);
+            builder.setView(dialogView);
 
-                final AlertDialog dialog = builder.create();
+            final AlertDialog dialog = builder.create();
 
-                Button btn_accept = dialogView.findViewById(R.id.btn_accept);
-                Button btn_cancel = dialogView.findViewById(R.id.btn_cancel);
+            Button btn_accept = dialogView.findViewById(R.id.btn_accept);
+            Button btn_cancel = dialogView.findViewById(R.id.btn_cancel);
 
-                btn_accept.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        deletePuzzle();
-                    }
-                });
+            btn_accept.setOnClickListener(v -> {
+                dialog.dismiss();
+                deletePuzzle();
+            });
 
-                btn_cancel.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-                Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            }
+            btn_cancel.setOnClickListener(v -> dialog.dismiss());
+            dialog.show();
+            Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         });
 
         return fragmentView;
     }
 
     private void deletePuzzle() {
-        mDbOpenHelper.deleteCustomBigPuzzle(puzzleDataTemp.id);
+        mDbOpenHelper.deleteCustomBigPuzzle(puzzleDto.getPuzzleId());
         loadCursor();
 
         if (puzzlePosition == puzzleNum + customPuzzleNum)
@@ -295,7 +265,7 @@ public class GalleryFragment extends Fragment {
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(colorSet, 0, colorSet.length);
 
-        puzzleDataTemp = new PuzzleData(id, a_name, p_name, bitmap, width, height, l_width, l_height, progress, false);
+        puzzleDto = new PuzzleDto(id, a_name, p_name, bitmap, width, height, l_width, l_height, progress, false);
     }
 
     private void loadCustomPuzzle(int position) {
@@ -314,7 +284,7 @@ public class GalleryFragment extends Fragment {
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(colorSet, 0, colorSet.length);
 
-        puzzleDataTemp = new PuzzleData(id, a_name, p_name, bitmap, width, height, l_width, l_height, progress, true);
+        puzzleDto = new PuzzleDto(id, a_name, p_name, bitmap, width, height, l_width, l_height, progress, true);
     }
 
     @SuppressLint("SetTextI18n")
@@ -324,24 +294,24 @@ public class GalleryFragment extends Fragment {
         Log.d("showPuzzleData", "refreshing view");
         //퍼즐 이름 표시
 
-        tv_puzzleName.setText(puzzleDataTemp.p_name);
+        tv_puzzleName.setText(puzzleDto.getPuzzleName());
 
         //퍼즐 아티스트 이름 표시
 
-        String strArtistName = puzzleDataTemp.a_name;
+        String strArtistName = puzzleDto.getArtistName();
         tv_artistName.setText(strArtistName);
 
         //퍼즐 진행도 표시
-        int puzzleWidth = puzzleDataTemp.width;
-        int puzzleHeight = puzzleDataTemp.height;
+        int puzzleWidth = puzzleDto.getPuzzleWidth();
+        int puzzleHeight = puzzleDto.getPuzzleHeight();
 
-        String strPuzzleProgress = puzzleDataTemp.progress + "/" + puzzleHeight * puzzleWidth;
+        String strPuzzleProgress = puzzleDto.getProgress() + "/" + puzzleHeight * puzzleWidth;
 
         tv_puzzleSize.setText(strPuzzleProgress);
 
         //레벨 아이템 사이즈 표시
-        int levelWidth = puzzleDataTemp.l_width;
-        int levelHeight = puzzleDataTemp.l_height;
+        int levelWidth = puzzleDto.getLevelWidth();
+        int levelHeight = puzzleDto.getLevelHeight();
 
         String strLevelSize = levelWidth + "X" + levelHeight;
 
@@ -351,17 +321,17 @@ public class GalleryFragment extends Fragment {
 
 
         //퍼즐 썸네일 표시
-        if (puzzleDataTemp.progress == puzzleDataTemp.width * puzzleDataTemp.height) {
+        if (puzzleDto.getProgress() == puzzleDto.getLevelWidth() * puzzleDto.getLevelHeight()) {
             //완료한 게임이면
             //컬러셋을 가져온다
-            iv_thumbnail.setImageBitmap(puzzleDataTemp.bitmap);
+            iv_thumbnail.setImageBitmap(puzzleDto.getBitmap());
         } else {
             //완료되지 않은 게임이면
             //물음표 이미지를 띄워준다.
             iv_thumbnail.setImageResource(R.drawable.ic_unknown);
         }
 
-        if (puzzleDataTemp.custom) {
+        if (puzzleDto.isCustom()) {
             btn_delete.setVisibility(View.VISIBLE);
         } else {
             btn_delete.setVisibility(View.GONE);

@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -126,7 +127,15 @@ public class DbManager {
         return insertId;
     }
 
-    private int loadLevel(XmlPullParser parser, int p_id) throws IOException, XmlPullParserException {
+    private int loadLevel(XmlPullParser parser, int puzzleId) throws IOException, XmlPullParserException {
+
+        DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
+        try {
+            mDbOpenHelper.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         //level
         parser.nextTag();
 
@@ -157,10 +166,12 @@ public class DbManager {
 
         //모든 데이터를 받아왔으면 해당 레벨을 db 에 insert 해준다.
 
-        byte[] colorSetByteArray = Base64.decode(colorSet, Base64.DEFAULT);
+        byte[] dataBlob = CustomParser.parseDataSetStringToByteArray(dataSet);
+        byte[] colorBlob = Base64.decode(colorSet, Base64.DEFAULT);
 
-        LevelData levelData = new LevelData(-1, p_id, number, width, height, 0, CustomParser.parseDataSetStringToByteArray(dataSet), null, colorSetByteArray, false);
-        int insertId = levelData.saveData(ctx);
+        int insertId = (int) mDbOpenHelper.insertBigLevel(puzzleId, number, width, height, dataBlob, colorBlob);
+
+        mDbOpenHelper.close();
 
         Log.d("loadLevel", "insert ID: " + insertId);
 
@@ -234,7 +245,7 @@ public class DbManager {
 
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser parser = factory.newPullParser();
-            parser.setInput(new InputStreamReader(levelInputStream, "UTF-8"));
+            parser.setInput(new InputStreamReader(levelInputStream, StandardCharsets.UTF_8));
             int eventType = parser.getEventType();
 
 

@@ -15,9 +15,9 @@ public class DbOpenHelper {
     private static final int DATABASE_VERSION = 1;
     public static SQLiteDatabase mDB;
     private DatabaseHelper mDBHelper;
-    private Context ctx;
+    private final Context ctx;
 
-    private class DatabaseHelper extends SQLiteOpenHelper {
+    private static class DatabaseHelper extends SQLiteOpenHelper {
 
         public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
             super(context, name, factory, version);
@@ -34,10 +34,8 @@ public class DbOpenHelper {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-            //savedata를 보존하면서 db를 업데이트하는 기능을 구현해야 함
-            //db.execSQL("DROP TABLE IF EXISTS "+ SqlManager.CreateLevelDB.getCreateStr());
-            //db.execSQL("DROP TABLE IF EXISTS "+ CategoryDB.CreateDB._TABLENAME);
-            onCreate(db);
+            //saveBlob 들을 보존하면서 db를 업데이트하는 기능을 구현해야 함
+            //onCreate(db);
         }
     }
 
@@ -58,22 +56,6 @@ public class DbOpenHelper {
     public void close() {
         mDB.close();
     }
-//
-//    public long insertLevel(String name, String category, int width, int height, byte[] dataSet, byte[] colorSet, int custom){
-//
-//
-//        ContentValues values = new ContentValues();
-//        values.put(SqlManager.LevelDBSql.NAME, name);
-//        values.put(SqlManager.LevelDBSql.CATEGORY, category);
-//        values.put(SqlManager.LevelDBSql.WIDTH, width);
-//        values.put(SqlManager.LevelDBSql.HEIGHT, height);
-//        values.put(SqlManager.LevelDBSql.PROGRESS, 0);
-//        values.put(SqlManager.LevelDBSql.DATASET, dataSet);
-//        values.put(SqlManager.LevelDBSql.COLORSET, colorSet);
-//        values.put(SqlManager.LevelDBSql.CUSTOM, custom);
-//
-//        return mDB.insert(SqlManager.LevelDBSql._TABLENAME, null, values);
-//    }
 
     public long insertBigLevel(int p_id, int number, int width, int height, byte[] dataSet, byte[] colorSet) {
 
@@ -134,41 +116,17 @@ public class DbOpenHelper {
         return mDB.insert(SqlManager.CustomBigPuzzleDBSql._TABLENAME, null, values);
     }
 
-//    public void deleteLevel(int id)
-//    {
-//        mDB.execSQL("DELETE FROM "+ SqlManager.LevelDBSql._TABLENAME +" WHERE " + SqlManager.LevelDBSql.ID + " = '" + id + "';");
-//    }
-
-    public void deleteCustomBigPuzzle(int id) {
-        mDB.execSQL("DELETE FROM " + SqlManager.CustomBigPuzzleDBSql._TABLENAME + " WHERE " + SqlManager.CustomBigPuzzleDBSql.ID + " = '" + id + "';");
+    public void deleteCustomBigPuzzle(int puzzleId) {
+        mDB.execSQL("DELETE FROM " + SqlManager.CustomBigPuzzleDBSql._TABLENAME + " WHERE " + SqlManager.CustomBigPuzzleDBSql.ID + " = '" + puzzleId + "';");
     }
 
-    public int updateLevel(int id, int progress, byte[] saveData) {
+    public int updateBigLevel(int levelId, int progress, byte[] saveBlob) {
         ContentValues values = new ContentValues();
 
-        values.put(SqlManager.LevelDBSql.SAVEDATA, saveData);
-        values.put(SqlManager.LevelDBSql.PROGRESS, progress);
-
-        return mDB.update(SqlManager.LevelDBSql._TABLENAME, values, SqlManager.LevelDBSql.ID + "=?", new String[]{String.valueOf(id)});
-    }
-
-    public int updateBigLevel(int id, int progress, byte[] saveData) {
-        ContentValues values = new ContentValues();
-
-        values.put(SqlManager.BigLevelDBSql.SAVEDATA, saveData);
+        values.put(SqlManager.BigLevelDBSql.SAVEDATA, saveBlob);
         values.put(SqlManager.BigLevelDBSql.PROGRESS, progress);
 
-        return mDB.update(SqlManager.BigLevelDBSql._TABLENAME, values, SqlManager.BigLevelDBSql.ID + "=?", new String[]{String.valueOf(id)});
-    }
-
-    public void increaseBigPuzzleProgress(int p_id) {
-
-        Log.d("increaseBPP", "increaseBigPuzzleProgress called");
-
-        mDB.execSQL("UPDATE " + SqlManager.BigPuzzleDBSql._TABLENAME +
-                        " SET " + SqlManager.BigPuzzleDBSql.PROGRESS + " = " + SqlManager.BigPuzzleDBSql.PROGRESS + " + ?" +
-                        " WHERE " + SqlManager.BigPuzzleDBSql.ID + " = ?",
-                new String[]{"1", String.valueOf(p_id)});
+        return mDB.update(SqlManager.BigLevelDBSql._TABLENAME, values, SqlManager.BigLevelDBSql.ID + "=?", new String[]{String.valueOf(levelId)});
     }
 
     public int updateCustomBigLevel(int id, int progress, byte[] saveData) {
@@ -180,29 +138,88 @@ public class DbOpenHelper {
         return mDB.update(SqlManager.CustomBigLevelDBSql._TABLENAME, values, SqlManager.CustomBigLevelDBSql.ID + "=?", new String[]{String.valueOf(id)});
     }
 
-    public long insertCategory(String name) {
-        ContentValues values = new ContentValues();
-        values.put(SqlManager.CategoryDBSql.NAME, name);
-        values.put(SqlManager.CategoryDBSql.PROGRESS, 0);
+    public void increaseBigPuzzleProgress(int puzzleId) {
 
-        return mDB.insert(SqlManager.CategoryDBSql._TABLENAME, null, values);
+        Log.d("increaseBPP", "increaseBigPuzzleProgress called");
+
+        mDB.execSQL("UPDATE " + SqlManager.BigPuzzleDBSql._TABLENAME +
+                        " SET " + SqlManager.BigPuzzleDBSql.PROGRESS + " = " + SqlManager.BigPuzzleDBSql.PROGRESS + " + ?" +
+                        " WHERE " + SqlManager.BigPuzzleDBSql.ID + " = ?",
+                new String[]{"1", String.valueOf(puzzleId)});
     }
 
-    public Cursor getCategoryCursor() {
-        return mDB.query(SqlManager.CategoryDBSql._TABLENAME, null, null, null, null, null, null);
+    public void increaseCustomBigPuzzleProgress(int puzzleId) {
+
+        Log.d("increaseBPP", "increaseBigPuzzleProgress called");
+
+        mDB.execSQL("UPDATE " + SqlManager.CustomBigPuzzleDBSql._TABLENAME +
+                        " SET " + SqlManager.CustomBigPuzzleDBSql.PROGRESS + " = " + SqlManager.CustomBigPuzzleDBSql.PROGRESS + " + ?" +
+                        " WHERE " + SqlManager.CustomBigPuzzleDBSql.ID + " = ?",
+                new String[]{"1", String.valueOf(puzzleId)});
     }
 
+    public LevelDto getLevelDto(int levelId) {
+        Cursor cursor = getBigLevelCursorById(levelId);
 
-    public Cursor getBigPuzzleCursorByArtistId(int a_id) {
-        Cursor c = mDB.rawQuery("SELECT * FROM " + SqlManager.BigPuzzleDBSql._TABLENAME + " WHERE " + SqlManager.BigPuzzleDBSql.A_ID + "='" + a_id + "';", null);
+        cursor.moveToNext();
 
-        return c;
+        int puzzleId = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
+        String name = StringGetter.p_name.get(puzzleId);
+
+        int number = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.NUMBER));
+        int width = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
+        int height = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
+        int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
+        byte[] dataSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
+        byte[] colorSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
+
+        byte[] saveData = null;
+        switch (progress) {
+            case 0:
+                progress = 1;
+                break;
+            case 1:
+            case 3:
+                saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
+                break;
+            case 2:
+                progress = 3;
+                break;
+        }
+
+        return new LevelDto(levelId, puzzleId, name, number, width, height, progress, dataSet, saveData, colorSet, false);
     }
 
-    public Cursor getLevelCursorByCategory(String category) {
-        Cursor c = mDB.rawQuery("SELECT * FROM " + SqlManager.LevelDBSql._TABLENAME + " WHERE " + SqlManager.LevelDBSql.CATEGORY + "='" + category + "';", null);
+    public LevelDto getCustomLevelDto(int levelId) {
 
-        return c;
+        Cursor cursor = getCustomBigLevelCursorById(levelId);
+        cursor.moveToNext();
+
+        int puzzleId = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.P_ID));
+        String name = getCustomBigPuzzleCursorById(puzzleId).getString(cursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_NAME));
+
+        int number = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.NUMBER));
+        int width = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.WIDTH));
+        int height = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.HEIGHT));
+        int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.PROGRESS));
+        byte[] dataSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.DATASET));
+        byte[] colorSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.COLORSET));
+
+        byte[] saveData = new byte[0];
+        switch (progress) {
+            case 0:
+                progress = 1;
+                break;
+            case 1:
+            case 3:
+                saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.SAVEDATA));
+                break;
+            case 2:
+                progress = 3;
+                break;
+        }
+
+        return new LevelDto(levelId, puzzleId, name, number, width, height, progress, dataSet, saveData, colorSet, true);
     }
 
     public Cursor getBigPuzzleCursor() {
@@ -229,21 +246,14 @@ public class DbOpenHelper {
         return c;
     }
 
-    public Cursor getLevelCursorById(int id) {
-
-        Cursor c = mDB.rawQuery("SELECT * FROM " + SqlManager.LevelDBSql._TABLENAME + " WHERE " + SqlManager.LevelDBSql.ID + "='" + id + "';", null);
-
-        return c;
-    }
-
-    public Cursor getBigLevelsCursorByParentId(int id) {
+    public Cursor getBigLevelCursorByParentId(int id) {
 
         Cursor c = mDB.rawQuery("SELECT * FROM " + SqlManager.BigLevelDBSql._TABLENAME + " WHERE " + SqlManager.BigLevelDBSql.P_ID + "='" + id + "' ORDER BY " + SqlManager.BigLevelDBSql.NUMBER + " ASC;", null);
 
         return c;
     }
 
-    public Cursor getCustomBigLevelsCursorByParentId(int id) {
+    public Cursor getCustomBigLevelCursorByParentId(int id) {
 
         Cursor c = mDB.rawQuery("SELECT * FROM " + SqlManager.CustomBigLevelDBSql._TABLENAME + " WHERE " + SqlManager.CustomBigLevelDBSql.P_ID + "='" + id + "' ORDER BY " + SqlManager.CustomBigLevelDBSql.NUMBER + " ASC;", null);
 
@@ -263,6 +273,50 @@ public class DbOpenHelper {
 
         return c;
     }
+
+    public void saveLevelDto(LevelDto levelDto) {
+
+        //레벨 데이터 저장
+        if (levelDto.getProgress() != 2) {
+            //완성된 게임이 아니므로 현재 진행 상황을 저장
+
+            if (levelDto.isCustom()) {
+                updateCustomBigLevel(levelDto.getLevelId(), levelDto.getProgress(), levelDto.getSaveBlob());
+            } else {
+                updateBigLevel(levelDto.getLevelId(), levelDto.getProgress(), levelDto.getSaveBlob());
+            }
+
+            //가장 최근에 한 게임 데이터 갱신하기
+
+
+        } else {
+            //게임 완료
+
+            if (levelDto.isCustom()) {
+                //커스텀 퍼즐인 경우
+
+                updateCustomBigLevel(levelDto.getLevelId(), levelDto.getProgress(), null);
+                //해당 레벨의 퍼즐에 해당하는 db 의 progress 값 늘려주기
+                increaseCustomBigPuzzleProgress(levelDto.getPuzzleId());
+            } else {
+                //스탠다드 퍼즐인 경우
+
+                updateBigLevel(levelDto.getLevelId(), levelDto.getProgress(), null);
+                //해당 레벨의 퍼즐에 해당하는 db 의 progress 값 늘려주기
+                increaseBigPuzzleProgress(levelDto.getPuzzleId());
+            }
+
+
+        }
+    }
+
+
+    //will be used
+    //    public Cursor getBigPuzzleCursorByArtistId(int a_id) {
+//        Cursor c = mDB.rawQuery("SELECT * FROM " + SqlManager.BigPuzzleDBSql._TABLENAME + " WHERE " + SqlManager.BigPuzzleDBSql.A_ID + "='" + a_id + "';", null);
+//
+//        return c;
+//    }
 
 
 }

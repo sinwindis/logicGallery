@@ -1,19 +1,22 @@
-package com.sinwindis.logicgallery.game;
+package com.sinwindis.logicgallery.data;
+
+import com.sinwindis.logicgallery.game.Board;
+import com.sinwindis.logicgallery.game.Cell;
 
 public class SaveData {
 
-    private int width;
-    private int height;
-    private byte[][] values;
-    private boolean[][] isFixed;
-    private boolean[][] isHintUsed;
+    private final int width;
+    private final int height;
+    private final byte[][] values;
+    private final boolean[][] isFixed;
+    private final boolean[][] isHintUsed;
 
     private static final byte MASK_VALUE = 0b00000011;
     private static final byte MASK_FIX = 0b01000000;
     private static final byte MASK_HINT = (byte) 0b10000000;
 
 
-    public SaveData(byte[] saveData, int height, int width) {
+    public SaveData(byte[] saveBlob, int height, int width) {
         this.height = height;
         this.width = width;
 
@@ -21,36 +24,38 @@ public class SaveData {
         isFixed = new boolean[height][width];
         isHintUsed = new boolean[height][width];
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                values[y][x] = (byte) (saveData[y * width + x] & MASK_VALUE);
-                isFixed[y][x] = (saveData[y * width + x] & MASK_FIX) == MASK_FIX;
-                isHintUsed[y][x] = (saveData[y * width + x] & MASK_HINT) == MASK_HINT;
+        if (saveBlob != null && saveBlob.length == height * width) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    values[y][x] = (byte) (saveBlob[y * width + x] & MASK_VALUE);
+                    isFixed[y][x] = (saveBlob[y * width + x] & MASK_FIX) == MASK_FIX;
+                    isHintUsed[y][x] = (saveBlob[y * width + x] & MASK_HINT) == MASK_HINT;
+                }
             }
         }
+
     }
 
-    public static byte[] getBlob(Board board) {
+    public static byte[] of(Board board) {
 
         int height = board.getHeight();
         int width = board.getWidth();
 
-        byte[] saveBlob = new byte[height*width];
+        byte[] saveBlob = new byte[height * width];
 
-        for(int y = 0; y < height; y++)
-        {
-            for(int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
 
                 Cell cell = board.getCell(y, x);
 
                 byte value = cell.getCurrentValue();
-                if(cell.isHinted()){
+                if (cell.isHinted()) {
                     value = (byte) (value | MASK_HINT);
                 }
-                if(cell.isFixed()) {
+                if (cell.isFixed()) {
                     value = (byte) (value | MASK_FIX);
                 }
-                saveBlob[y*width + x] = value;
+                saveBlob[y * width + x] = value;
             }
         }
 

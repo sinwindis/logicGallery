@@ -1,4 +1,4 @@
-package com.sinwindis.logicgallery.option;
+package com.sinwindis.logicgallery.dialog;
 
 import android.app.Activity;
 import android.content.SharedPreferences;

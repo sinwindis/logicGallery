@@ -1,12 +1,18 @@
 package com.sinwindis.logicgallery.game;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.sinwindis.logicgallery.data.SaveData;
+
 public class Board {
 
 
-    private Cell[][] cells;
+    private final Cell[][] cells;
 
-    private int height;
-    private int width;
+    private final int height;
+    private final int width;
 
     public Board(int height, int width) {
         this.height = height;
@@ -16,10 +22,14 @@ public class Board {
     }
 
     public Cell getCell(int y, int x) {
-        if (y < this.height && x < this.width)
+
+        if (y < this.height && x < this.width) {
             return cells[y][x];
-        else
+        } else {
             return null;
+
+        }
+
     }
 
     public boolean setCorrectValues(byte[] values) {
@@ -173,4 +183,9 @@ public class Board {
     }
 
 
+    @NonNull
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

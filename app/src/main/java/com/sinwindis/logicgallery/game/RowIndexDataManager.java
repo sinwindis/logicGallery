@@ -4,16 +4,16 @@ import java.util.Arrays;
 
 public class RowIndexDataManager {
 
-    private LevelPlayManager lpm;
+    private final Board lpm;
     private int[][] idxDataSet;
     private int[] idxNumSet;
 
     boolean[] isIdxComplete;
 
-    public RowIndexDataManager(LevelPlayManager lpm) {
-        this.lpm = lpm;
-        isIdxComplete = new boolean[lpm.getHeight()];
-        for (int i = 0; i < lpm.getHeight(); i++) {
+    public RowIndexDataManager(Board board) {
+        this.lpm = board;
+        isIdxComplete = new boolean[board.getHeight()];
+        for (int i = 0; i < board.getHeight(); i++) {
             isIdxComplete[i] = false;
         }
     }

@@ -29,7 +29,7 @@ public class RvTutorialBoardAdapter extends RecyclerView.Adapter<RvTutorialBoard
         }
     }
 
-    RvTutorialBoardAdapter(int width, int height) {
+    public RvTutorialBoardAdapter(int width, int height) {
         //생성자
         this.height = height;
         this.width = width;

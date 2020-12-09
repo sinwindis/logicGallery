@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sinwindis.logicgallery.R;
 import com.sinwindis.logicgallery.animation.ButtonAnimation;
-import com.sinwindis.logicgallery.data.LevelData;
+import com.sinwindis.logicgallery.data.LevelDto;
 import com.sinwindis.logicgallery.data.DbOpenHelper;
 import com.sinwindis.logicgallery.data.SqlManager;
 import com.sinwindis.logicgallery.data.StringGetter;
@@ -28,7 +28,7 @@ import java.sql.SQLException;
 
 public class BigLevelFragment extends Fragment {
 
-    private Context ctx;
+    private final Context ctx;
 
     public BigLevelFragment(Context ctx) {
         // Required empty public constructor
@@ -49,7 +49,7 @@ public class BigLevelFragment extends Fragment {
         int fullCount = 0;
         int clearCount = 0;
 
-        LevelData[] levelThumbnailData;
+        LevelDto[] levelThumbnailData;
 
         int p_id = 0;
         boolean custom = false;
@@ -80,8 +80,8 @@ public class BigLevelFragment extends Fragment {
 
             tv_title.setText(name);
 
-            Cursor customBigLevelCursor = mDbOpenHelper.getCustomBigLevelsCursorByParentId(p_id);
-            levelThumbnailData = new LevelData[customBigLevelCursor.getCount()];
+            Cursor customBigLevelCursor = mDbOpenHelper.getCustomBigLevelCursorByParentId(p_id);
+            levelThumbnailData = new LevelDto[customBigLevelCursor.getCount()];
 
             while (customBigLevelCursor.moveToNext()) {
 
@@ -96,7 +96,7 @@ public class BigLevelFragment extends Fragment {
                 if (progress == 1 || progress == 3)
                     saveData = customBigLevelCursor.getBlob(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.SAVEDATA));
 
-                levelThumbnailData[fullCount] = new LevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet, true);
+                levelThumbnailData[fullCount] = new LevelDto(id, p_id, name, number, width, height, progress, dataSet, saveData, colorSet, true);
                 fullCount++;
                 if (progress == 2 || progress == 3) {
                     clearCount++;
@@ -115,8 +115,8 @@ public class BigLevelFragment extends Fragment {
             String name = StringGetter.p_name.get(p_id);
             tv_title.setText(name);
 
-            Cursor bigLevelCursor = mDbOpenHelper.getBigLevelsCursorByParentId(p_id);
-            levelThumbnailData = new LevelData[bigLevelCursor.getCount()];
+            Cursor bigLevelCursor = mDbOpenHelper.getBigLevelCursorByParentId(p_id);
+            levelThumbnailData = new LevelDto[bigLevelCursor.getCount()];
 
             while (bigLevelCursor.moveToNext()) {
 
@@ -131,7 +131,7 @@ public class BigLevelFragment extends Fragment {
                 if (progress == 1 || progress == 3)
                     saveData = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
 
-                levelThumbnailData[fullCount] = new LevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet, false);
+                levelThumbnailData[fullCount] = new LevelDto(id, p_id, name, number, width, height, progress, dataSet, saveData, colorSet, false);
                 fullCount++;
                 if (progress == 2 || progress == 3) {
                     clearCount++;
@@ -152,7 +152,7 @@ public class BigLevelFragment extends Fragment {
 
         final int finalPuzzleWidth = puzzleWidth;
         final int finalPuzzleHeight = puzzleHeight;
-        final LevelData[] finalLevelThumbnailData = levelThumbnailData;
+        final LevelDto[] finalLevelThumbnailData = levelThumbnailData;
         cl_rv_cover.post(new Runnable() {
             @Override
             public void run() {

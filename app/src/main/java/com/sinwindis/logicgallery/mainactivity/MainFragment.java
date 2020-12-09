@@ -6,8 +6,10 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,14 +20,17 @@ import android.widget.ImageView;
 import androidx.fragment.app.Fragment;
 
 import com.sinwindis.logicgallery.R;
-import com.sinwindis.logicgallery.data.LevelData;
+import com.sinwindis.logicgallery.data.BitmapMaker;
+import com.sinwindis.logicgallery.data.LevelDto;
+import com.sinwindis.logicgallery.data.SaveData;
+import com.sinwindis.logicgallery.data.StringGetter;
 import com.sinwindis.logicgallery.gallery.GalleryFragment;
 import com.sinwindis.logicgallery.data.DbOpenHelper;
 import com.sinwindis.logicgallery.data.SqlManager;
 import com.sinwindis.logicgallery.game.GameFragment;
 import com.sinwindis.logicgallery.levelcreate.LevelCreateFragment;
-import com.sinwindis.logicgallery.option.OptionDialog;
-import com.sinwindis.logicgallery.tutorial.TutorialDialog;
+import com.sinwindis.logicgallery.dialog.OptionDialog;
+import com.sinwindis.logicgallery.dialog.TutorialDialog;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -33,6 +38,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+
+import com.sinwindis.logicgallery.dialog.RewardDialog;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -54,98 +61,74 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         fragmentView = inflater.inflate(R.layout.fragment_main, container, false);
-
         iv_thumbnail = fragmentView.findViewById(R.id.iv_level_board);
+
+        @SuppressLint("UseCompatLoadingForDrawables") Drawable backgroundBtnOvalShadow = ctx.getDrawable(R.drawable.background_btn_oval_shadow);
 
         //버튼 클릭리스너 부분
         //옵션 버튼
         ImageView img_option = fragmentView.findViewById(R.id.img_option);
 
-        img_option.setOnTouchListener(new View.OnTouchListener() {
+        img_option.setOnTouchListener((view, motionEvent) -> {
 
-            @SuppressLint("UseCompatLoadingForDrawables")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            switch (motionEvent.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    view.setBackground(backgroundBtnOvalShadow);
+                    break;
 
-                switch (motionEvent.getActionMasked()) {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_oval_shadow));
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        view.setBackground(null);
-                        break;
-                }
-
-                return false;
+                case MotionEvent.ACTION_UP:
+                    view.setBackground(null);
+                    break;
             }
+
+            return false;
         });
 
-        img_option.setOnClickListener(new View.OnClickListener() {
+        img_option.setOnClickListener(view -> {
+            OptionDialog optionDialog = new OptionDialog();
 
-            @Override
-            public void onClick(View view) {
-                OptionDialog optionDialog = new OptionDialog();
-
-                optionDialog.makeDialog(getActivity());
-                optionDialog.dialog.show();
-                Objects.requireNonNull(optionDialog.dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            }
+            optionDialog.makeDialog(getActivity());
+            optionDialog.dialog.show();
+            Objects.requireNonNull(optionDialog.dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         });
 
         //추가 버튼
         ImageView img_plus = fragmentView.findViewById(R.id.img_plus);
-        img_plus.setOnTouchListener(new View.OnTouchListener() {
+        img_plus.setOnTouchListener((view, motionEvent) -> {
 
-            @SuppressLint("UseCompatLoadingForDrawables")
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            switch (motionEvent.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    view.setBackground(backgroundBtnOvalShadow);
+                    break;
 
-                switch (motionEvent.getActionMasked()) {
-                    case MotionEvent.ACTION_DOWN:
-                        view.setBackground(ctx.getResources().getDrawable(R.drawable.background_btn_oval_shadow));
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        view.setBackground(null);
-                        break;
-                }
-
-                return false;
+                case MotionEvent.ACTION_UP:
+                    view.setBackground(null);
+                    break;
             }
+
+            return false;
         });
 
-        img_plus.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                LevelCreateFragment dest = new LevelCreateFragment(ctx);
-                ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(dest);
-            }
+        img_plus.setOnClickListener(view -> {
+            LevelCreateFragment dest = new LevelCreateFragment(ctx);
+            ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(dest);
         });
 
         //아티스트를 선택할 수 있는 갤러리 프래그먼트로 이동
         Button btn_gallery = fragmentView.findViewById(R.id.btn_gallery);
 
-        btn_gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GalleryFragment dest = new GalleryFragment(ctx);
+        btn_gallery.setOnClickListener(view -> {
+            GalleryFragment dest = new GalleryFragment(ctx);
 
-                ((MainActivity) ctx).fragmentMove(dest);
-            }
+            ((MainActivity) ctx).fragmentMove(dest);
         });
 
+        showFirstTutorialDialog();
 
         return fragmentView;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        //가장 최근에 플레이한 레벨 데이터 받아오기
+    private void showFirstTutorialDialog() {
         SharedPreferences tutorialPref = ctx.getSharedPreferences("TUTORIAL", MODE_PRIVATE);
         if (!tutorialPref.getBoolean("tutorial", false)) {
             TutorialDialog tutorialDialog = new TutorialDialog();
@@ -159,11 +142,20 @@ public class MainFragment extends Fragment {
             editor.putBoolean("tutorial", true);
             editor.apply();
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //가장 최근에 플레이한 레벨 데이터 받아오기
+
 
         SharedPreferences lastPlayPref = ctx.getSharedPreferences("LASTPLAY", MODE_PRIVATE);
 
         //마지막 플레이한 레벨의 이름과 카테고리를 받아온다.
-        final int lastPlayId = lastPlayPref.getInt("id", 0);
+        final int lastPlayId = lastPlayPref.getInt("id", -1);
         final boolean custom = lastPlayPref.getBoolean("custom", false);
 
         Log.d("lastPlayData", "id: " + lastPlayId + " custom: " + custom);
@@ -172,10 +164,7 @@ public class MainFragment extends Fragment {
         if (isDateChanged()) {
             //hint 1개 추가
             addHint();
-            RewardDialog rewardDialog = new RewardDialog();
-            rewardDialog.makeDialog(getActivity());
-            rewardDialog.dialog.show();
-            Objects.requireNonNull(rewardDialog.dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            showRewardDialog();
         }
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
@@ -185,138 +174,53 @@ public class MainFragment extends Fragment {
             e.printStackTrace();
         }
 
-        Cursor cursor;
-
-        boolean dataLoad = false;
+        final LevelDto lastPlayLevelDto;
 
         if (custom) {
-            if (lastPlayId != 0) {
-                if (lastPlayId > 0) {
-                    cursor = mDbOpenHelper.getCustomBigLevelCursorById(lastPlayId);
-                    dataLoad = true;
-                } else {
-                    cursor = mDbOpenHelper.getCustomBigLevelCursorById(-1 * lastPlayId);
-                }
-
-
-                if (cursor.getCount() > 0) {
-
-                    cursor.moveToNext();
-                    int id = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.ID));
-                    int p_id = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.P_ID));
-                    int number = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.NUMBER));
-                    int width = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.WIDTH));
-                    int height = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.HEIGHT));
-                    int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.PROGRESS));
-                    byte[] dataSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.DATASET));
-                    byte[] colorSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.COLORSET));
-                    byte[] saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.SAVEDATA));
-
-                    Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
-
-                    bigPuzzleCursor.moveToNext();
-
-                    final LevelData lastPlayLevel = new LevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet, true);
-
-                    iv_thumbnail.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Bitmap scaledBitmap;
-
-                            if (lastPlayId > 0) {
-                                Log.d("iv_thumbnail", "custom, saved");
-                                scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getSaveBitmap(), 400, 400, false);
-                            } else {
-                                Log.d("iv_thumbnail", "custom, completed");
-                                scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getColorBitmap(), 400, 400, false);
-                            }
-
-                            iv_thumbnail.setImageBitmap(scaledBitmap);
-                        }
-                    });
-
-
-                }
-
-            }
+            lastPlayLevelDto = mDbOpenHelper.getCustomLevelDto(lastPlayId);
         } else {
-            if (lastPlayId != 0) {
-                if (lastPlayId > 0) {
-                    cursor = mDbOpenHelper.getBigLevelCursorById(lastPlayId);
-                    dataLoad = true;
-                } else {
-                    cursor = mDbOpenHelper.getBigLevelCursorById(-1 * lastPlayId);
-                }
-
-
-                if (cursor.getCount() > 0) {
-
-                    cursor.moveToNext();
-                    int id = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.ID));
-                    int p_id = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
-                    int number = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.NUMBER));
-                    int width = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
-                    int height = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
-                    int progress = cursor.getInt(cursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
-                    byte[] dataSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
-                    byte[] colorSet = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
-                    byte[] saveData = cursor.getBlob(cursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
-
-                    Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
-
-                    bigPuzzleCursor.moveToNext();
-
-                    final LevelData lastPlayLevel = new LevelData(id, p_id, number, width, height, progress, dataSet, saveData, colorSet, false);
-
-                    iv_thumbnail.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Bitmap scaledBitmap;
-
-                            if (lastPlayId > 0) {
-                                Log.d("iv_thumbnail", "standard, saved");
-                                scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getSaveBitmap(), 400, 400, false);
-                            } else {
-                                Log.d("iv_thumbnail", "standard, completed");
-                                scaledBitmap = Bitmap.createScaledBitmap(lastPlayLevel.getColorBitmap(), 400, 400, false);
-                            }
-
-                            iv_thumbnail.setImageBitmap(scaledBitmap);
-                        }
-                    });
-                }
-            }
+            lastPlayLevelDto = mDbOpenHelper.getLevelDto(lastPlayId);
         }
 
 
-        mDbOpenHelper.close();
+        Log.d("MainFragment", "LevelDto: " + lastPlayLevelDto.toString());
 
-        final boolean isContinue = dataLoad;
+
+        final boolean isComplete = (lastPlayLevelDto.getProgress() == 2 || lastPlayLevelDto.getProgress() == 4);
+
+        iv_thumbnail.post(() -> {
+
+            Bitmap srcBitmap;
+            Bitmap scaledBitmap;
+            if (isComplete) {
+                srcBitmap = BitmapMaker.getColorBitmap(lastPlayLevelDto.getColorBlob());
+            } else {
+                final SaveData saveData = lastPlayLevelDto.getSaveData();
+                srcBitmap = BitmapMaker.getGrayScaleBitmap(saveData.getValues());
+            }
+            scaledBitmap = Bitmap.createScaledBitmap(srcBitmap, 400, 400, false);
+            iv_thumbnail.setImageBitmap(scaledBitmap);
+        });
+
+
+        Log.d("MainFragment", "isComplete: " + isComplete);
 
         //이어하기 버튼
         Button btn_continue = fragmentView.findViewById(R.id.btn_continue);
-        if (!isContinue) {
-
+        if (isComplete) {
             btn_continue.setVisibility(View.INVISIBLE);
+        } else {
+            btn_continue.setOnClickListener(view -> {
+                GameFragment gameFragment = new GameFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", lastPlayId);
+                gameFragment.setArguments(bundle);
+
+                ((MainActivity) ctx).fragmentMove(gameFragment);
+            });
         }
-
-        btn_continue.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if (isContinue) {
-                    GameFragment gameFragment = new GameFragment(ctx);
-
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("id", lastPlayId);
-                    gameFragment.setArguments(bundle);
-
-                    ((MainActivity) ctx).fragmentMove(gameFragment);
-                }
-            }
-        });
     }
-
 
     private void addHint() {
         SharedPreferences hintPref = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
@@ -325,6 +229,14 @@ public class MainFragment extends Fragment {
         int hintCount = hintPref.getInt("hint", 4);
         editor.putInt("hint", hintCount + 1);
         editor.apply();
+    }
+
+    private void showRewardDialog() {
+
+        RewardDialog rewardDialog = new RewardDialog();
+        rewardDialog.makeDialog(getActivity());
+        rewardDialog.dialog.show();
+        Objects.requireNonNull(rewardDialog.dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
     }
 
     private boolean isDateChanged() {

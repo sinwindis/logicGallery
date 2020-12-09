@@ -1,4 +1,4 @@
-package com.sinwindis.logicgallery.tutorial;
+package com.sinwindis.logicgallery.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sinwindis.logicgallery.R;
 import com.sinwindis.logicgallery.data.TutorialScene;
+import com.sinwindis.logicgallery.tutorial.GameBoardBorder;
+import com.sinwindis.logicgallery.tutorial.RvTutorialBoardAdapter;
 
 public class TutorialDialog {
 

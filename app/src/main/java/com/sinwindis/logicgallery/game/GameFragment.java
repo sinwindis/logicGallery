@@ -2,15 +2,12 @@ package com.sinwindis.logicgallery.game;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,30 +16,24 @@ import androidx.fragment.app.Fragment;
 import com.sinwindis.logicgallery.R;
 import com.sinwindis.logicgallery.animation.ButtonAnimation;
 import com.sinwindis.logicgallery.data.DbOpenHelper;
-import com.sinwindis.logicgallery.data.SqlManager;
-import com.sinwindis.logicgallery.data.StringGetter;
-import com.sinwindis.logicgallery.option.OptionDialog;
-import com.sinwindis.logicgallery.tutorial.TutorialDialog;
+import com.sinwindis.logicgallery.data.LevelDto;
+import com.sinwindis.logicgallery.dialog.OptionDialog;
+import com.sinwindis.logicgallery.dialog.TutorialDialog;
 
 import java.sql.SQLException;
 
 public class GameFragment extends Fragment {
 
-    private Context ctx;
-    private Context mainActivityContext;
-    LevelPlayManager lpm;
+    LevelDto levelDto;
 
     View fragmentView;
 
     GameController gameController;
 
-    private TextView tv_title;
+    private int levelId;
+    private boolean isCustom = false;
 
-    private int id;
-    private boolean custom = false;
-
-    public GameFragment(Context ctx) {
-        mainActivityContext = ctx;
+    public GameFragment() {
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -53,7 +44,7 @@ public class GameFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         fragmentView = inflater.inflate(R.layout.fragment_game, container, false);
-        ctx = fragmentView.getContext();
+        Context ctx = fragmentView.getContext();
 
         //db와 연결해 해당 게임레벨 데이터를 받아올 준비를 한다.
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
@@ -65,95 +56,28 @@ public class GameFragment extends Fragment {
 
         //bundle 로 받은 id 를 저장한다.
         if (getArguments() != null) {
-            id = getArguments().getInt("id");
-            custom = getArguments().getBoolean("custom");
+            levelId = getArguments().getInt("id");
+            isCustom = getArguments().getBoolean("custom");
 
-            Log.d("GameFragment", "id: " + id + " custom: " + custom);
+            Log.d("GameFragment", "id: " + levelId + " custom: " + isCustom);
         }
+        LevelDto levelDto;
 
-        String name;
-        int p_id;
-        int width;
-        int height;
-        int progress;
-        byte[] dataSet;
-        byte[] saveData;
+        if (isCustom) {
+            levelDto = mDbOpenHelper.getCustomLevelDto(levelId);
 
-        Cursor levelCursor;
-
-        if (custom) {
-            levelCursor = mDbOpenHelper.getCustomBigLevelCursorById(id);
-            levelCursor.moveToNext();
-
-            p_id = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.P_ID));
-
-            Cursor bigPuzzleCursor = mDbOpenHelper.getCustomBigPuzzleCursorById(p_id);
-
-            bigPuzzleCursor.moveToNext();
-            name = bigPuzzleCursor.getString(bigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_NAME));
-
-            width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.WIDTH));
-            height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.HEIGHT));
-            progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.PROGRESS));
-            dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.DATASET));
-
-            saveData = new byte[0];
-            switch (progress) {
-                case 0:
-                    progress = 1;
-                    break;
-                case 1:
-                case 3:
-                    saveData = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.SAVEDATA));
-                    break;
-                case 2:
-                    progress = 3;
-                    break;
-            }
         } else {
-            levelCursor = mDbOpenHelper.getBigLevelCursorById(id);
-            levelCursor.moveToNext();
 
-            p_id = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.P_ID));
-            name = StringGetter.p_name.get(p_id);
-
-            Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
-
-            bigPuzzleCursor.moveToNext();
-
-            width = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
-            height = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
-            progress = levelCursor.getInt(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
-            dataSet = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
-
-            saveData = null;
-            switch (progress) {
-                case 0:
-                    progress = 1;
-                    break;
-                case 1:
-                case 3:
-                    saveData = levelCursor.getBlob(levelCursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
-                    break;
-                case 2:
-                    progress = 3;
-                    break;
-            }
+            levelDto = mDbOpenHelper.getLevelDto(levelId);
         }
-
-
-        lpm = new LevelPlayManager(id, p_id, name, progress, width, height, dataSet, saveData, custom);
-
 
         mDbOpenHelper.close();
 
-        tv_title = fragmentView.findViewById(R.id.tv_title);
-        tv_title.setText(name);
+        TextView tv_title = fragmentView.findViewById(R.id.tv_title);
+        tv_title.setText(levelDto.getName());
 
         //gameBoard 를 제작한다.
-        gameController = new GameController(mainActivityContext, fragmentView, lpm);
-
-        gameController.makeGameBoard();
+        gameController = new GameController(ctx, fragmentView, levelDto);
 
         setButtonListeners();
 
@@ -169,107 +93,84 @@ public class GameFragment extends Fragment {
 
         ButtonAnimation.setOvalButtonAnimationShadow(img_toggle);
 
-        img_toggle.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int touchMode = gameController.func_toggle();
+        img_toggle.setOnClickListener(view -> {
+            int touchMode = gameController.func_toggle();
 
-                if (touchMode == 1) {
-                    ((ImageView) view).setImageResource(R.drawable.ic_x);
-                } else {
-                    ((ImageView) view).setImageResource(R.drawable.ic_o);
-                }
-
+            if (touchMode == 1) {
+                ((ImageView) view).setImageResource(R.drawable.ic_x);
+            } else {
+                ((ImageView) view).setImageResource(R.drawable.ic_o);
             }
+
         });
 
         //다음 스택 버튼
         ImageView img_next = fragmentView.findViewById(R.id.img_nextstack);
         ButtonAnimation.setOvalButtonAnimationShadow(img_next);
 
-        img_next.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                gameController.moveToNext();
-            }
-        });
+        img_next.setOnClickListener(view -> gameController.moveToNext());
 
         ImageView img_prev = fragmentView.findViewById(R.id.img_prevstack);
         ButtonAnimation.setOvalButtonAnimationShadow(img_prev);
 
-        img_prev.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gameController.moveToPrev();
-            }
-        });
+        img_prev.setOnClickListener(view -> gameController.moveToPrev());
 
         //힌트 버튼
         ImageView img_hint = fragmentView.findViewById(R.id.img_hint);
         ButtonAnimation.setOvalButtonAnimationShadow(img_hint);
 
-        img_hint.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                gameController.func_hint();
-                img_toggle.setImageResource(R.drawable.ic_hint);
-            }
+        img_hint.setOnClickListener(view -> {
+            gameController.func_hint();
+            img_toggle.setImageResource(R.drawable.ic_hint);
         });
 
         //튜토리얼 버튼
         ImageView img_tutorial = fragmentView.findViewById(R.id.img_tutorial);
 
         ButtonAnimation.setOvalButtonAnimationBlack(img_tutorial);
-        img_tutorial.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        img_tutorial.setOnClickListener(view -> {
 
-                TutorialDialog tutorialDialog = new TutorialDialog();
+            TutorialDialog tutorialDialog = new TutorialDialog();
 
-                tutorialDialog.makeDialog(getActivity());
-                tutorialDialog.dialog.show();
-                tutorialDialog.dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            tutorialDialog.makeDialog(getActivity());
+            tutorialDialog.dialog.show();
+            tutorialDialog.dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-            }
         });
 
         //옵션 버튼
         ImageView img_option = fragmentView.findViewById(R.id.img_option);
         ButtonAnimation.setOvalButtonAnimationBlack(img_option);
 
-        img_option.setOnClickListener(new View.OnClickListener() {
+        img_option.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
+            OptionDialog optionDialog = new OptionDialog();
 
-                OptionDialog optionDialog = new OptionDialog();
-
-                optionDialog.makeDialog(getActivity());
-                optionDialog.dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        gameController.loadPref();
-                    }
-                });
-                optionDialog.dialog.show();
-                optionDialog.dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            }
+            optionDialog.makeDialog(getActivity());
+            optionDialog.dialog.setOnDismissListener(dialogInterface -> gameController.loadPref());
+            optionDialog.dialog.show();
+            optionDialog.dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         });
 
         //뒤로가기 버튼
         ImageView img_back = fragmentView.findViewById(R.id.img_back);
         ButtonAnimation.setOvalButtonAnimationBlack(img_back);
 
-        img_back.setOnClickListener(new View.OnClickListener() {
+        img_back.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
+            assert getFragmentManager() != null;
+            getFragmentManager().popBackStackImmediate();
 
-                assert getFragmentManager() != null;
-                getFragmentManager().popBackStackImmediate();
+        });
 
-            }
+        //뒤로가기 버튼
+        ImageView img_end = fragmentView.findViewById(R.id.img_end);
+        ButtonAnimation.setOvalButtonAnimationBlack(img_back);
+
+        img_end.setOnClickListener(view -> {
+
+            gameController.completeGame();
+
         });
     }
 
@@ -279,9 +180,9 @@ public class GameFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
 
-        gameController.saveGame();
+        gameController.onDestroy();
     }
 }

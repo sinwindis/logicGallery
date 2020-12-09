@@ -25,41 +25,35 @@ public class LoadActivity extends AppCompatActivity {
         final Handler intentHandler = new Handler();
 
 
-        Thread loadThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Context ctx = getBaseContext();
+        Thread loadThread = new Thread(() -> {
+            Context ctx = getBaseContext();
 
-                DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
-                try {
-                    mDbOpenHelper.open();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                mDbOpenHelper.create();
-                mDbOpenHelper.close();
-
-                DbManager dbManger = new DbManager(ctx);
-
-
-                dbManger.loadData();
-                StringGetter.loadData(ctx);
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                intentHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // UI 작업 수행 O
-                        Intent intent = new Intent(LoadActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                });
+            DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
+            try {
+                mDbOpenHelper.open();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
+            mDbOpenHelper.create();
+            mDbOpenHelper.close();
+
+            DbManager dbManger = new DbManager(ctx);
+
+
+            dbManger.loadData();
+            StringGetter.loadData(ctx);
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            intentHandler.post(() -> {
+                // UI 작업 수행 O
+                Intent intent = new Intent(LoadActivity.this, MainActivity.class);
+                startActivity(intent);
+            });
         });
 
         loadThread.start();

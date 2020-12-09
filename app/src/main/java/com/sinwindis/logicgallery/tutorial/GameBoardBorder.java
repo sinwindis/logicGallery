@@ -5,15 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GameBoardBorder extends RecyclerView.ItemDecoration {
 
-    private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
-
-    private Drawable normalBorder;
-    private int width;
+    private final Drawable normalBorder;
+    private final int width;
 
     /**
      * Custom divider will be used
@@ -24,7 +23,7 @@ public class GameBoardBorder extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+    public void onDrawOver(@NonNull Canvas c, RecyclerView parent, @NonNull RecyclerView.State state) {
 
         int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {

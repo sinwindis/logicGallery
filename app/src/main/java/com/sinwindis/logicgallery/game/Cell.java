@@ -3,13 +3,13 @@ package com.sinwindis.logicgallery.game;
 public class Cell {
 
     //0: 공백 1: 체크 2: X
-    private byte correctValue;
+    private final byte correctValue;
     private byte currentValue;
 
     private boolean isHinted;
     private boolean isFixed;
 
-    private CellStack stack;
+    private final CellStack stack;
 
     public Cell(byte correctValue) {
         this.correctValue = correctValue;
@@ -128,65 +128,67 @@ public class Cell {
     public int getStackIdx() {
         return stack.getStackIdx();
     }
-}
 
-class CellStack {
+    class CellStack {
 
-    byte[] values;
+        byte[] values;
 
-    private int stackSize = 10;
-    private int stackMax = 0;
-    private int stackIdx = 0;
+        private int stackSize = 10;
+        private int stackMax = 0;
+        private int stackIdx = 0;
 
-    public CellStack() {
-        values = new byte[stackSize];
-        values[0] = 0;
-    }
-
-    public void push(byte value) {
-
-        stackIdx++;
-
-        stackMax = stackIdx;
-
-        if (stackIdx == stackSize) {
-            expandStackSize();
+        public CellStack() {
+            values = new byte[stackSize];
+            values[0] = 0;
         }
 
-        values[stackIdx] = value;
-    }
+        public void push(byte value) {
 
-    public byte moveToPrev() {
-        if (stackIdx == 0)
-            return 0;
-
-        stackIdx--;
-        return values[stackIdx];
-    }
-
-    public byte moveToNext() {
-        if (stackIdx != stackMax) {
-            //마지막 칸이 아니라면 다음으로 한 칸 이동
             stackIdx++;
+
+            stackMax = stackIdx;
+
+            if (stackIdx == stackSize) {
+                expandStackSize();
+            }
+
+            values[stackIdx] = value;
         }
 
-        return values[stackIdx];
-    }
+        public byte moveToPrev() {
+            if (stackIdx == 0)
+                return 0;
 
-    private void expandStackSize() {
-        byte[] tempValues = values.clone();
+            stackIdx--;
+            return values[stackIdx];
+        }
 
-        stackSize *= 2;
-        values = new byte[stackSize];
+        public byte moveToNext() {
+            if (stackIdx != stackMax) {
+                //마지막 칸이 아니라면 다음으로 한 칸 이동
+                stackIdx++;
+            }
 
-        System.arraycopy(tempValues, 0, values, 0, tempValues.length);
-    }
+            return values[stackIdx];
+        }
 
-    public int getStackMax() {
-        return this.stackMax;
-    }
+        private void expandStackSize() {
+            byte[] tempValues = values.clone();
 
-    public int getStackIdx() {
-        return this.stackIdx;
+            stackSize *= 2;
+            values = new byte[stackSize];
+
+            System.arraycopy(tempValues, 0, values, 0, tempValues.length);
+        }
+
+        public int getStackMax() {
+            return this.stackMax;
+        }
+
+        public int getStackIdx() {
+            return this.stackIdx;
+        }
     }
 }
+
+

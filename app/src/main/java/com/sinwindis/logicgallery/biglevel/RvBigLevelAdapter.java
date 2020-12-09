@@ -14,13 +14,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sinwindis.logicgallery.R;
-import com.sinwindis.logicgallery.data.LevelData;
+import com.sinwindis.logicgallery.data.BitmapMaker;
+import com.sinwindis.logicgallery.data.LevelDto;
 import com.sinwindis.logicgallery.game.GameFragment;
 import com.sinwindis.logicgallery.mainactivity.MainActivity;
 
 public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.ViewHolder> {
 
-    LevelData[] data;
+    LevelDto[] levelDtos;
     Context ctx;
     int puzzleSize;
 
@@ -33,10 +34,10 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
         }
     }
 
-    RvBigLevelAdapter(Context ctx, LevelData[] bigLevelThumbnailData, int puzzleWidth, int puzzleHeight, int parentWidth, int parentHeight) {
+    RvBigLevelAdapter(Context ctx, LevelDto[] levelDtos, int puzzleWidth, int puzzleHeight, int parentWidth, int parentHeight) {
         //생성자
         this.ctx = ctx;
-        this.data = bigLevelThumbnailData;
+        this.levelDtos = levelDtos;
 
         int widthTemp = parentWidth / puzzleWidth;
         int heightTemp = parentHeight / puzzleHeight;
@@ -60,14 +61,14 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
         return new ViewHolder(view);
     }
 
-    // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
+    // onBindViewHolder() - position 에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
         ImageView iv = holder.itemView.findViewById(R.id.iv_item_level);
-        Bitmap bitmap;
+        Bitmap bitmap, srcBitmap;
 
-        switch (data[position].getProgress()) {
+        switch (levelDtos[position].getProgress()) {
             case 0:
                 //한번도 안했으면
                 //물음표 이미지 띄우기
@@ -75,37 +76,37 @@ public class RvBigLevelAdapter extends RecyclerView.Adapter<RvBigLevelAdapter.Vi
                 break;
             case 1:
                 //저장된 게임일 경우
-                bitmap = Bitmap.createScaledBitmap(data[position].getSaveBitmap(), puzzleSize, puzzleSize, false);
+                srcBitmap = BitmapMaker.getGrayScaleBitmap(levelDtos[position].getSaveData().getValues());
+                bitmap = Bitmap.createScaledBitmap(srcBitmap, puzzleSize, puzzleSize, false);
                 iv.setImageBitmap(bitmap);
                 break;
             case 2:
             case 3:
+            case 4:
                 //완료한 게임일 경우
-                bitmap = Bitmap.createScaledBitmap(data[position].getColorBitmap(), puzzleSize, puzzleSize, false);
+                srcBitmap = BitmapMaker.getColorBitmap(levelDtos[position].getColorBlob());
+                bitmap = Bitmap.createScaledBitmap(srcBitmap, puzzleSize, puzzleSize, false);
                 iv.setImageBitmap(bitmap);
                 break;
         }
 
-        iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //클릭 시 해당 퍼즐의 게임을 실행한다
-                Fragment dest = new GameFragment(ctx);
-                // Fragment 생성
-                Bundle bundle = new Bundle();
-                //type 가 1이면 빅레벨 테이블에서 가져와야 함
-                bundle.putBoolean("custom", data[position].getCustom());
-                bundle.putInt("id", data[position].getLevelId());
-                dest.setArguments(bundle);
-                ((MainActivity) ctx).fragmentMove(dest);
-            }
+        iv.setOnClickListener(view -> {
+            //클릭 시 해당 퍼즐의 게임을 실행한다
+            Fragment dest = new GameFragment();
+            // Fragment 생성
+            Bundle bundle = new Bundle();
+            //type 가 1이면 빅레벨 테이블에서 가져와야 함
+            bundle.putBoolean("custom", levelDtos[position].isCustom());
+            bundle.putInt("id", levelDtos[position].getLevelId());
+            dest.setArguments(bundle);
+            ((MainActivity) ctx).fragmentMove(dest);
         });
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        return data.length;
+        return levelDtos.length;
     }
 
 }

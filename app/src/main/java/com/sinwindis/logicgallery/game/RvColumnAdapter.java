@@ -94,7 +94,6 @@ public class RvColumnAdapter extends RecyclerView.Adapter<RvColumnAdapter.ViewHo
 
     public void refreshView(int columnNum) {
         boolean[] completeIdx = columnIndexDataManager.getIdxMatch(columnNum);
-        Log.d("getIdxMatch", Arrays.toString(completeIdx));
         int[] idxNumSet = columnIndexDataManager.getIdxNumSet();
         int[][] dataSet = columnIndexDataManager.getIdxDataSet();
 

@@ -1,4 +1,4 @@
-package com.sinwindis.logicgallery.mainactivity;
+package com.sinwindis.logicgallery.dialog;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

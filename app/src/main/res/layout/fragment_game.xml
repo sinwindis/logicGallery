@@ -57,6 +57,16 @@
             app:layout_constraintEnd_toStartOf="@id/img_option"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/img_end"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
+            android:layout_margin="15dp"
+            android:src="@drawable/ic_tutorial"
+            app:layout_constraintEnd_toStartOf="@id/img_tutorial"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
