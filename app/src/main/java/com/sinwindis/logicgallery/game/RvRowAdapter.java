@@ -1,7 +1,9 @@
 package com.sinwindis.logicgallery.game;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sinwindis.logicgallery.R;
@@ -22,10 +25,13 @@ import java.util.List;
 public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> {
 
     RowIndexDataManager rowIndexDataManager;
-    List<TextView> tvList = new ArrayList<>();
-    float heightUnder = 0;
-    int heightOffset = 0;
-    int length;
+    private final List<TextView> tvList = new ArrayList<>();
+    private final List<ConstraintLayout> clList = new ArrayList<>();
+    private float heightUnder = 0;
+    private int heightOffset = 0;
+    private final int length;
+    private Drawable completeBackgroundDrawable;
+    private Drawable incompleteBackgroundDrawable;
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -43,10 +49,19 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
+    @SuppressLint("UseCompatLoadingForDrawables")
     @NonNull
     @Override
     public RvRowAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+        if (completeBackgroundDrawable == null) {
+            completeBackgroundDrawable = context.getDrawable(R.drawable.background_index_row_gray);
+        }
+
+        if (incompleteBackgroundDrawable == null) {
+            incompleteBackgroundDrawable = context.getDrawable(R.drawable.background_index_row);
+        }
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.item_row, parent, false);
@@ -70,15 +85,12 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     public void onBindViewHolder(RvRowAdapter.ViewHolder holder, int position) {
 
         final TextView tv = holder.itemView.findViewById(R.id.tv_item_row);
-        tv.post(new Runnable() {
-            @Override
-            public void run() {
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, tv.getMeasuredHeight() / 2);
-            }
-        });
+        final ConstraintLayout cl = holder.itemView.findViewById(R.id.cl_background);
 
+        tv.post(() -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) tv.getMeasuredHeight() / 2));
 
         tvList.add(tv);
+        clList.add(cl);
 
         refreshView(position);
     }
@@ -93,20 +105,32 @@ public class RvRowAdapter extends RecyclerView.Adapter<RvRowAdapter.ViewHolder> 
     public void refreshView(int rowNum) {
         //숫자가 다 채워질 경우 색 바꾸기
 
-        int[] idxNumSet = rowIndexDataManager.getIdxNumSet();
+        int idxMaxNum = rowIndexDataManager.getIdxNumSet()[rowNum];
         int[][] dataSet = rowIndexDataManager.getIdxDataSet();
         boolean[] completeIdx = rowIndexDataManager.getIdxMatch(rowNum);
 
+        boolean isColumnComplete = true;
+        if (idxMaxNum == 0) {
+            isColumnComplete = false;
+        }
+
         tvList.get(rowNum).setText("");
         SpannableStringBuilder numStr;
-        for (int i = 0; i < idxNumSet[rowNum]; i++) {
+        for (int i = 0; i < idxMaxNum; i++) {
             numStr = new SpannableStringBuilder(' ' + String.valueOf(dataSet[rowNum][i]));
             if (completeIdx[i]) {
                 numStr.setSpan(new ForegroundColorSpan(Color.parseColor("#a0a0a0")), 0, numStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else {
                 numStr.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), 0, numStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                isColumnComplete = false;
             }
             tvList.get(rowNum).append(numStr);
+        }
+
+        if (isColumnComplete) {
+            clList.get(rowNum).setBackground(completeBackgroundDrawable);
+        } else {
+            clList.get(rowNum).setBackground(incompleteBackgroundDrawable);
         }
     }
 }
