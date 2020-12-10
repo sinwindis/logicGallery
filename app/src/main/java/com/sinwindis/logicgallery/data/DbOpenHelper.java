@@ -5,9 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.widget.TextView;
+
+import com.sinwindis.logicgallery.R;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class DbOpenHelper {
 
@@ -209,6 +214,66 @@ public class DbOpenHelper {
         }
 
         return new LevelDto(levelId, puzzleId, name, number, width, height, progress, dataSet, saveData, colorSet, true);
+    }
+
+    public ArrayList<LevelDto> getLevelDtos(int puzzleId) {
+        Cursor bigLevelCursor = getBigLevelCursorByParentId(puzzleId);
+        ArrayList<LevelDto> levelDtos = new ArrayList<>();
+
+        while (bigLevelCursor.moveToNext()) {
+            int id = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.ID));
+            levelDtos.add(getLevelDto(id));
+        }
+
+        return levelDtos;
+    }
+
+
+    public ArrayList<LevelDto> getCustomLevelDtos(int puzzleId) {
+        Cursor customBigLevelCursor = getCustomBigLevelCursorByParentId(puzzleId);
+        ArrayList<LevelDto> levelDtos = new ArrayList<>();
+
+        while (customBigLevelCursor.moveToNext()) {
+            int id = customBigLevelCursor.getInt(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.ID));
+            levelDtos.add(getCustomLevelDto(id));
+        }
+
+        return levelDtos;
+    }
+
+    public PuzzleDto getPuzzleDto(int puzzleId) {
+        Cursor puzzleCursor = getBigPuzzleCursorById(puzzleId);
+
+        puzzleCursor.moveToNext();
+
+        String puzzleName = StringGetter.p_name.get(puzzleId);
+        int artistId = puzzleCursor.getInt(puzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.A_ID));
+        String artistName = StringGetter.a_name.get(artistId);
+        Bitmap bitmap = BitmapMaker.getColorBitmap(puzzleCursor.getBlob(puzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.COLORSET)));
+        int puzzleWidth = puzzleCursor.getInt(puzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.P_WIDTH));
+        int puzzleHeight = puzzleCursor.getInt(puzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.P_HEIGHT));
+        int levelWidth = puzzleCursor.getInt(puzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.L_WIDTH));
+        int levelHeight = puzzleCursor.getInt(puzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.L_HEIGHT));
+        int progress = puzzleCursor.getInt(puzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.PROGRESS));
+
+        return new PuzzleDto(puzzleId, artistName, puzzleName, bitmap, puzzleWidth, puzzleHeight, levelWidth, levelHeight, progress, false);
+    }
+
+    public PuzzleDto getCustomPuzzleDto(int puzzleId) {
+        Cursor puzzleCursor = getCustomBigPuzzleCursorById(puzzleId);
+
+        puzzleCursor.moveToNext();
+
+        String puzzleName = puzzleCursor.getString(puzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_NAME));
+        String artistName = puzzleCursor.getString(puzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.A_NAME));
+        Bitmap bitmap = BitmapMaker.getColorBitmap(puzzleCursor.getBlob(puzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.COLORSET)));
+        int puzzleWidth = puzzleCursor.getInt(puzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_WIDTH));
+        int puzzleHeight = puzzleCursor.getInt(puzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_HEIGHT));
+        int levelWidth = puzzleCursor.getInt(puzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.L_WIDTH));
+        int levelHeight = puzzleCursor.getInt(puzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.L_HEIGHT));
+        int progress = puzzleCursor.getInt(puzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.PROGRESS));
+
+        return new PuzzleDto(puzzleId, artistName, puzzleName, bitmap, puzzleWidth, puzzleHeight, levelWidth, levelHeight, progress, true);
     }
 
     public Cursor getBigPuzzleCursor() {

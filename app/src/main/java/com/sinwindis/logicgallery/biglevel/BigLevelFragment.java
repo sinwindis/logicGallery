@@ -20,15 +20,26 @@ import com.sinwindis.logicgallery.R;
 import com.sinwindis.logicgallery.animation.ButtonAnimation;
 import com.sinwindis.logicgallery.data.LevelDto;
 import com.sinwindis.logicgallery.data.DbOpenHelper;
+import com.sinwindis.logicgallery.data.PuzzleDto;
 import com.sinwindis.logicgallery.data.SqlManager;
 import com.sinwindis.logicgallery.data.StringGetter;
 import com.sinwindis.logicgallery.listener.BigLevelItemTouchListener;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class BigLevelFragment extends Fragment {
 
     private final Context ctx;
+    private PuzzleDto puzzleDto;
+    private ArrayList<LevelDto> levelDtos;
+    private int puzzleId;
+    private boolean isCustom;
+
+    private RecyclerView rv_level;
+    private TextView tv_title;
+    private TextView tv_level_num;
+    private ConstraintLayout cl_rv_cover;
 
     public BigLevelFragment(Context ctx) {
         // Required empty public constructor
@@ -42,24 +53,38 @@ public class BigLevelFragment extends Fragment {
 
         View fragmentView = inflater.inflate(R.layout.fragment_biglevel, container, false);
 
-        final RecyclerView rv_level = fragmentView.findViewById(R.id.rv_biglevel);
-
-        int puzzleWidth;
-        int puzzleHeight;
-        int fullCount = 0;
-        int clearCount = 0;
-
-        LevelDto[] levelThumbnailData;
-
-        int p_id = 0;
-        boolean custom = false;
+        rv_level = fragmentView.findViewById(R.id.rv_biglevel);
+        tv_title = fragmentView.findViewById(R.id.tv_title);
+        tv_level_num = fragmentView.findViewById(R.id.tv_level_num);
+        cl_rv_cover = fragmentView.findViewById(R.id.cl_rv_cover);
 
         if (getArguments() != null) {
-            p_id = getArguments().getInt("p_id"); // 전달한 key 값
-            custom = getArguments().getBoolean("custom");
+            puzzleId = getArguments().getInt("p_id"); // 전달한 key 값
+            isCustom = getArguments().getBoolean("custom");
 
-            Log.d("BigLevelFragment", "p_id: " + p_id + " custom: " + custom);
+            Log.d("BigLevelFragment", "p_id: " + puzzleId + " custom: " + isCustom);
         }
+        DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
+        try {
+            mDbOpenHelper.open();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        mDbOpenHelper.close();
+
+        ImageView img_back = fragmentView.findViewById(R.id.img_back);
+        ButtonAnimation.setOvalButtonAnimationBlack(img_back);
+        img_back.setOnClickListener(view -> getFragmentManager().popBackStackImmediate());
+
+        return fragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
         try {
@@ -68,118 +93,36 @@ public class BigLevelFragment extends Fragment {
             e.printStackTrace();
         }
 
-        if (custom) {
-            Cursor customBigPuzzleCursor = mDbOpenHelper.getCustomBigPuzzleCursorById(p_id);
-            customBigPuzzleCursor.moveToNext();
-
-            String name = customBigPuzzleCursor.getString(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_NAME));
-            puzzleWidth = customBigPuzzleCursor.getInt(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_WIDTH));
-            puzzleHeight = customBigPuzzleCursor.getInt(customBigPuzzleCursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_HEIGHT));
-
-            TextView tv_title = fragmentView.findViewById(R.id.tv_title);
-
-            tv_title.setText(name);
-
-            Cursor customBigLevelCursor = mDbOpenHelper.getCustomBigLevelCursorByParentId(p_id);
-            levelThumbnailData = new LevelDto[customBigLevelCursor.getCount()];
-
-            while (customBigLevelCursor.moveToNext()) {
-
-                int id = customBigLevelCursor.getInt(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.ID));
-                int number = customBigLevelCursor.getInt(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.NUMBER));
-                int width = customBigLevelCursor.getInt(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.WIDTH));
-                int height = customBigLevelCursor.getInt(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.HEIGHT));
-                int progress = customBigLevelCursor.getInt(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.PROGRESS));
-                byte[] dataSet = customBigLevelCursor.getBlob(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.DATASET));
-                byte[] colorSet = customBigLevelCursor.getBlob(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.COLORSET));
-                byte[] saveData = new byte[0];
-                if (progress == 1 || progress == 3)
-                    saveData = customBigLevelCursor.getBlob(customBigLevelCursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.SAVEDATA));
-
-                levelThumbnailData[fullCount] = new LevelDto(id, p_id, name, number, width, height, progress, dataSet, saveData, colorSet, true);
-                fullCount++;
-                if (progress == 2 || progress == 3) {
-                    clearCount++;
-                }
-            }
+        if (isCustom) {
+            puzzleDto = mDbOpenHelper.getCustomPuzzleDto(puzzleId);
+            levelDtos = mDbOpenHelper.getCustomLevelDtos(puzzleId);
         } else {
-            Cursor bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursorById(p_id);
-
-            bigPuzzleCursor.moveToNext();
-
-            puzzleWidth = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.P_WIDTH));
-            puzzleHeight = bigPuzzleCursor.getInt(bigPuzzleCursor.getColumnIndex(SqlManager.BigPuzzleDBSql.P_HEIGHT));
-
-            TextView tv_title = fragmentView.findViewById(R.id.tv_title);
-
-            String name = StringGetter.p_name.get(p_id);
-            tv_title.setText(name);
-
-            Cursor bigLevelCursor = mDbOpenHelper.getBigLevelCursorByParentId(p_id);
-            levelThumbnailData = new LevelDto[bigLevelCursor.getCount()];
-
-            while (bigLevelCursor.moveToNext()) {
-
-                int id = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.ID));
-                int number = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.NUMBER));
-                int width = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.WIDTH));
-                int height = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.HEIGHT));
-                int progress = bigLevelCursor.getInt(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.PROGRESS));
-                byte[] dataSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.DATASET));
-                byte[] colorSet = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.COLORSET));
-                byte[] saveData = new byte[0];
-                if (progress == 1 || progress == 3)
-                    saveData = bigLevelCursor.getBlob(bigLevelCursor.getColumnIndex(SqlManager.BigLevelDBSql.SAVEDATA));
-
-                levelThumbnailData[fullCount] = new LevelDto(id, p_id, name, number, width, height, progress, dataSet, saveData, colorSet, false);
-                fullCount++;
-                if (progress == 2 || progress == 3) {
-                    clearCount++;
-                }
-            }
+            puzzleDto = mDbOpenHelper.getPuzzleDto(puzzleId);
+            levelDtos = mDbOpenHelper.getLevelDtos(puzzleId);
         }
-
 
         mDbOpenHelper.close();
 
-        ((TextView) fragmentView.findViewById(R.id.tv_level_num)).setText(clearCount + "/" + fullCount);
 
-        //rv_level.addItemDecoration(new BigLevelBorder(ctx, R.drawable.border_gameboard_normal, puzzleWidth));
+        tv_title.setText(puzzleDto.getPuzzleName());
 
-        final ConstraintLayout cl_rv_cover = fragmentView.findViewById(R.id.cl_rv_cover);
+        final int finalPuzzleWidth = puzzleDto.getPuzzleWidth();
+        final int finalPuzzleHeight = puzzleDto.getPuzzleHeight();
+        rv_level.setLayoutManager(new GridLayoutManager(ctx, finalPuzzleWidth));
 
-        rv_level.setLayoutManager(new GridLayoutManager(ctx, puzzleWidth));
+        StringBuilder strLevelCount = new StringBuilder();
+        strLevelCount.append(puzzleDto.getProgress());
+        strLevelCount.append("/");
+        strLevelCount.append(puzzleDto.getLevelHeight() * puzzleDto.getLevelWidth());
+        tv_level_num.setText(strLevelCount);
 
-        final int finalPuzzleWidth = puzzleWidth;
-        final int finalPuzzleHeight = puzzleHeight;
-        final LevelDto[] finalLevelThumbnailData = levelThumbnailData;
-        cl_rv_cover.post(new Runnable() {
-            @Override
-            public void run() {
-                int parentWidth = cl_rv_cover.getMeasuredWidth() - rv_level.getPaddingEnd() - rv_level.getPaddingStart();
-                int parentHeight = cl_rv_cover.getMeasuredHeight() - rv_level.getPaddingTop() - rv_level.getPaddingBottom();
+        cl_rv_cover.post(() -> {
+            int parentWidth = cl_rv_cover.getMeasuredWidth() - rv_level.getPaddingEnd() - rv_level.getPaddingStart();
+            int parentHeight = cl_rv_cover.getMeasuredHeight() - rv_level.getPaddingTop() - rv_level.getPaddingBottom();
 
-                rv_level.setAdapter(new RvBigLevelAdapter(ctx, finalLevelThumbnailData, finalPuzzleWidth, finalPuzzleHeight, parentWidth, parentHeight));
-            }
+            rv_level.setAdapter(new RvBigLevelAdapter(ctx, levelDtos, finalPuzzleWidth, finalPuzzleHeight, parentWidth, parentHeight));
         });
 
         rv_level.addOnItemTouchListener(new BigLevelItemTouchListener(ctx));
-
-
-        ImageView img_back = fragmentView.findViewById(R.id.img_back);
-
-        ButtonAnimation.setOvalButtonAnimationBlack(img_back);
-
-        img_back.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-
-                getFragmentManager().popBackStackImmediate();
-            }
-        });
-
-        return fragmentView;
     }
 }
