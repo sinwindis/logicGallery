@@ -35,18 +35,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //MobileAds.initialize(this, getString(R.string.admob_app_id));
         AdView mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-        t.add(R.id.fl_main, new MainFragment(this));
+        t.add(R.id.fl_main, new MainFragment());
         t.commit();
-
-//        mIntersisialAd = new InterstitialAd(this);
-//        mIntersisialAd.setAdUnitId(getString(R.string.popup_ad_unit_id));
-//        mIntersisialAd.loadAd(new AdRequest.Builder().build());
     }
 
     public void fragmentMove(Fragment dest) {

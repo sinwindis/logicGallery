@@ -1,15 +1,11 @@
 package com.sinwindis.logicgallery.mainactivity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,10 +19,11 @@ import com.sinwindis.logicgallery.R;
 import com.sinwindis.logicgallery.data.BitmapMaker;
 import com.sinwindis.logicgallery.data.LevelDto;
 import com.sinwindis.logicgallery.data.SaveData;
-import com.sinwindis.logicgallery.data.StringGetter;
+import com.sinwindis.logicgallery.data.sharedpref.LastPlayPreference;
+import com.sinwindis.logicgallery.data.sharedpref.PropertyPreference;
+import com.sinwindis.logicgallery.data.sharedpref.TutorialPreference;
 import com.sinwindis.logicgallery.gallery.GalleryFragment;
 import com.sinwindis.logicgallery.data.DbOpenHelper;
-import com.sinwindis.logicgallery.data.SqlManager;
 import com.sinwindis.logicgallery.game.GameFragment;
 import com.sinwindis.logicgallery.levelcreate.LevelCreateFragment;
 import com.sinwindis.logicgallery.dialog.OptionDialog;
@@ -41,18 +38,16 @@ import java.util.Objects;
 
 import com.sinwindis.logicgallery.dialog.RewardDialog;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class MainFragment extends Fragment {
 
-    Context ctx;
-    View fragmentView;
+    private View fragmentView;
+    private ImageView iv_thumbnail;
 
+    private TutorialPreference tutorialPreference;
+    private PropertyPreference propertyPreference;
+    private LastPlayPreference lastPlayPreference;
 
-    ImageView iv_thumbnail;
-
-    public MainFragment(Context ctx) {
-        this.ctx = ctx;
+    public MainFragment() {
     }
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
@@ -63,7 +58,12 @@ public class MainFragment extends Fragment {
         fragmentView = inflater.inflate(R.layout.fragment_main, container, false);
         iv_thumbnail = fragmentView.findViewById(R.id.iv_level_board);
 
-        @SuppressLint("UseCompatLoadingForDrawables") Drawable backgroundBtnOvalShadow = ctx.getDrawable(R.drawable.background_btn_oval_shadow);
+        tutorialPreference = new TutorialPreference(getContext());
+        propertyPreference = new PropertyPreference(getContext());
+        lastPlayPreference = new LastPlayPreference(getContext());
+
+        @SuppressLint("UseCompatLoadingForDrawables")
+        Drawable backgroundBtnOvalShadow = Objects.requireNonNull(getContext()).getDrawable(R.drawable.background_btn_oval_shadow);
 
         //버튼 클릭리스너 부분
         //옵션 버튼
@@ -110,7 +110,7 @@ public class MainFragment extends Fragment {
         });
 
         img_plus.setOnClickListener(view -> {
-            LevelCreateFragment dest = new LevelCreateFragment(ctx);
+            LevelCreateFragment dest = new LevelCreateFragment(getContext());
             ((MainActivity) Objects.requireNonNull(getActivity())).fragmentMove(dest);
         });
 
@@ -118,30 +118,14 @@ public class MainFragment extends Fragment {
         Button btn_gallery = fragmentView.findViewById(R.id.btn_gallery);
 
         btn_gallery.setOnClickListener(view -> {
-            GalleryFragment dest = new GalleryFragment(ctx);
+            GalleryFragment dest = new GalleryFragment(getContext());
 
-            ((MainActivity) ctx).fragmentMove(dest);
+            ((MainActivity) getContext()).fragmentMove(dest);
         });
 
         showFirstTutorialDialog();
 
         return fragmentView;
-    }
-
-    private void showFirstTutorialDialog() {
-        SharedPreferences tutorialPref = ctx.getSharedPreferences("TUTORIAL", MODE_PRIVATE);
-        if (!tutorialPref.getBoolean("tutorial", false)) {
-            TutorialDialog tutorialDialog = new TutorialDialog();
-
-            tutorialDialog.makeDialog(getActivity());
-            tutorialDialog.dialog.show();
-            Objects.requireNonNull(tutorialDialog.dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-            SharedPreferences.Editor editor = tutorialPref.edit();
-
-            editor.putBoolean("tutorial", true);
-            editor.apply();
-        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -151,23 +135,20 @@ public class MainFragment extends Fragment {
 
         //가장 최근에 플레이한 레벨 데이터 받아오기
 
-
-        SharedPreferences lastPlayPref = ctx.getSharedPreferences("LASTPLAY", MODE_PRIVATE);
-
         //마지막 플레이한 레벨의 이름과 카테고리를 받아온다.
-        final int lastPlayId = lastPlayPref.getInt("id", -1);
-        final boolean custom = lastPlayPref.getBoolean("custom", false);
+        final int lastPlayId = lastPlayPreference.getLastPlayId();
+        final boolean custom = lastPlayPreference.isCustom();
 
         Log.d("lastPlayData", "id: " + lastPlayId + " custom: " + custom);
 
         //날짜가 하루 이상 지났으면
         if (isDateChanged()) {
             //hint 1개 추가
-            addHint();
+            propertyPreference.increaseHintCount();
             showRewardDialog();
         }
 
-        DbOpenHelper mDbOpenHelper = new DbOpenHelper(ctx);
+        DbOpenHelper mDbOpenHelper = new DbOpenHelper(getContext());
         try {
             mDbOpenHelper.open();
         } catch (SQLException e) {
@@ -200,6 +181,7 @@ public class MainFragment extends Fragment {
                 final SaveData saveData = lastPlayLevelDto.getSaveData();
                 srcBitmap = BitmapMaker.getGrayScaleBitmap(saveData.getValues());
             }
+            assert srcBitmap != null;
             scaledBitmap = Bitmap.createScaledBitmap(srcBitmap, 400, 400, false);
             iv_thumbnail.setImageBitmap(scaledBitmap);
         });
@@ -219,18 +201,21 @@ public class MainFragment extends Fragment {
                 bundle.putInt("id", lastPlayId);
                 gameFragment.setArguments(bundle);
 
-                ((MainActivity) ctx).fragmentMove(gameFragment);
+                ((MainActivity) getContext()).fragmentMove(gameFragment);
             });
         }
     }
 
-    private void addHint() {
-        SharedPreferences hintPref = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
-        SharedPreferences.Editor editor = hintPref.edit();
+    private void showFirstTutorialDialog() {
+        if (!tutorialPreference.isTutorialExperienced()) {
+            TutorialDialog tutorialDialog = new TutorialDialog();
 
-        int hintCount = hintPref.getInt("hint", 4);
-        editor.putInt("hint", hintCount + 1);
-        editor.apply();
+            tutorialDialog.makeDialog(getActivity());
+            tutorialDialog.dialog.show();
+            Objects.requireNonNull(tutorialDialog.dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            tutorialPreference.setTutorialExperienced();
+        }
     }
 
     private void showRewardDialog() {
@@ -249,24 +234,24 @@ public class MainFragment extends Fragment {
         String formattedDate = df.format(c);
         String[] currentDate = formattedDate.split("-");
 
-
-        //기존 날짜 확인
-        SharedPreferences datePref = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
-        String lastDateStr = datePref.getString("date", "00-00-0000");
-        String[] lastDate = lastDateStr.split("-");
-
-        SharedPreferences.Editor editor = datePref.edit();
-
-        editor.putString("date", formattedDate);
-        editor.apply();
-
-        int lastYear = Integer.parseInt(lastDate[2]);
         int currentYear = Integer.parseInt(currentDate[2]);
-        int lastMonth = Integer.parseInt(lastDate[1]);
         int currentMonth = Integer.parseInt(currentDate[1]);
-        int lastDay = Integer.parseInt(lastDate[0]);
         int currentDay = Integer.parseInt(currentDate[0]);
 
-        return (lastYear < currentYear || lastMonth < currentMonth || lastDay < currentDay);
+
+        //기존 날짜 확인
+        String lastDateStr = propertyPreference.getDate();
+        String[] lastDate = lastDateStr.split("-");
+
+        int lastYear = Integer.parseInt(lastDate[2]);
+        int lastMonth = Integer.parseInt(lastDate[1]);
+        int lastDay = Integer.parseInt(lastDate[0]);
+
+        if (lastYear < currentYear || lastMonth < currentMonth || lastDay < currentDay) {
+            propertyPreference.setDate(formattedDate);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -1,11 +1,11 @@
 package com.sinwindis.logicgallery.data;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Base64;
 import android.util.Log;
 
 import com.sinwindis.logicgallery.R;
+import com.sinwindis.logicgallery.data.sharedpref.VersionPreference;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -16,13 +16,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-
-import static android.content.Context.MODE_PRIVATE;
-
-//대집도..
-//raw xml 파일에서 읽은 level의 데이터를 db에 차곡차곡 쌓는 역할로 바뀔 것
-//db는 카테고리의 이름을 저장하는 테이블 하나, 각 카테고리별 레벨을 저장하는 테이블 카테고리 개수만큼, 빅 퍼즐의 이름을 저장하는 테이블 하나, 각 빅 퍼즐의 레벨을 저장하는 테이블 빅퍼즐 개수만큼
-//raw xml 파일은 level을 저장하는 파일 하나, category의 이름들을 저장하는 파일 하나를 사용할 것이다.
 
 public class DbManager {
 
@@ -229,8 +222,8 @@ public class DbManager {
         InputStream levelInputStream;
 
         //get version
-        SharedPreferences versionSavePref = ctx.getSharedPreferences("VERSION", MODE_PRIVATE);
-        String currentVersion = versionSavePref.getString("levelVersion", "0");
+        VersionPreference versionPreference = new VersionPreference(ctx);
+        String currentVersion = versionPreference.getVersion();
 
         Log.d("DbManager", "currentVersion: " + currentVersion);
         //get version
@@ -280,13 +273,8 @@ public class DbManager {
                         //버전 체크를 계속해서 해준다
                         case "version":
                             //로드가 완료된 버전으로 버전 넘버를 업데이트 해준다.
-
-                            SharedPreferences.Editor editor = versionSavePref.edit();
                             currentVersion = parser.nextText();
-                            editor.putString("levelVersion", currentVersion);
-
-                            editor.apply();
-
+                            versionPreference.setVersion(currentVersion);
                             break;
 
                         case "artist":

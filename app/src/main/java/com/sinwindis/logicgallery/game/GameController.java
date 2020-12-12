@@ -2,7 +2,6 @@ package com.sinwindis.logicgallery.game;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +20,9 @@ import com.sinwindis.logicgallery.data.DbOpenHelper;
 import com.sinwindis.logicgallery.data.LevelDto;
 import com.sinwindis.logicgallery.data.Progress;
 import com.sinwindis.logicgallery.data.SaveData;
+import com.sinwindis.logicgallery.data.sharedpref.LastPlayPreference;
+import com.sinwindis.logicgallery.data.sharedpref.OptionPreference;
+import com.sinwindis.logicgallery.data.sharedpref.PropertyPreference;
 import com.sinwindis.logicgallery.end.EndFragment;
 import com.sinwindis.logicgallery.listener.BoardItemTouchListener;
 import com.sinwindis.logicgallery.mainactivity.MainActivity;
@@ -125,14 +127,14 @@ public class GameController {
 
     public void loadPref() {
         //option preferences
-        SharedPreferences sharedPreferences = ctx.getSharedPreferences("OPTION", MODE_PRIVATE);
-        smartDrag = sharedPreferences.getBoolean("smartDrag", true);
-        oneLineDrag = sharedPreferences.getBoolean("oneLineDrag", true);
-        autoX = sharedPreferences.getBoolean("autoX", false);
+        OptionPreference optionPreference = new OptionPreference(ctx);
+        smartDrag = optionPreference.isSmartDrag();
+        oneLineDrag = optionPreference.isOneLineDrag();
+        autoX = optionPreference.isAutoX();
 
-        //hint properties
-        sharedPreferences = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
-        hintCount = sharedPreferences.getInt("hint", 3);
+        //hint preferences
+        PropertyPreference propertyPreference = new PropertyPreference(ctx);
+        hintCount = propertyPreference.getHintCount();
     }
 
 
@@ -695,20 +697,12 @@ public class GameController {
 
             mDbOpenHelper.close();
 
-            SharedPreferences sharedPreferences = ctx.getSharedPreferences("PROPERTY", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            PropertyPreference propertyPreference = new PropertyPreference(ctx);
+            propertyPreference.setHintCount(hintCount);
 
-            editor.putInt("hint", hintCount);
-            editor.apply();
-
-            SharedPreferences lastPlayPref = ctx.getSharedPreferences("LASTPLAY", MODE_PRIVATE);
-            editor = lastPlayPref.edit();
-
-            editor.putInt("id", saveLevelDto.getLevelId());
-            editor.putBoolean("custom", saveLevelDto.isCustom());
-
-            editor.apply();
-
+            LastPlayPreference lastPlayPreference = new LastPlayPreference(ctx);
+            lastPlayPreference.setId(saveLevelDto.getLevelId());
+            lastPlayPreference.setCustom(saveLevelDto.isCustom());
         } catch (SQLException e) {
             e.printStackTrace();
         }
