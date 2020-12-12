@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -185,6 +186,9 @@ public class MainFragment extends Fragment {
             scaledBitmap = Bitmap.createScaledBitmap(srcBitmap, 400, 400, false);
             iv_thumbnail.setImageBitmap(scaledBitmap);
         });
+
+        TextView tv_hintCount = fragmentView.findViewById(R.id.tv_count_hint);
+        tv_hintCount.setText(String.valueOf(propertyPreference.getHintCount()));
 
 
         Log.d("MainFragment", "isComplete: " + isComplete);
