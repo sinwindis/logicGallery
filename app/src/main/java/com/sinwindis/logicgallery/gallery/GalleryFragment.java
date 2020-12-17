@@ -64,6 +64,21 @@ public class GalleryFragment extends Fragment {
         this.ctx = ctx;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPuzzle(puzzlePosition);
+        showPuzzleData();
+        //퍼즐 클리어하고 돌아왔을 때 화면 갱신해줘야 함
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mDbOpenHelper.close();
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -218,21 +233,6 @@ public class GalleryFragment extends Fragment {
         showPuzzleData();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getPuzzle(puzzlePosition);
-        showPuzzleData();
-        //퍼즐 클리어하고 돌아왔을 때 화면 갱신해줘야 함
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        mDbOpenHelper.close();
-    }
-
     private void loadCursor() {
         bigPuzzleCursor = mDbOpenHelper.getBigPuzzleCursor();
         customBigPuzzleCursor = mDbOpenHelper.getCustomBigPuzzleCursor();
@@ -321,7 +321,7 @@ public class GalleryFragment extends Fragment {
 
 
         //퍼즐 썸네일 표시
-        if (puzzleDto.getProgress() == puzzleDto.getLevelWidth() * puzzleDto.getLevelHeight()) {
+        if (puzzleDto.getProgress() == puzzleWidth * puzzleHeight) {
             //완료한 게임이면
             //컬러셋을 가져온다
             iv_thumbnail.setImageBitmap(puzzleDto.getBitmap());

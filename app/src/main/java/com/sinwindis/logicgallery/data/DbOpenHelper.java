@@ -165,6 +165,9 @@ public class DbOpenHelper {
 
     public LevelDto getLevelDto(int levelId) {
         Cursor cursor = getBigLevelCursorById(levelId);
+        if (cursor.getCount() == 0) {
+            return null;
+        }
 
         cursor.moveToNext();
 
@@ -195,7 +198,13 @@ public class DbOpenHelper {
         cursor.moveToNext();
 
         int puzzleId = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.P_ID));
-        String name = getCustomBigPuzzleCursorById(puzzleId).getString(cursor.getColumnIndex(SqlManager.CustomBigPuzzleDBSql.P_NAME));
+        String name;
+        PuzzleDto puzzleDto = getCustomPuzzleDto(puzzleId);
+        if (puzzleDto == null) {
+            return null;
+        } else {
+            name = puzzleDto.getPuzzleName();
+        }
 
         int number = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.NUMBER));
         int width = cursor.getInt(cursor.getColumnIndex(SqlManager.CustomBigLevelDBSql.WIDTH));
@@ -261,6 +270,9 @@ public class DbOpenHelper {
 
     public PuzzleDto getCustomPuzzleDto(int puzzleId) {
         Cursor puzzleCursor = getCustomBigPuzzleCursorById(puzzleId);
+        if (puzzleCursor.getCount() == 0) {
+            return null;
+        }
 
         puzzleCursor.moveToNext();
 
@@ -331,37 +343,46 @@ public class DbOpenHelper {
     public void saveLevelDto(LevelDto levelDto) {
 
         Log.d("DbOpenHelper", "saveLevelDto parameter: " + levelDto.toString());
-        //레벨 데이터 저장
-        if (levelDto.getProgress() != 2 && levelDto.getProgress() != 4) {
-            //완성된 게임이 아니므로 현재 진행 상황을 저장
 
-            if (levelDto.isCustom()) {
-                updateCustomBigLevel(levelDto.getLevelId(), levelDto.getProgress(), levelDto.getSaveBlob());
-            } else {
-                updateBigLevel(levelDto.getLevelId(), levelDto.getProgress(), levelDto.getSaveBlob());
-            }
+        switch (levelDto.getProgress()) {
+            case Progress.PROGRESS_FIRST:
+                break;
+            case Progress.PROGRESS_PLAYING:
+            case Progress.PROGRESS_REPLAYING:
+                if (levelDto.isCustom()) {
+                    updateCustomBigLevel(levelDto.getLevelId(), levelDto.getProgress(), levelDto.getSaveBlob());
+                } else {
+                    updateBigLevel(levelDto.getLevelId(), levelDto.getProgress(), levelDto.getSaveBlob());
+                }
+                break;
+            case Progress.PROGRESS_COMPLETE:
+                if (levelDto.isCustom()) {
+                    //커스텀 퍼즐인 경우
 
-            //가장 최근에 한 게임 데이터 갱신하기
+                    updateCustomBigLevel(levelDto.getLevelId(), levelDto.getProgress(), null);
+                    //해당 레벨의 퍼즐에 해당하는 db 의 progress 값 늘려주기
+                    increaseCustomBigPuzzleProgress(levelDto.getPuzzleId());
+                } else {
+                    //스탠다드 퍼즐인 경우
 
+                    updateBigLevel(levelDto.getLevelId(), levelDto.getProgress(), null);
+                    //해당 레벨의 퍼즐에 해당하는 db 의 progress 값 늘려주기
+                    increaseBigPuzzleProgress(levelDto.getPuzzleId());
+                }
+                break;
+            case Progress.PROGRESS_RECOMPLETE:
+                if (levelDto.isCustom()) {
+                    //커스텀 퍼즐인 경우
 
-        } else {
-            //게임 완료
+                    updateCustomBigLevel(levelDto.getLevelId(), levelDto.getProgress(), null);
+                } else {
+                    //스탠다드 퍼즐인 경우
 
-            if (levelDto.isCustom()) {
-                //커스텀 퍼즐인 경우
+                    updateBigLevel(levelDto.getLevelId(), levelDto.getProgress(), null);
+                }
+                break;
 
-                updateCustomBigLevel(levelDto.getLevelId(), levelDto.getProgress(), null);
-                //해당 레벨의 퍼즐에 해당하는 db 의 progress 값 늘려주기
-                increaseCustomBigPuzzleProgress(levelDto.getPuzzleId());
-            } else {
-                //스탠다드 퍼즐인 경우
-
-                updateBigLevel(levelDto.getLevelId(), levelDto.getProgress(), null);
-                //해당 레벨의 퍼즐에 해당하는 db 의 progress 값 늘려주기
-                increaseBigPuzzleProgress(levelDto.getPuzzleId());
-            }
         }
-
     }
 
 
