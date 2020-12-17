@@ -26,13 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
         //광고
         MobileAds.initialize(this, initializationStatus -> {
-
-            /* get the adapter status */
-            Map<String, AdapterStatus> map = initializationStatus.getAdapterStatusMap();
-            for (Map.Entry<String, AdapterStatus> entry : map.entrySet()) {
-                AdapterStatus adapterStatus = entry.getValue();
-                AdapterStatus.State state = adapterStatus.getInitializationState();
-            }
         });
 
         AdView mAdView = findViewById(R.id.adView);
