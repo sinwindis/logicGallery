@@ -1,5 +1,6 @@
 package com.sinwindis.logicgallery.game;
 
+import android.graphics.Point;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ public class Board {
 
 
     private final Cell[][] cells;
+    private final BoardStack boardStack;
 
     private final int height;
     private final int width;
@@ -19,6 +21,7 @@ public class Board {
         this.width = width;
 
         this.cells = new Cell[height][width];
+        this.boardStack = new BoardStack(height, width);
     }
 
     public Cell getCell(int y, int x) {
@@ -30,6 +33,19 @@ public class Board {
 
         }
 
+    }
+
+    public Cell getCell(Point point) {
+
+        int y = point.y;
+        int x = point.x;
+
+        if (y < this.height && x < this.width) {
+            return cells[y][x];
+        } else {
+            return null;
+
+        }
     }
 
     public boolean setCorrectValues(byte[] values) {
@@ -48,7 +64,7 @@ public class Board {
         return true;
     }
 
-    public boolean setSaveData(SaveData saveData) {
+    public boolean loadSaveData(SaveData saveData) {
 
         if (saveData.getHeight() != this.height || saveData.getWidth() != this.width) {
             return false;
@@ -60,11 +76,13 @@ public class Board {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                cells[y][x].push(saveValues[y][x]);
+                cells[y][x].setCurrentValue(saveValues[y][x]);
                 cells[y][x].setFixed(saveFixes[y][x]);
                 cells[y][x].setHinted(saveHints[y][x]);
             }
         }
+
+        boardStack.push();
 
         return true;
     }
@@ -73,68 +91,37 @@ public class Board {
         return cells;
     }
 
-
-    public boolean pushValues(boolean[][] mat, byte value) {
-        if (mat.length != height || mat[0].length != width) {
-            return false;
-        }
-
-        boolean isValueChanged = false;
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                //만약 셀의 값이 하나라도 바뀌면 isValueChanged 를 true 로 바꿔준다.
-                if (cells[y][x].push(value))
-                    isValueChanged = true;
-            }
-        }
-        return isValueChanged;
-    }
-
-    public boolean pushValues(byte[] values) {
-        if (values.length != this.height * this.width) {
-            return false;
-        }
-
-        boolean isValueChanged = false;
-
-        for (int i = 0; i < values.length; i++) {
-            int y = i / this.width;
-            int x = i % this.width;
-
-            //만약 셀의 값이 하나라도 바뀌면 isValueChanged 를 true 로 바꿔준다.
-            if (cells[y][x].push(values[i]))
-                isValueChanged = true;
-        }
-
-        return isValueChanged;
+    public void push() {
+        boardStack.push();
     }
 
     public boolean moveToNext() {
+        if (boardStack.moveToNext()) {
+            byte[][] stack = boardStack.getCurrentStack();
 
-        if (width == 0 || height == 0)
-            return false;
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                cells[y][x].moveToNext();
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    cells[y][x].setCurrentValue(stack[y][x]);
+                }
             }
+            return true;
         }
+        return false;
 
-        return true;
     }
 
     public boolean moveToPrev() {
-        if (width == 0 || height == 0)
-            return false;
+        if (boardStack.moveToPrev()) {
+            byte[][] stack = boardStack.getCurrentStack();
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                cells[y][x].moveToPrev();
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    cells[y][x].setCurrentValue(stack[y][x]);
+                }
             }
+            return true;
         }
-
-        return true;
+        return false;
     }
 
     public byte[] getParsedCells() {
@@ -174,12 +161,12 @@ public class Board {
         return this.width;
     }
 
-    public int getStackMax() {
-        return this.cells[0][0].getStackMax();
+    public int getExploredStackNum() {
+        return boardStack.exploredStackNum;
     }
 
-    public int getStackIdx() {
-        return this.cells[0][0].getStackIdx();
+    public int getCurrentStackNum() {
+        return boardStack.currentStackNum;
     }
 
 
@@ -187,5 +174,77 @@ public class Board {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    class BoardStack {
+        private final int MAX_STACK_NUM_DEFAULT = 10;
+
+
+        private int currentStackNum = 0;
+        private int exploredStackNum = 0;
+        private int maxStackNum = MAX_STACK_NUM_DEFAULT;
+
+        private byte[][][] stack;
+
+        public BoardStack(int height, int width) {
+            stack = new byte[MAX_STACK_NUM_DEFAULT][height][width];
+        }
+
+        private void expandStack() {
+            byte[][][] stackTemp = new byte[maxStackNum][height][width];
+
+            for (int i = 0; i < maxStackNum; i++) {
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        stackTemp[i][y][x] = stack[i][y][x];
+                    }
+                }
+            }
+            maxStackNum *= 2;
+            stack = new byte[maxStackNum][height][width];
+
+            for (int i = 0; i < stackTemp.length; i++) {
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        stack[i][y][x] = stackTemp[i][y][x];
+                    }
+                }
+            }
+        }
+
+        public void push() {
+
+            if (currentStackNum == maxStackNum) {
+                expandStack();
+            }
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    stack[currentStackNum][y][x] = cells[y][x].getCurrentValue();
+                }
+            }
+            currentStackNum++;
+            exploredStackNum = currentStackNum;
+        }
+
+        public boolean moveToPrev() {
+            if (currentStackNum == 0) {
+                return false;
+            }
+            currentStackNum--;
+            return true;
+        }
+
+        public boolean moveToNext() {
+            if (currentStackNum == exploredStackNum) {
+                return false;
+            }
+            currentStackNum++;
+            return true;
+        }
+
+        public byte[][] getCurrentStack() {
+            return stack[currentStackNum];
+        }
     }
 }

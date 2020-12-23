@@ -10,7 +10,7 @@
             android:toDegrees="135">
             <shape android:shape="line">
                 <stroke
-                    android:width="10dp"
+                    android:width="6dp"
                     android:color="@color/colorBlack" />
             </shape>
         </rotate>
@@ -23,7 +23,7 @@
             android:toDegrees="45">
             <shape android:shape="line">
                 <stroke
-                    android:width="10dp"
+                    android:width="6dp"
                     android:color="@color/colorBlack" />
             </shape>
         </rotate>

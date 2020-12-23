@@ -12,10 +12,10 @@ import java.util.Calendar;
 
 
 abstract public class BoardItemTouchListener implements RecyclerView.OnItemTouchListener {
-    private static final int MAX_CLICK_DURATION = 200;
+    private static final int MAX_CLICK_DURATION = 20;
 
     private boolean isIn;   // Is touching still at the same item.
-    private String tagTouchableView;    // View catches touch event in each item of recycler view.
+    private final String tagTouchableView;    // View catches touch event in each item of recycler view.
 
     private int countIn;    // How many times touch event in item.
     private long timeDown;  // Time touch down on touchable view.

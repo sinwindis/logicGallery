@@ -224,11 +224,11 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
 
-            android:background="@drawable/background_cl_stack"
+            android:background="@drawable/background_cl_buttons_25"
 
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/img_toggle"
-            app:layout_constraintBottom_toBottomOf="@id/img_toggle">
+            app:layout_constraintEnd_toStartOf="@id/img_button_o"
+            app:layout_constraintBottom_toBottomOf="@id/img_button_o">
 
             <TextView
                 style="@style/StyleFontMedium"
@@ -291,7 +291,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
-            android:id="@+id/img_toggle"
+            android:id="@+id/img_button_o"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:padding="15dp"
@@ -311,19 +311,19 @@
             android:layout_height="0dp"
             android:src="@drawable/border_tutorial_oval"
 
-            app:layout_constraintStart_toStartOf="@id/img_toggle"
-            app:layout_constraintEnd_toEndOf="@id/img_toggle"
-            app:layout_constraintBottom_toBottomOf="@id/img_toggle"
-            app:layout_constraintTop_toTopOf="@id/img_toggle" />
+            app:layout_constraintStart_toStartOf="@id/img_button_o"
+            app:layout_constraintEnd_toEndOf="@id/img_button_o"
+            app:layout_constraintBottom_toBottomOf="@id/img_button_o"
+            app:layout_constraintTop_toTopOf="@id/img_button_o" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:background="@drawable/background_cl_hint"
+            android:background="@drawable/background_cl_buttons_30"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/img_toggle"
-            app:layout_constraintBottom_toBottomOf="@id/img_toggle">
+            app:layout_constraintStart_toEndOf="@id/img_button_o"
+            app:layout_constraintBottom_toBottomOf="@id/img_button_o">
 
             <TextView
                 style="@style/StyleFontMedium"
@@ -337,7 +337,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/img_hint"
+                android:id="@+id/img_button_hint"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:padding="15dp"
@@ -356,10 +356,10 @@
                 android:layout_height="0dp"
                 android:src="@drawable/border_tutorial_oval"
 
-                app:layout_constraintStart_toStartOf="@id/img_hint"
-                app:layout_constraintEnd_toEndOf="@id/img_hint"
-                app:layout_constraintBottom_toBottomOf="@id/img_hint"
-                app:layout_constraintTop_toTopOf="@id/img_hint" />
+                app:layout_constraintStart_toStartOf="@id/img_button_hint"
+                app:layout_constraintEnd_toEndOf="@id/img_button_hint"
+                app:layout_constraintBottom_toBottomOf="@id/img_button_hint"
+                app:layout_constraintTop_toTopOf="@id/img_button_hint" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

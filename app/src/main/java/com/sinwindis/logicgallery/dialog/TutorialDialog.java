@@ -221,7 +221,7 @@ public class TutorialDialog {
         iv_borders[9] = view.findViewById(R.id.border_hint);
 
 
-        iv_toggle = view.findViewById(R.id.img_toggle);
+        iv_toggle = view.findViewById(R.id.img_button_o);
 
         tv_stack = view.findViewById(R.id.tv_stack);
         tv_hint = view.findViewById(R.id.tv_hint);

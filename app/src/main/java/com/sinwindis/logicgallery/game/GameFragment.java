@@ -3,6 +3,7 @@ package com.sinwindis.logicgallery.game;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,11 +25,12 @@ import java.sql.SQLException;
 
 public class GameFragment extends Fragment {
 
-    LevelDto levelDto;
+    private LevelDto levelDto;
 
-    View fragmentView;
+    private View fragmentView;
 
-    GameController gameController;
+    private GameBoardController gameBoardController;
+    private TouchMode touchMode;
 
     private int levelId;
     private boolean isCustom = false;
@@ -77,7 +79,9 @@ public class GameFragment extends Fragment {
         tv_title.setText(levelDto.getName());
 
         //gameBoard 를 제작한다.
-        gameController = new GameController(ctx, fragmentView, levelDto);
+        gameBoardController = new GameBoardController(ctx, fragmentView, levelDto);
+        touchMode = new TouchMode();
+        gameBoardController.setTouchMode(touchMode);
 
         setButtonListeners();
 
@@ -88,41 +92,27 @@ public class GameFragment extends Fragment {
     private void setButtonListeners() {
 
         //버튼 이벤트
-        //토글 버튼
-        final ImageView img_toggle = fragmentView.findViewById(R.id.img_toggle);
+        //터치 모드 버튼
+        final ImageView ivButtonO = fragmentView.findViewById(R.id.img_button_o);
+        final ImageView ivButtonX = fragmentView.findViewById(R.id.img_button_x);
+        final ImageView ivButtonLock = fragmentView.findViewById(R.id.img_button_lock);
+        final ImageView ivButtonHint = fragmentView.findViewById(R.id.img_button_hint);
+        @SuppressLint("UseCompatLoadingForDrawables") final Drawable background = getResources().getDrawable(R.drawable.background_btn_oval_normal);
 
-        ButtonAnimation.setOvalButtonAnimationShadow(img_toggle);
-
-        img_toggle.setOnClickListener(view -> {
-            int touchMode = gameController.func_toggle();
-
-            if (touchMode == 1) {
-                ((ImageView) view).setImageResource(R.drawable.ic_x);
-            } else {
-                ((ImageView) view).setImageResource(R.drawable.ic_o);
-            }
-
-        });
+        TouchModeButtonController touchModeButtonController = new TouchModeButtonController(ivButtonO, ivButtonX, ivButtonLock, ivButtonHint);
+        touchModeButtonController.setTouchMode(touchMode);
+        touchModeButtonController.setup(background);
 
         //다음 스택 버튼
         ImageView img_next = fragmentView.findViewById(R.id.img_nextstack);
         ButtonAnimation.setOvalButtonAnimationShadow(img_next);
 
-        img_next.setOnClickListener(view -> gameController.moveToNext());
+        img_next.setOnClickListener(view -> gameBoardController.moveToNext());
 
         ImageView img_prev = fragmentView.findViewById(R.id.img_prevstack);
         ButtonAnimation.setOvalButtonAnimationShadow(img_prev);
 
-        img_prev.setOnClickListener(view -> gameController.moveToPrev());
-
-        //힌트 버튼
-        ImageView img_hint = fragmentView.findViewById(R.id.img_hint);
-        ButtonAnimation.setOvalButtonAnimationShadow(img_hint);
-
-        img_hint.setOnClickListener(view -> {
-            gameController.func_hint();
-            img_toggle.setImageResource(R.drawable.ic_hint);
-        });
+        img_prev.setOnClickListener(view -> gameBoardController.moveToPrev());
 
         //튜토리얼 버튼
         ImageView img_tutorial = fragmentView.findViewById(R.id.img_tutorial);
@@ -147,7 +137,7 @@ public class GameFragment extends Fragment {
             OptionDialog optionDialog = new OptionDialog();
 
             optionDialog.makeDialog(getActivity());
-            optionDialog.dialog.setOnDismissListener(dialogInterface -> gameController.loadPref());
+            optionDialog.dialog.setOnDismissListener(dialogInterface -> gameBoardController.loadPref());
             optionDialog.dialog.show();
             optionDialog.dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         });
@@ -169,7 +159,7 @@ public class GameFragment extends Fragment {
 
         img_end.setOnClickListener(view -> {
 
-            gameController.completeGame();
+            gameBoardController.completeGame();
 
         });
     }
@@ -183,6 +173,6 @@ public class GameFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 
-        gameController.onDestroy();
+        gameBoardController.onDestroy();
     }
 }
