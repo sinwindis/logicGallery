@@ -180,8 +180,8 @@ public class Board {
         private final int MAX_STACK_NUM_DEFAULT = 10;
 
 
-        private int currentStackNum = 0;
-        private int exploredStackNum = 0;
+        private int currentStackNum = -1;
+        private int exploredStackNum = -1;
         private int maxStackNum = MAX_STACK_NUM_DEFAULT;
 
         private byte[][][] stack;
@@ -214,6 +214,9 @@ public class Board {
 
         public void push() {
 
+            currentStackNum++;
+            exploredStackNum = currentStackNum;
+
             if (currentStackNum == maxStackNum) {
                 expandStack();
             }
@@ -223,8 +226,6 @@ public class Board {
                     stack[currentStackNum][y][x] = cells[y][x].getCurrentValue();
                 }
             }
-            currentStackNum++;
-            exploredStackNum = currentStackNum;
         }
 
         public boolean moveToPrev() {

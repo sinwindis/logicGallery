@@ -322,15 +322,19 @@ public class GameBoardController {
     }
 
     private void clickUpAction() {
-        removeDragBorderView();
-        removeDragCountView();
-
 
         setCellValues();
-
         refreshIndexView();
         checkAutoX();
-        refreshCells();
+        board.push();
+
+        removeDragBorderView();
+        removeDragCountView();
+        Point startPoint = dragManager.getStartPoint();
+        Point endPoint = dragManager.getEndPoint();
+        refreshCellViews(startPoint.y, startPoint.x, endPoint.y, endPoint.x);
+        refreshStackView();
+        refreshHintView();
 
         if (board.isBoardComplete()) {
             completeGame();
@@ -410,7 +414,7 @@ public class GameBoardController {
 
         rv_board.post(() -> {
             checkAutoX();
-            refreshCells();
+            refreshCellViews(0, 0, board.getHeight() - 1, board.getWidth() - 1);
         });
         rv_column.post(() -> {
             for (int i = 0; i < board.getWidth(); i++) {
@@ -430,7 +434,7 @@ public class GameBoardController {
 
     public void moveToNext() {
         if (board.moveToNext()) {
-            refreshCells();
+            refreshCellViews(0, 0, board.getHeight() - 1, board.getWidth() - 1);
             refreshIndexView();
             refreshStackView();
         }
@@ -438,7 +442,7 @@ public class GameBoardController {
 
     public void moveToPrev() {
         if (board.moveToPrev()) {
-            refreshCells();
+            refreshCellViews(0, 0, board.getHeight() - 1, board.getWidth() - 1);
             refreshIndexView();
             refreshStackView();
         }
@@ -564,45 +568,58 @@ public class GameBoardController {
         }
     }
 
-    private void refreshCells() {
+    private void refreshCellViews(int startY, int startX, int endY, int endX) {
         for (int y = 0; y < board.getHeight(); y++) {
-            for (int x = 0; x < board.getWidth(); x++) {
-                ImageView view = Objects.requireNonNull(glm.findViewByPosition(x + y * board.getWidth())).findViewById(R.id.iv_item_board);
+            for (int x = startX; x <= endX; x++) {
+                refreshCellView(y, x);
+            }
+        }
 
-                if (view == null) {
-                    continue;
-                }
+        for (int y = startY; y <= endY; y++) {
+            for (int x = 0; x < startX; x++) {
+                refreshCellView(y, x);
+            }
+            for (int x = endX + 1; x < board.getWidth(); x++) {
+                refreshCellView(y, x);
+            }
+        }
+    }
 
-                Cell targetCell = board.getCell(y, x);
+    private void refreshCellView(int y, int x) {
+        ImageView view = Objects.requireNonNull(glm.findViewByPosition(x + y * board.getWidth())).findViewById(R.id.iv_item_board);
 
-                if (targetCell.isHinted()) {
-                    switch (targetCell.getCurrentValue()) {
-                        case 0:
-                        case 2:
-                            view.setImageResource(R.drawable.background_x);
-                            view.setBackgroundColor(Color.parseColor("#c0c0c0"));
-                            break;
-                        case 1:
-                            view.setImageDrawable(null);
-                            view.setBackgroundColor(Color.parseColor("#404040"));
-                            break;
-                    }
-                } else {
-                    switch (targetCell.getCurrentValue()) {
-                        case 0:
-                            view.setImageDrawable(null);
-                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            break;
-                        case 1:
-                            view.setImageDrawable(null);
-                            view.setBackgroundColor(Color.parseColor("#000000"));
-                            break;
-                        case 2:
-                            view.setImageResource(R.drawable.background_x);
-                            view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                            break;
-                    }
-                }
+        if (view == null) {
+            return;
+        }
+
+        Cell targetCell = board.getCell(y, x);
+
+        if (targetCell.isHinted()) {
+            switch (targetCell.getCurrentValue()) {
+                case 0:
+                case 2:
+                    view.setImageResource(R.drawable.background_x);
+                    view.setBackgroundColor(Color.parseColor("#c0c0c0"));
+                    break;
+                case 1:
+                    view.setImageDrawable(null);
+                    view.setBackgroundColor(Color.parseColor("#404040"));
+                    break;
+            }
+        } else {
+            switch (targetCell.getCurrentValue()) {
+                case 0:
+                    view.setImageDrawable(null);
+                    view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    break;
+                case 1:
+                    view.setImageDrawable(null);
+                    view.setBackgroundColor(Color.parseColor("#000000"));
+                    break;
+                case 2:
+                    view.setImageResource(R.drawable.background_x);
+                    view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    break;
             }
         }
     }
