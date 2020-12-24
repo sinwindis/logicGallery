@@ -24,7 +24,6 @@ import com.sinwindis.logicgallery.data.Progress;
 import com.sinwindis.logicgallery.data.SaveData;
 import com.sinwindis.logicgallery.data.sharedpref.LastPlayPreference;
 import com.sinwindis.logicgallery.data.sharedpref.OptionPreference;
-import com.sinwindis.logicgallery.data.sharedpref.PropertyPreference;
 import com.sinwindis.logicgallery.end.EndFragment;
 import com.sinwindis.logicgallery.listener.BoardItemTouchListener;
 import com.sinwindis.logicgallery.mainactivity.MainActivity;
@@ -33,6 +32,10 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 public class GameBoardController {
+
+    private final int SIZE_BORDER = 8;
+    private final int OFFSET_COUNT_X = 100;
+    private final int OFFSET_COUNT_Y = 200;
 
     //property
     private boolean smartDrag;
@@ -44,6 +47,9 @@ public class GameBoardController {
     private TouchRangeManager touchRangeManager;
 
     private int progress;
+
+    private float dragOffsetX;
+    private float dragOffsetY;
 
     private final Context ctx;
 
@@ -363,27 +369,32 @@ public class GameBoardController {
         @Override
         public void onDownTouchableView(int pos) {
             clickAction(pos);
+            Log.d("BoardItemTouch", "onDown");
         }
 
         @Override
         public void onMoveTouchableView(int pos) {
             moveAction(pos);
+            Log.d("BoardItemTouch", "onMove");
         }
 
 
         @Override
         public void onClickUp(int pos, RecyclerView.ViewHolder holder) {
             clickUpAction();
+            Log.d("BoardItemTouch", "onUp");
         }
 
         @Override
         public void onLongClickUp(int pos, RecyclerView.ViewHolder holder) {
             clickUpAction();
+            Log.d("BoardItemTouch", "onLongClickUp");
         }
 
         @Override
         public void onDragMultiUp(int endPos, RecyclerView.ViewHolder holder) {
             clickUpAction();
+            Log.d("BoardItemTouch", "onDragMultiUp");
         }
 
 
@@ -424,6 +435,10 @@ public class GameBoardController {
         rv_board.post(() -> {
             checkAutoX();
             refreshCellViews(0, 0, board.getHeight() - 1, board.getWidth() - 1);
+
+            ConstraintLayout cl_board = targetView.findViewById(R.id.board);
+            dragOffsetX = rv_board.getX() + cl_board.getX() - SIZE_BORDER;
+            dragOffsetY = rv_board.getY() + cl_board.getY() - SIZE_BORDER;
         });
         rv_column.post(() -> {
             for (int i = 0; i < board.getWidth(); i++) {
@@ -642,13 +657,13 @@ public class GameBoardController {
         assert firstDragView != null;
         assert lastDragView != null;
 
-        int dragWidth = (int) (lastDragView.getX() - firstDragView.getX() + lastDragView.getWidth()) + 16;
-        int dragHeight = (int) (lastDragView.getY() - firstDragView.getY() + lastDragView.getHeight()) + 16;
+        int dragWidth = (int) (lastDragView.getX() - firstDragView.getX() + lastDragView.getWidth()) + SIZE_BORDER * 2;
+        int dragHeight = (int) (lastDragView.getY() - firstDragView.getY() + lastDragView.getHeight()) + SIZE_BORDER * 2;
 
         ll_drag.setVisibility(View.VISIBLE);
 
-        ll_drag.setX(firstDragView.getX() - 8);
-        ll_drag.setY(firstDragView.getY() - 8);
+        ll_drag.setX(dragOffsetX + firstDragView.getX());
+        ll_drag.setY(dragOffsetY + firstDragView.getY());
 
         ll_drag.setLayoutParams(new ConstraintLayout.LayoutParams(dragWidth, dragHeight));
     }
@@ -658,8 +673,14 @@ public class GameBoardController {
         int dragCount = dragManager.getDragCount();
 
         if (dragCount > 1) {
+            Point endPoint = touchRangeManager.getEndPoint();
             tv_count.setText(String.valueOf(dragCount));
+            View lastDragView = glm.findViewByPosition(endPoint.y * board.getWidth() + endPoint.x);
+            cl_count.setX(lastDragView.getX() + dragOffsetX - OFFSET_COUNT_X);
+            cl_count.setY(lastDragView.getY() + dragOffsetY - OFFSET_COUNT_Y);
             cl_count.setVisibility(View.VISIBLE);
         }
     }
+
+
 }

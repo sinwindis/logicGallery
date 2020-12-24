@@ -73,6 +73,6 @@ public class DragManager {
     public int getDragCount() {
         Point endPoint = getEndPoint();
         Point startPoint = getStartPoint();
-        return (endPoint.x - startPoint.x) * (endPoint.y - startPoint.x);
+        return (endPoint.x - startPoint.x + 1) * (endPoint.y - startPoint.y + 1);
     }
 }

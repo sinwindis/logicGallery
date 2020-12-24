@@ -74,10 +74,11 @@
         android:id="@+id/board"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +92,7 @@
             android:paddingBottom="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/ll_board"
+            app:layout_constraintBottom_toTopOf="@id/rv_board"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.8"
             android:overScrollMode="never">
@@ -106,7 +107,7 @@
             android:paddingStart="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ll_board"
+            app:layout_constraintTop_toTopOf="@id/rv_board"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.2"
             android:textAlignment="viewEnd"
@@ -114,60 +115,56 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ll_board"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_board"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:orientation="vertical"
+            android:overScrollMode="never"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.8">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_board"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never">
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.recyclerview.widget.RecyclerView>
+    <LinearLayout
+        android:id="@+id/ll_drag"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/border_drag"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal">
 
+    </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_drag"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/border_drag"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:orientation="horizontal">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@drawable/background_cl_count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintDimensionRatio="1:1">
 
-            </LinearLayout>
+        <TextView
+            style="@style/StyleFontSmall"
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_count"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/background_cl_count"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
 
-                <TextView
-                    style="@style/StyleFontSmall"
+            android:text="55">
 
-                    android:id="@+id/tv_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
-
-                </TextView>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </TextView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
