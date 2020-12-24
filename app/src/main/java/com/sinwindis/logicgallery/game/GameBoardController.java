@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sinwindis.logicgallery.R;
 import com.sinwindis.logicgallery.data.DbOpenHelper;
+import com.sinwindis.logicgallery.data.HintManager;
 import com.sinwindis.logicgallery.data.LevelDto;
 import com.sinwindis.logicgallery.data.Progress;
 import com.sinwindis.logicgallery.data.SaveData;
@@ -42,13 +43,13 @@ public class GameBoardController {
     private DragManager dragManager;
     private TouchRangeManager touchRangeManager;
 
-    private int hintCount;
     private int progress;
 
     private final Context ctx;
 
     //Model
     public Board board;
+    private HintManager hintManager;
     //for loading
     private final LevelDto levelDto;
     //for save
@@ -97,6 +98,7 @@ public class GameBoardController {
         board = new Board(levelDto.getHeight(), levelDto.getWidth());
         board.setCorrectValues(levelDto.getDataSet());
         board.loadSaveData(levelDto.getSaveData());
+        hintManager = new HintManager(ctx);
 
         Log.d("initialize", "board width: " + board.getWidth() + "board height: " + board.getHeight());
 
@@ -132,10 +134,6 @@ public class GameBoardController {
         oneLineDrag = optionPreference.isOneLineDrag();
         dragManager.setOneLineDrag(oneLineDrag);
         autoX = optionPreference.isAutoX();
-
-        //hint preferences
-        PropertyPreference propertyPreference = new PropertyPreference(ctx);
-        hintCount = propertyPreference.getHintCount();
     }
 
     public void checkAutoX() {
@@ -175,7 +173,7 @@ public class GameBoardController {
 
     private void useHint(Cell cell) {
         if (cell.useHint()) {
-            hintCount--;
+            hintManager.setHintCount(hintManager.getHintCount() - 1);
             refreshHintView();
         }
     }
@@ -323,13 +321,24 @@ public class GameBoardController {
 
     private void clickUpAction() {
 
+        removeDragBorderView();
+        removeDragCountView();
+
+        //checkHintUse
+        if (macroMode.getMacroMode() == MacroMode.HINT) {
+
+            //show dialog
+
+            if (!hintManager.useHint(dragManager.getDragCount())) {
+                return;
+            }
+        }
+
         setCellValues();
         refreshIndexView();
         checkAutoX();
         board.push();
 
-        removeDragBorderView();
-        removeDragCountView();
         Point startPoint = dragManager.getStartPoint();
         Point endPoint = dragManager.getEndPoint();
         refreshCellViews(startPoint.y, startPoint.x, endPoint.y, endPoint.x);
@@ -535,8 +544,7 @@ public class GameBoardController {
 
             mDbOpenHelper.close();
 
-            PropertyPreference propertyPreference = new PropertyPreference(ctx);
-            propertyPreference.setHintCount(hintCount);
+            hintManager.apply();
 
             LastPlayPreference lastPlayPreference = new LastPlayPreference(ctx);
             lastPlayPreference.setId(saveLevelDto.getLevelId());
@@ -556,7 +564,7 @@ public class GameBoardController {
     }
 
     private void refreshHintView() {
-        tv_hint.setText(String.valueOf(hintCount));
+        tv_hint.setText(String.valueOf(hintManager.getHintCount()));
     }
 
     private void refreshIndexView() {
