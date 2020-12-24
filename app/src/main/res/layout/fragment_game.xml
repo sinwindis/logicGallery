@@ -84,16 +84,6 @@
         app:layout_constraintBottom_toTopOf="@id/cl_button"
         app:layout_constraintTop_toBottomOf="@id/cl_top">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.2" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cl_column"
             android:layout_width="0dp"
@@ -254,7 +244,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="60dp"
-                android:layout_height="80dp"
+                android:layout_height="90dp"
                 android:background="@drawable/background_cl_buttons_30"
 
                 app:layout_constraintEnd_toEndOf="parent"
