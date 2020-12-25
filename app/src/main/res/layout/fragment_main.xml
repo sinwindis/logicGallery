@@ -14,21 +14,46 @@
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/background_top">
 
-        <TextView
-            style="@style/StyleFontMedium"
-
-            android:id="@+id/tv_count_hint"
-            android:layout_width="200dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_count_hint"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
-            android:background="@drawable/background_btn_accent"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/img_option"
             app:layout_constraintBottom_toBottomOf="@id/img_option">
 
+            <ImageView
+                android:id="@+id/iv_hint"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_hint"
+                android:padding="5dp"
 
-        </TextView>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                style="@style/StyleFontMedium"
+
+                android:id="@+id/tv_count_hint"
+                android:layout_width="80dp"
+                android:layout_height="0dp"
+                android:padding="5dp"
+                android:gravity="end|center_vertical"
+                android:background="@drawable/background_btn_accent"
+                android:layout_marginStart="20dp"
+
+                app:layout_constraintStart_toEndOf="@id/iv_hint"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <ImageView
             android:id="@+id/img_option"
@@ -109,7 +134,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="15dp"
-                android:src="@drawable/ic_launcher"
 
 
                 app:layout_constraintEnd_toEndOf="parent"

@@ -18,17 +18,19 @@ import androidx.fragment.app.Fragment;
 
 import com.sinwindis.logicgallery.R;
 import com.sinwindis.logicgallery.data.BitmapMaker;
+import com.sinwindis.logicgallery.data.DbOpenHelper;
 import com.sinwindis.logicgallery.data.LevelDto;
+import com.sinwindis.logicgallery.data.Progress;
 import com.sinwindis.logicgallery.data.SaveData;
 import com.sinwindis.logicgallery.data.sharedpref.LastPlayPreference;
 import com.sinwindis.logicgallery.data.sharedpref.PropertyPreference;
 import com.sinwindis.logicgallery.data.sharedpref.TutorialPreference;
+import com.sinwindis.logicgallery.dialog.OptionDialog;
+import com.sinwindis.logicgallery.dialog.RewardDialog;
+import com.sinwindis.logicgallery.dialog.TutorialDialog;
 import com.sinwindis.logicgallery.gallery.GalleryFragment;
-import com.sinwindis.logicgallery.data.DbOpenHelper;
 import com.sinwindis.logicgallery.game.GameFragment;
 import com.sinwindis.logicgallery.levelcreate.LevelCreateFragment;
-import com.sinwindis.logicgallery.dialog.OptionDialog;
-import com.sinwindis.logicgallery.dialog.TutorialDialog;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -36,8 +38,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
-
-import com.sinwindis.logicgallery.dialog.RewardDialog;
 
 public class MainFragment extends Fragment {
 
@@ -163,51 +163,10 @@ public class MainFragment extends Fragment {
         } else {
             lastPlayLevelDto = mDbOpenHelper.getLevelDto(lastPlayId);
         }
-
         mDbOpenHelper.close();
 
-
-        Log.d("MainFragment", "LevelDto: " + lastPlayLevelDto.toString());
-
-
-        final boolean isComplete = (lastPlayLevelDto.getProgress() == 2 || lastPlayLevelDto.getProgress() == 4);
-
-        iv_thumbnail.post(() -> {
-
-            Bitmap srcBitmap;
-            Bitmap scaledBitmap;
-            if (isComplete) {
-                srcBitmap = BitmapMaker.getColorBitmap(lastPlayLevelDto.getColorBlob());
-            } else {
-                final SaveData saveData = lastPlayLevelDto.getSaveData();
-                srcBitmap = BitmapMaker.getGrayScaleBitmap(saveData.getValues());
-            }
-            assert srcBitmap != null;
-            scaledBitmap = Bitmap.createScaledBitmap(srcBitmap, 400, 400, false);
-            iv_thumbnail.setImageBitmap(scaledBitmap);
-        });
-
-        TextView tv_hintCount = fragmentView.findViewById(R.id.tv_count_hint);
-        tv_hintCount.setText(String.valueOf(propertyPreference.getHintCount()));
-
-
-        Log.d("MainFragment", "isComplete: " + isComplete);
-
-        //이어하기 버튼
-        Button btn_continue = fragmentView.findViewById(R.id.btn_continue);
-        if (isComplete) {
-            btn_continue.setVisibility(View.INVISIBLE);
-        } else {
-            btn_continue.setOnClickListener(view -> {
-                GameFragment gameFragment = new GameFragment();
-
-                Bundle bundle = new Bundle();
-                bundle.putInt("id", lastPlayId);
-                gameFragment.setArguments(bundle);
-
-                ((MainActivity) getContext()).fragmentMove(gameFragment);
-            });
-        }
+        setPreView(lastPlayLevelDto);
+        setHintCountView();
     }
 
     private void showFirstTutorialDialog() {
@@ -257,5 +216,54 @@ public class MainFragment extends Fragment {
         } else {
             return false;
         }
+    }
+
+    private void setPreView(LevelDto lastPlayLevelDto) {
+        Button btn_continue = fragmentView.findViewById(R.id.btn_continue);
+        if (lastPlayLevelDto == null) {
+            btn_continue.setVisibility(View.INVISIBLE);
+            @SuppressLint("UseCompatLoadingForDrawables")
+            Drawable defaultDrawable = getResources().getDrawable(R.drawable.ic_launcher);
+            iv_thumbnail.setImageDrawable(defaultDrawable);
+            return;
+        }
+
+        Bitmap srcBitmap = null;
+
+        switch (lastPlayLevelDto.getProgress()) {
+            case Progress.PROGRESS_COMPLETE:
+            case Progress.PROGRESS_RECOMPLETE:
+                srcBitmap = BitmapMaker.getColorBitmap(lastPlayLevelDto.getColorBlob());
+                btn_continue.setVisibility(View.INVISIBLE);
+                break;
+            case Progress.PROGRESS_FIRST:
+            case Progress.PROGRESS_PLAYING:
+            case Progress.PROGRESS_REPLAYING:
+                final SaveData saveData = lastPlayLevelDto.getSaveData();
+                srcBitmap = BitmapMaker.getGrayScaleBitmap(saveData.getValues());
+                btn_continue.setOnClickListener(view -> {
+                    GameFragment gameFragment = new GameFragment();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id", lastPlayLevelDto.getLevelId());
+                    bundle.putBoolean("custom", lastPlayLevelDto.isCustom());
+                    gameFragment.setArguments(bundle);
+
+                    ((MainActivity) getContext()).fragmentMove(gameFragment);
+                });
+                break;
+        }
+
+        if (srcBitmap != null) {
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(srcBitmap, 400, 400, false);
+            iv_thumbnail.post(() -> {
+                iv_thumbnail.setImageBitmap(scaledBitmap);
+            });
+        }
+    }
+
+    private void setHintCountView() {
+        TextView tv_hintCount = fragmentView.findViewById(R.id.tv_count_hint);
+        tv_hintCount.setText(String.valueOf(propertyPreference.getHintCount()));
     }
 }
