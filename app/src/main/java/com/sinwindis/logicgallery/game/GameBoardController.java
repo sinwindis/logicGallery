@@ -2,12 +2,10 @@ package com.sinwindis.logicgallery.game;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,7 +27,6 @@ import com.sinwindis.logicgallery.listener.BoardItemTouchListener;
 import com.sinwindis.logicgallery.mainactivity.MainActivity;
 
 import java.sql.SQLException;
-import java.util.Objects;
 
 public class GameBoardController {
 
@@ -103,7 +100,6 @@ public class GameBoardController {
 
         board = new Board(levelDto.getHeight(), levelDto.getWidth());
         board.setCorrectValues(levelDto.getDataSet());
-        board.loadSaveData(levelDto.getSaveData());
         hintManager = new HintManager(ctx);
 
         Log.d("initialize", "board width: " + board.getWidth() + "board height: " + board.getHeight());
@@ -345,9 +341,6 @@ public class GameBoardController {
         checkAutoX();
         board.push();
 
-        Point startPoint = dragManager.getStartPoint();
-        Point endPoint = dragManager.getEndPoint();
-        refreshCellViews(startPoint.y, startPoint.x, endPoint.y, endPoint.x);
         refreshStackView();
         refreshHintView();
 
@@ -434,9 +427,10 @@ public class GameBoardController {
 
         rv_board.post(() -> {
             checkAutoX();
-            refreshCellViews(0, 0, board.getHeight() - 1, board.getWidth() - 1);
 
             ConstraintLayout cl_board = targetView.findViewById(R.id.board);
+            board.bindCellViews(glm);
+            board.loadSaveData(levelDto.getSaveData());
             dragOffsetX = rv_board.getX() + cl_board.getX() - SIZE_BORDER;
             dragOffsetY = rv_board.getY() + cl_board.getY() - SIZE_BORDER;
         });
@@ -458,7 +452,6 @@ public class GameBoardController {
 
     public void moveToNext() {
         if (board.moveToNext()) {
-            refreshCellViews(0, 0, board.getHeight() - 1, board.getWidth() - 1);
             refreshIndexView();
             refreshStackView();
         }
@@ -466,7 +459,6 @@ public class GameBoardController {
 
     public void moveToPrev() {
         if (board.moveToPrev()) {
-            refreshCellViews(0, 0, board.getHeight() - 1, board.getWidth() - 1);
             refreshIndexView();
             refreshStackView();
         }
@@ -588,62 +580,6 @@ public class GameBoardController {
         }
         for (int i = 0; i < board.getHeight(); i++) {
             rvRowAdapter.refreshView(i);
-        }
-    }
-
-    private void refreshCellViews(int startY, int startX, int endY, int endX) {
-        for (int y = 0; y < board.getHeight(); y++) {
-            for (int x = startX; x <= endX; x++) {
-                refreshCellView(y, x);
-            }
-        }
-
-        for (int y = startY; y <= endY; y++) {
-            for (int x = 0; x < startX; x++) {
-                refreshCellView(y, x);
-            }
-            for (int x = endX + 1; x < board.getWidth(); x++) {
-                refreshCellView(y, x);
-            }
-        }
-    }
-
-    private void refreshCellView(int y, int x) {
-        ImageView view = Objects.requireNonNull(glm.findViewByPosition(x + y * board.getWidth())).findViewById(R.id.iv_item_board);
-
-        if (view == null) {
-            return;
-        }
-
-        Cell targetCell = board.getCell(y, x);
-
-        if (targetCell.isHinted()) {
-            switch (targetCell.getCurrentValue()) {
-                case 0:
-                case 2:
-                    view.setImageResource(R.drawable.background_x);
-                    view.setBackgroundColor(Color.parseColor("#c0c0c0"));
-                    break;
-                case 1:
-                    view.setImageDrawable(null);
-                    view.setBackgroundColor(Color.parseColor("#404040"));
-                    break;
-            }
-        } else {
-            switch (targetCell.getCurrentValue()) {
-                case 0:
-                    view.setImageDrawable(null);
-                    view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    break;
-                case 1:
-                    view.setImageDrawable(null);
-                    view.setBackgroundColor(Color.parseColor("#000000"));
-                    break;
-                case 2:
-                    view.setImageResource(R.drawable.background_x);
-                    view.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    break;
-            }
         }
     }
 

@@ -1,10 +1,17 @@
 package com.sinwindis.logicgallery.game;
 
+import android.graphics.Color;
+import android.widget.ImageView;
+
+import com.sinwindis.logicgallery.R;
+
 public class Cell {
 
     public static final byte BLANK = 0;
     public static final byte CHECK = 1;
     public static final byte X = 2;
+
+    private ImageView iv_cell;
 
     private final byte correctValue;
     private byte currentValue;
@@ -17,6 +24,10 @@ public class Cell {
 
         isHinted = false;
         isFixed = false;
+    }
+
+    public void setImageView(ImageView iv_cell) {
+        this.iv_cell = iv_cell;
     }
 
     public boolean useHint() {
@@ -62,7 +73,44 @@ public class Cell {
             return false;
         }
         this.currentValue = value;
+
+        refreshCellView();
         return true;
+    }
+
+    private void refreshCellView() {
+        if (iv_cell == null) {
+            return;
+        }
+
+        if (isHinted()) {
+            switch (currentValue) {
+                case 0:
+                case 2:
+                    iv_cell.setImageResource(R.drawable.background_x);
+                    iv_cell.setBackgroundColor(Color.parseColor("#c0c0c0"));
+                    break;
+                case 1:
+                    iv_cell.setImageDrawable(null);
+                    iv_cell.setBackgroundColor(Color.parseColor("#404040"));
+                    break;
+            }
+        } else {
+            switch (getCurrentValue()) {
+                case 0:
+                    iv_cell.setImageDrawable(null);
+                    iv_cell.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    break;
+                case 1:
+                    iv_cell.setImageDrawable(null);
+                    iv_cell.setBackgroundColor(Color.parseColor("#000000"));
+                    break;
+                case 2:
+                    iv_cell.setImageResource(R.drawable.background_x);
+                    iv_cell.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    break;
+            }
+        }
     }
 
     public byte getCurrentValue() {

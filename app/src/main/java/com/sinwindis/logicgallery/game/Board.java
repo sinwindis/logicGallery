@@ -1,9 +1,10 @@
 package com.sinwindis.logicgallery.game;
 
 import android.graphics.Point;
-import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.sinwindis.logicgallery.data.SaveData;
 
@@ -22,6 +23,14 @@ public class Board {
 
         this.cells = new Cell[height][width];
         this.boardStack = new BoardStack(height, width);
+    }
+
+    public void bindCellViews(GridLayoutManager glm) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                cells[y][x].setImageView((ImageView) glm.findViewByPosition(y * width + x));
+            }
+        }
     }
 
     public Cell getCell(int y, int x) {
